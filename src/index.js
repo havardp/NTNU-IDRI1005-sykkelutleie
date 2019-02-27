@@ -2,62 +2,137 @@ import * as React from 'react';
 import { Component } from 'react-simplified';
 import ReactDOM from 'react-dom';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
-import { connection } from './mysql_connection';
+import { studentService } from './services';
+import { Card, List, Row, Column, NavBar, Button, Form } from './widgets';
+
+import createHashHistory from 'history/createHashHistory';
+const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
+
+class Menu extends Component {
+  render() {
+    return (
+      <NavBar brand="WhiteBoard">
+        <NavBar.Link to="/students">Students</NavBar.Link>
+      </NavBar>
+    );
+  }
+}
+
+class Home extends Component {
+  render() {
+    return <Card title="Welcome">Welcome to WhiteBoard</Card>;
+  }
+}
 
 class StudentList extends Component {
   students = [];
 
   render() {
     return (
-      <ul>
-        {this.students.map(student => (
-          <li key={student.id}>
-            <NavLink activeStyle={{ color: 'darkblue' }} to={'/students/' + student.id}>
+      <Card title="Students">
+        <List>
+          {this.students.map(student => (
+            <List.Item key={student.id} to={'/students/' + student.id}>
               {student.name}
-            </NavLink>
-          </li>
-        ))}
-      </ul>
+            </List.Item>
+          ))}
+        </List>
+      </Card>
     );
   }
 
   mounted() {
-    connection.query('select id, name from Students', (error, results) => {
-      if (error) return console.error(error); // If error, show error in console (in red text) and return
-
-      this.students = results;
+    studentService.getStudents(students => {
+      this.students = students;
     });
   }
 }
 
 class StudentDetails extends Component {
-  name = '';
-  email = '';
+  student = null;
 
   render() {
+    if (!this.student) return null;
+
     return (
-      <ul>
-        <li>Name: {this.name}</li>
-        <li>Email: {this.email}</li>
-      </ul>
+      <div>
+        <Card title="Student details">
+          <Row>
+            <Column width={2}>Name:</Column>
+            <Column>{this.student.name}</Column>
+          </Row>
+          <Row>
+            <Column width={2}>Email:</Column>
+            <Column>{this.student.email}</Column>
+          </Row>
+        </Card>
+        <Button.Light onClick={this.edit}>Edit</Button.Light>
+      </div>
     );
   }
 
   mounted() {
-    connection.query('select name, email from Students where id=?', [this.props.match.params.id], (error, results) => {
-      if (error) return console.error(error); // If error, show error in console (in red text) and return
-
-      this.name = results[0].name;
-      this.email = results[0].email;
+    studentService.getStudent(this.props.match.params.id, student => {
+      this.student = student;
     });
+  }
+
+  edit() {
+    history.push('/students/' + this.student.id + '/edit');
+  }
+}
+
+class StudentEdit extends Component {
+  student = null;
+
+  render() {
+    if (!this.student) return null;
+
+    return (
+      <div>
+        <Card title="Edit student">
+          <Form.Label>Name:</Form.Label>
+          <Form.Input type="text" value={this.student.name} onChange={e => (this.student.name = e.target.value)} />
+          <Form.Label>Email:</Form.Label>
+          <Form.Input type="text" value={this.student.email} onChange={e => (this.student.email = e.target.value)} />
+        </Card>
+        <Row>
+          <Column>
+            <Button.Success onClick={this.save}>Save</Button.Success>
+          </Column>
+          <Column right>
+            <Button.Light onClick={this.cancel}>Cancel</Button.Light>
+          </Column>
+        </Row>
+      </div>
+    );
+  }
+
+  mounted() {
+    studentService.getStudent(this.props.match.params.id, student => {
+      this.student = student;
+    });
+  }
+
+  save() {
+    studentService.updateStudent(this.student, () => {
+      history.push('/students/' + this.props.match.params.id);
+    });
+  }
+
+  cancel() {
+    history.push('/students/' + this.props.match.params.id);
   }
 }
 
 ReactDOM.render(
   <HashRouter>
     <div>
-      <StudentList />
-      <Route path="/students/:id" component={StudentDetails} />
+      <Menu />
+      <Route exact path="/" component={Home} />
+      <Route exact path="/students" component={StudentList} />
+      <Route exact path="/students/:id" component={StudentDetails} />
+      <Route exact path="/students/:id/edit" component={StudentEdit} />
     </div>
   </HashRouter>,
   document.getElementById('root')
