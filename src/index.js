@@ -1,8 +1,10 @@
+// @flow
+
 import * as React from 'react';
 import { Component } from 'react-simplified';
 import ReactDOM from 'react-dom';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
-import { studentService } from './services';
+import { Student, studentService } from './services';
 import { Card, List, Row, Column, NavBar, Button, Form } from './widgets';
 
 import createHashHistory from 'history/createHashHistory';
@@ -25,7 +27,7 @@ class Home extends Component {
 }
 
 class StudentList extends Component {
-  students = [];
+  students: Student[] = [];
 
   render() {
     return (
@@ -48,12 +50,10 @@ class StudentList extends Component {
   }
 }
 
-class StudentDetails extends Component {
-  student = null;
+class StudentDetails extends Component<{ match: { params: { id: number } } }> {
+  student = new Student();
 
   render() {
-    if (!this.student) return null;
-
     return (
       <div>
         <Card title="Student details">
@@ -82,12 +82,10 @@ class StudentDetails extends Component {
   }
 }
 
-class StudentEdit extends Component {
-  student = null;
+class StudentEdit extends Component<{ match: { params: { id: number } } }> {
+  student = new Student();
 
   render() {
-    if (!this.student) return null;
-
     return (
       <div>
         <Card title="Edit student">
@@ -125,15 +123,19 @@ class StudentEdit extends Component {
   }
 }
 
-ReactDOM.render(
-  <HashRouter>
+let root = document.getElementById('root');
+if (root)
+  ReactDOM.render(
     <div>
-      <Menu />
-      <Route exact path="/" component={Home} />
-      <Route exact path="/students" component={StudentList} />
-      <Route exact path="/students/:id" component={StudentDetails} />
-      <Route exact path="/students/:id/edit" component={StudentEdit} />
-    </div>
-  </HashRouter>,
-  document.getElementById('root')
-);
+      <HashRouter>
+        <div>
+          <Menu />
+          <Route exact path="/" component={Home} />
+          <Route exact path="/students" component={StudentList} />
+          <Route exact path="/students/:id" component={StudentDetails} />
+          <Route exact path="/students/:id/edit" component={StudentEdit} />
+        </div>
+      </HashRouter>
+    </div>,
+    root
+  );
