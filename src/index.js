@@ -9,6 +9,7 @@ import { Card, List, Row, Column, NavBar, Button, Form } from './widgets';
 
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
+const bcrypt = require('bcryptjs');
 
 class Menu extends Component {
   render() {
@@ -47,6 +48,10 @@ class StudentList extends Component {
     studentService.getStudents(students => {
       this.students = students;
     });
+    var salt = bcrypt.genSaltSync(10); //krypteringsnøkkel
+    var hash = bcrypt.hashSync('test', salt); //krypterte verrsjonen av "test"
+    console.log(hash); //krypterte verrsjonen av "test"
+    console.log(bcrypt.compareSync('test', hash)); //true/false om hashen stemmer med startstringen
   }
 }
 
