@@ -4,9 +4,9 @@ import mysql from 'mysql';
 
 let config = {
   host: 'mysql.stud.iie.ntnu.no',
-  user: 'haavapet',
-  password: 'caZha3tr',
-  database: 'haavapet'
+  user: 'g_idri1005_27',
+  password: 'zdXpJ1gC',
+  database: 'g_idri1005_27'
 };
 
 // Setup database server reconnection when server timeouts connection:

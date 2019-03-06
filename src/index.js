@@ -51,6 +51,7 @@ class StudentList extends Component {
     var salt = bcrypt.genSaltSync(10); //krypteringsnøkkel
     var hash = bcrypt.hashSync('test', salt); //krypterte verrsjonen av "test"
     console.log(hash); //krypterte verrsjonen av "test"
+    var salt = bcrypt.genSaltSync(10); //krypteringsnøkkel
     console.log(bcrypt.compareSync('test', hash)); //true/false om hashen stemmer med startstringen
   }
 }
