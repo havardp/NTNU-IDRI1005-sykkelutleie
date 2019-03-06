@@ -12,8 +12,8 @@ const bcrypt = require('bcryptjs');
 class Menu extends Component {
   render() {
     return (
-      <NavBar brand="WhiteBoard">
-        <NavBar.Link to="/students">Students</NavBar.Link>
+      <NavBar brand="Sykkelutleie AS">
+        <NavBar.Link to="/home">Profil</NavBar.Link>
       </NavBar>
     );
   }
@@ -49,11 +49,10 @@ class Login extends Component {
     employeeService.getEmployee(
       this.user.name,
       result => {
-        console.log('rett navn');
         if (bcrypt.compareSync(this.user.password, result.password)) history.push('/home');
       },
       () => {
-        this.errorMessage = 'Du har skrevet feil!';
+        this.errorMessage = 'Du har skrevet feil brukernavn eller passord, prøv igjen!';
         this.render();
       }
     );
@@ -64,7 +63,18 @@ class Login extends Component {
 
 class Home extends Component {
   render() {
-    return <div>Welcome</div>;
+    return (
+      <div>
+        <Card>
+          <List.Item>
+            <Button.Success onClick={this.save}>Save</Button.Success>
+          </List.Item>
+          <List.Item>
+            <Button.Light onClick={this.cancel}>Cancel</Button.Light>
+          </List.Item>
+        </Card>
+      </div>
+    );
   }
 }
 
