@@ -1,11 +1,10 @@
-// @flow
-
 import * as React from 'react';
 import { Component } from 'react-simplified';
 import { NavLink } from 'react-router-dom';
 
 // Renders an information card using Bootstrap styles
-export class Card extends Component<{ title?: string, children?: React.Node }> {
+// Attributes: title
+export class Card extends Component {
   render() {
     return (
       <div className="card">
@@ -19,7 +18,8 @@ export class Card extends Component<{ title?: string, children?: React.Node }> {
 }
 
 // Renders a list group item using Bootstrap styles
-class ListItem extends Component<{ to?: string, children?: React.Node }> {
+// Attributes: to
+class ListItem extends Component {
   render() {
     return this.props.to ? (
       <NavLink className="list-group-item" activeClassName="active" to={this.props.to}>
@@ -32,7 +32,7 @@ class ListItem extends Component<{ to?: string, children?: React.Node }> {
 }
 
 // Renders a list group using Bootstrap styles
-export class List extends Component<{ children?: React.Node }> {
+export class List extends Component {
   static Item = ListItem;
 
   render() {
@@ -41,14 +41,15 @@ export class List extends Component<{ children?: React.Node }> {
 }
 
 // Renders a row using Bootstrap styles
-export class Row extends Component<{ children?: React.Node }> {
+export class Row extends Component {
   render() {
     return <div className="row">{this.props.children}</div>;
   }
 }
 
 // Renders a column with specified width using Bootstrap styles
-export class Column extends Component<{ width?: number, right?: boolean, children?: React.Node }> {
+// Properties: width, right
+export class Column extends Component {
   render() {
     return (
       <div
@@ -61,7 +62,8 @@ export class Column extends Component<{ width?: number, right?: boolean, childre
 }
 
 // Renders a NavBar link using Bootstrap styles
-class NavBarLink extends Component<{ exact?: boolean, to: string, children?: React.Node }> {
+// Attributes: exact, to
+class NavBarLink extends Component {
   render() {
     return (
       <NavLink className="nav-link" activeClassName="active" exact={this.props.exact} to={this.props.to}>
@@ -72,7 +74,8 @@ class NavBarLink extends Component<{ exact?: boolean, to: string, children?: Rea
 }
 
 // Renders a NavBar using Bootstrap styles
-export class NavBar extends Component<{ brand?: string, children?: React.Node }> {
+// Attributes: brand
+export class NavBar extends Component {
   static Link = NavBarLink;
 
   render() {
@@ -90,7 +93,8 @@ export class NavBar extends Component<{ brand?: string, children?: React.Node }>
 }
 
 // Renders a success button using Bootstrap styles
-class ButtonSuccess extends Component<{ onClick: () => mixed, children?: React.Node }> {
+// Attributes: onClick
+class ButtonSuccess extends Component {
   render() {
     return (
       <button type="button" className="btn btn-success" onClick={this.props.onClick}>
@@ -101,7 +105,8 @@ class ButtonSuccess extends Component<{ onClick: () => mixed, children?: React.N
 }
 
 // Renders a danger button using Bootstrap styles
-class ButtonDanger extends Component<{ onClick: () => mixed, children?: React.Node }> {
+// Attributes: onClick
+class ButtonDanger extends Component {
   render() {
     return (
       <button type="button" className="btn btn-danger" onClick={this.props.onClick}>
@@ -112,7 +117,8 @@ class ButtonDanger extends Component<{ onClick: () => mixed, children?: React.No
 }
 
 // Renders a light button using Bootstrap styles
-class ButtonLight extends Component<{ onClick: () => mixed, children?: React.Node }> {
+// Attributes: onClick
+class ButtonLight extends Component {
   render() {
     return (
       <button type="button" className="btn btn-light" onClick={this.props.onClick}>
@@ -130,20 +136,19 @@ export class Button {
 }
 
 // Renders a form label using Bootstrap styles
-class FormLabel extends Component<{ children?: React.Node }> {
+class FormLabel extends Component {
   render() {
-    return <label className="col-form-label">{this.props.children}</label>;
+    return (
+      <label className="col-form-label" type="hidden">
+        {this.props.children}
+      </label>
+    );
   }
 }
 
 // Renders a form input using Bootstrap styles
-class FormInput extends Component<{
-  type: string,
-  value: mixed,
-  onChange: (event: SyntheticInputEvent<HTMLInputElement>) => mixed,
-  required?: boolean,
-  pattern?: string
-}> {
+// Attributes: type, value, onChange, required, pattern
+class FormInput extends Component {
   render() {
     return (
       <input
