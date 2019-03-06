@@ -14,17 +14,12 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.0.0",
     "bcryptjs": "^2.4.3",
-    "bootstrap": "^4.3.1",
     "electron": "^4.0.2",
     "electron-reload": "^1.4.0",
     "jquery": "^3.3.1",
     "mysql": "^2.16.0",
-<<<<<<< HEAD
     "react-bootstrap-dropdown": "^0.3.0",
     "react-bootstrap-dropdown-menu": "^1.1.15",
-=======
-    "react-bootstrap": "^1.0.0-beta.5",
->>>>>>> 5cf1f463d1991978dd7db473d06174c11243b640
     "react-router-dom": "^4.3.1",
     "react-simple-dropdown": "^3.2.3",
     "react-simplified": "^1.5.2"

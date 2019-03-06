@@ -158,7 +158,6 @@ class FormInput extends Component {
         onChange={this.props.onChange}
         required={this.props.required}
         pattern={this.props.pattern}
-        placeholder={this.props.placeholder}
       />
     );
   }
