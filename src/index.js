@@ -8,12 +8,20 @@ import { Card, List, Row, Column, NavBar, Button, Form } from './widgets';
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 const bcrypt = require('bcryptjs');
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import Dropdown from 'react-bootstrap/Dropdown';
+
+
 
 class Menu extends Component {
   render() {
     return (
       <NavBar brand="Sykkelutleie AS">
-        <NavBar.Link to="/home">Profil</NavBar.Link>
+        <DropdownButton id="dropdown-item-button" title="Dropdown button">
+          <Dropdown.Item as="button">Action</Dropdown.Item>
+          <Dropdown.Item as="button">Another action</Dropdown.Item>
+          <Dropdown.Item as="button">Something else</Dropdown.Item>
+        </DropdownButton>
       </NavBar>
     );
   }
@@ -27,10 +35,8 @@ class Login extends Component {
     return (
       <div>
         <Card title="Login">
-          <Form.Label>Brukernavn:</Form.Label>
-          <Form.Input type="text" onChange={e => (this.user.name = e.target.value)} />
-          <Form.Label>Passord:</Form.Label>
-          <Form.Input type="password" onChange={e => (this.user.password = e.target.value)} />
+          <Form.Input type="text" placeholder="Brukernavn" onChange={e => (this.user.name = e.target.value)} />
+          <Form.Input type="password" placeholder="Passord" onChange={e => (this.user.password = e.target.value)} />
           <Form.Label>{this.errorMessage}</Form.Label>
         </Card>
         <Row>
@@ -58,7 +64,9 @@ class Login extends Component {
     );
   }
 
-  help() {alert("Kontakt en administrator ved glemt brukernavn eller passord.")}
+  help() {
+    alert('Kontakt en administrator ved glemt brukernavn eller passord.');
+  }
 }
 
 class Home extends Component {
@@ -66,16 +74,34 @@ class Home extends Component {
     return (
       <div>
         <Card>
-          <List.Item>
-            <Button.Success onClick={this.save}>Save</Button.Success>
-          </List.Item>
-          <List.Item>
-            <Button.Light onClick={this.cancel}>Cancel</Button.Light>
-          </List.Item>
+          <List>
+            <Button.Success onClick={this.newOrder}>Ny ordre</Button.Success>
+            <br />
+          </List>
+          <List>
+            <Button.Success onClick={this.findOrder}>Finn ordre</Button.Success>
+            <br />
+          </List>
+          <List>
+            <Button.Success onClick={this.customer}>Kunde</Button.Success>
+            <br />
+          </List>
+          <List>
+            <Button.Success onClick={this.storageStatus}>Lagerstatus</Button.Success>
+            <br />
+          </List>
+          <List>
+            <Button.Success onClick={this.employee}>Ansatte</Button.Success>
+          </List>
         </Card>
       </div>
     );
   }
+  newOrder() {}
+  findOrder() {}
+  customer() {}
+  storageStatus() {}
+  employee() {}
 }
 
 // class StudentList extends Component {
