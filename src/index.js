@@ -11,6 +11,8 @@ const bcrypt = require('bcryptjs');
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 
+
+
 class Menu extends Component {
   render() {
     return (
@@ -33,10 +35,8 @@ class Login extends Component {
     return (
       <div>
         <Card title="Login">
-          <Form.Label>Brukernavn:</Form.Label>
-          <Form.Input type="text" onChange={e => (this.user.name = e.target.value)} />
-          <Form.Label>Passord:</Form.Label>
-          <Form.Input type="password" onChange={e => (this.user.password = e.target.value)} />
+          <Form.Input type="text" placeholder="Brukernavn" onChange={e => (this.user.name = e.target.value)} />
+          <Form.Input type="password" placeholder="Passord" onChange={e => (this.user.password = e.target.value)} />
           <Form.Label>{this.errorMessage}</Form.Label>
         </Card>
         <Row>
