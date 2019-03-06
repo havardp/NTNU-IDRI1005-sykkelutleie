@@ -4,6 +4,8 @@ import ReactDOM from 'react-dom';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { employeeService } from './services';
 import { Card, List, Row, Column, NavBar, Button, Form } from './widgets';
+import Dropdown from 'react-bootstrap-dropdown';
+
 
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
@@ -13,7 +15,8 @@ class Menu extends Component {
   render() {
     return (
       <NavBar brand="Sykkelutleie AS">
-        <NavBar.Link to="/home">Profil</NavBar.Link>
+
+
       </NavBar>
     );
   }
