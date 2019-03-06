@@ -59,7 +59,7 @@ class Login extends Component {
     );
   }
 
-  help() {}
+  help() {alert("Kontakt en administrator ved glemt brukernavn eller passord.")}
 }
 
 class Home extends Component {
