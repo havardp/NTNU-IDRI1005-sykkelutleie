@@ -1,9 +1,12 @@
 import { connection } from './mysql_connection';
 
 class EmployeeService {
-  getEmployee(username, success) {
+  getEmployee(username, success, failure) {
     connection.query('select password from Employee where e_id = ?', [username], (error, results) => {
-      if (error) return console.error(error);
+      if (error) {
+        return console.error(error);
+      }
+      if (results.length == 0) return failure();
 
       success(results[0]);
     });

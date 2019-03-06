@@ -21,7 +21,7 @@ class Menu extends Component {
 
 class Login extends Component {
   user = [];
-  errorMessage = 'Du har skrevet feil!';
+  errorMessage = '';
 
   render() {
     return (
@@ -46,16 +46,20 @@ class Login extends Component {
   }
 
   login() {
-    employeeService.getEmployee(this.user.name, result => {
-      if (bcrypt.compareSync(this.user.password, result.password)) history.push('/home');
-      else {
+    employeeService.getEmployee(
+      this.user.name,
+      result => {
+        console.log('rett navn');
+        if (bcrypt.compareSync(this.user.password, result.password)) history.push('/home');
+      },
+      () => {
+        this.errorMessage = 'Du har skrevet feil!';
+        this.render();
       }
-    });
+    );
   }
 
-  help() {
-    alert('trenger du hjelp');
-  }
+  help() {}
 }
 
 class Home extends Component {
