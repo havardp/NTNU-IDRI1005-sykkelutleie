@@ -79,14 +79,17 @@ export class NavBar extends Component {
   static Link = NavBarLink;
 
   render() {
+    //navbar-expand-sm   -  fjernet
     return (
-      <nav className="navbar navbar-expand-sm bg-light navbar-light">
+      <nav className="navbar bg-light navbar-light">
         {
           <NavLink className="navbar-brand" activeClassName="active" exact to="/">
             {this.props.brand}
           </NavLink>
         }
-        <ul className="navbar-nav">{this.props.children}</ul>
+        <ul className="navbar-nav" style={{ marginRight: 50 }}>
+          {this.props.children}
+        </ul>
       </nav>
     );
   }

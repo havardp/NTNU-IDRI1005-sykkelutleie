@@ -12,13 +12,21 @@ const history = createHashHistory(); // Use history.push(...) to programmaticall
 const bcrypt = require('bcryptjs');
 
 class Menu extends Component {
+  //"&#128100;" profil ikon
   render() {
     return (
       <NavBar brand="Sykkelutleie AS">
-        <DropdownButton id="dropdown-item-button" title="&#128100; Min Profil" variant="secondary">
+        <DropdownButton id="dropdown-item-button" title={sessionStorage.getItem('userName')} variant="secondary">
           <Dropdown.Item onClick={() => history.push('/myPage')}>Min side</Dropdown.Item>
           <Dropdown.Item onClick={() => history.push('/home')}>Hovedside</Dropdown.Item>
-          <Dropdown.Item onClick={() => history.push('/')}>Logg inn</Dropdown.Item>
+          <Dropdown.Item
+            onClick={() => {
+              history.push('/');
+              sessionStorage.clear();
+            }}
+          >
+            Logg ut
+          </Dropdown.Item>
         </DropdownButton>
       </NavBar>
     );
@@ -33,18 +41,20 @@ class Login extends Component {
     return (
       <div>
         <Card title="Login">
-          <Form.Input type="text" placeholder="Brukernavn" onChange={e => (this.user.name = e.target.value)} />
-          <Form.Input type="password" placeholder="Passord" onChange={e => (this.user.password = e.target.value)} />
-          <Form.Label>{this.state.errorMessage}</Form.Label>
+          <List>
+            <Form.Input type="text" placeholder="Brukernavn" onChange={e => (this.user.name = e.target.value)} />
+            <Form.Input type="password" placeholder="Passord" onChange={e => (this.user.password = e.target.value)} />
+            <Form.Label>{this.state.errorMessage}</Form.Label>
+          </List>
+          <Row>
+            <Column>
+              <Button.Light onClick={this.login}>Logg inn</Button.Light>
+            </Column>
+            <Column right>
+              <Button.Light onClick={this.help}>Hjelp &#x2753;</Button.Light>
+            </Column>
+          </Row>
         </Card>
-        <Row>
-          <Column>
-            <Button.Light onClick={this.login}>Logg inn</Button.Light>
-          </Column>
-          <Column right>
-            <Button.Light onClick={this.help}>Hjelp &#x2753;</Button.Light>
-          </Column>
-        </Row>
       </div>
     );
   }
@@ -53,8 +63,11 @@ class Login extends Component {
     employeeService.getEmployee(
       this.user.name,
       result => {
-        if (bcrypt.compareSync(this.user.password, result.password)) history.push('/home');
-        else {
+        if (bcrypt.compareSync(this.user.password, result.password)) {
+          sessionStorage.setItem('userName', this.user.name);
+          sessionStorage.setItem('userLoggedIn', true);
+          history.push('/home');
+        } else {
           // this.errorMessage = 'Du har skrevet feil brukernavn eller passord, prøv igjen!';
           // this.render();
           this.setState({ errorMessage: 'Du har skrevet feil brukernavn eller passord, prøv igjen!' });
@@ -95,11 +108,126 @@ class Home extends Component {
       </div>
     );
   }
-  newOrder() {}
+  newOrder() {
+    console.log(sessionStorage.getItem('userLoggedIn'));
+  }
   findOrder() {}
   customer() {}
   storageStatus() {}
   employee() {}
+}
+
+class MyPage extends Component {
+  state = { e_id: ' ', fname: ' ', lname: ' ', department: ' ', email: ' ', tlf: ' ', adress: ' ', dob: ' ' };
+  render() {
+    return (
+      <Card title="Personalia">
+        <List>
+          <List.Item>
+            <Row>
+              <Column>
+                <Form.Label>Ansatt id</Form.Label>
+              </Column>
+              <Column>
+                <Form.Label>{this.state.e_id}</Form.Label>
+              </Column>
+            </Row>
+          </List.Item>
+          <List.Item>
+            <Row>
+              <Column>
+                <Form.Label>Fornavn</Form.Label>
+              </Column>
+              <Column>
+                <Form.Label>{this.state.fname}</Form.Label>
+              </Column>
+            </Row>
+          </List.Item>
+          <List.Item>
+            <Row>
+              <Column>
+                <Form.Label>Etternavn</Form.Label>
+              </Column>
+              <Column>
+                <Form.Label>{this.state.lname}</Form.Label>
+              </Column>
+            </Row>
+          </List.Item>
+          <List.Item>
+            <Row>
+              <Column>
+                <Form.Label>Avdeling</Form.Label>
+              </Column>
+              <Column>
+                <Form.Label>{this.state.department}</Form.Label>
+              </Column>
+            </Row>
+          </List.Item>
+          <List.Item>
+            <Row>
+              <Column>
+                <Form.Label>Telefon</Form.Label>
+              </Column>
+              <Column>
+                <Form.Label>{this.state.tlf}</Form.Label>
+              </Column>
+            </Row>
+          </List.Item>
+          <List.Item>
+            <Row>
+              <Column>
+                <Form.Label>Email</Form.Label>
+              </Column>
+              <Column>
+                <Form.Label>{this.state.email}</Form.Label>
+              </Column>
+            </Row>
+          </List.Item>
+          <List.Item>
+            <Row>
+              <Column>
+                <Form.Label>Adresse</Form.Label>
+              </Column>
+              <Column>
+                <Form.Label>{this.state.adress}</Form.Label>
+              </Column>
+            </Row>
+          </List.Item>
+          <List.Item>
+            <Row>
+              <Column>
+                <Form.Label>Fødselsdato</Form.Label>
+              </Column>
+              <Column>
+                <Form.Label>{this.state.dob}</Form.Label>
+              </Column>
+            </Row>
+          </List.Item>
+        </List>
+      </Card>
+    );
+  }
+  mounted() {
+    employeeService.getEmployee(
+      sessionStorage.getItem('userName'),
+      result => {
+        this.setState({ e_id: result.e_id });
+        this.setState({ fname: result.fname });
+        this.setState({ lname: result.lname });
+        this.setState({ department: result.department });
+        this.setState({ email: result.email });
+        this.setState({ tlf: result.tlf });
+        this.setState({ adress: result.adress });
+        this.setState({
+          dob: result.DOB.getDate() + '-' + (result.DOB.getMonth() + 1) + '-' + result.DOB.getFullYear()
+        });
+        this.setState({ errormessage: 'test' });
+      },
+      () => {
+        console.log('failure');
+      }
+    );
+  }
 }
 
 // class StudentList extends Component {
@@ -330,6 +458,7 @@ ReactDOM.render(
       <Menu />
       <Route exact path="/" component={Login} />
       <Route exact path="/home" component={Home} />
+      <Route exact path="/myPage" component={MyPage} />
     </div>
   </HashRouter>,
   document.getElementById('root')
