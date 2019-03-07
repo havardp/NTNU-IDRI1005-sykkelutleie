@@ -116,6 +116,16 @@ class ButtonDanger extends Component {
   }
 }
 
+class ButtonInfo extends Component {
+  render() {
+    return (
+      <button type="button" className="btn btn-info" onClick={this.props.onClick}>
+        {this.props.children}
+      </button>
+    );
+  }
+}
+
 // Renders a light button using Bootstrap styles
 // Attributes: onClick
 class ButtonLight extends Component {
@@ -133,6 +143,7 @@ export class Button {
   static Success = ButtonSuccess;
   static Danger = ButtonDanger;
   static Light = ButtonLight;
+  static Info = ButtonInfo;
 }
 
 // Renders a form label using Bootstrap styles

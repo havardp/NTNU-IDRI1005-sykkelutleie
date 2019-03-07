@@ -4,23 +4,21 @@ import ReactDOM from 'react-dom';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { employeeService } from './services';
 import { Card, List, Row, Column, NavBar, Button, Form } from './widgets';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import Dropdown from 'react-bootstrap/Dropdown';
 
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
 const bcrypt = require('bcryptjs');
-import DropdownButton from 'react-bootstrap/DropdownButton';
-import Dropdown from 'react-bootstrap/Dropdown';
-
-
 
 class Menu extends Component {
   render() {
     return (
       <NavBar brand="Sykkelutleie AS">
-        <DropdownButton id="dropdown-item-button" title="Dropdown button">
-          <Dropdown.Item as="button">Action</Dropdown.Item>
-          <Dropdown.Item as="button">Another action</Dropdown.Item>
-          <Dropdown.Item as="button">Something else</Dropdown.Item>
+        <DropdownButton id="dropdown-item-button" title="Profil" variant="secondary">
+          <Dropdown.Item onClick={() => history.push('/myPage')}>Min side</Dropdown.Item>
+          <Dropdown.Item onClick={() => history.push('/home')}>Hovedside</Dropdown.Item>
+          <Dropdown.Item onClick={() => history.push('/')}>Logg ut</Dropdown.Item>
         </DropdownButton>
       </NavBar>
     );
@@ -56,6 +54,10 @@ class Login extends Component {
       this.user.name,
       result => {
         if (bcrypt.compareSync(this.user.password, result.password)) history.push('/home');
+        else {
+          this.errorMessage = 'Du har skrevet feil brukernavn eller passord, prøv igjen!';
+          this.render();
+        }
       },
       () => {
         this.errorMessage = 'Du har skrevet feil brukernavn eller passord, prøv igjen!';
@@ -75,23 +77,23 @@ class Home extends Component {
       <div>
         <Card>
           <List>
-            <Button.Success onClick={this.newOrder}>Ny ordre</Button.Success>
+            <Button.Info onClick={this.newOrder}>Ny ordre</Button.Info>
             <br />
           </List>
           <List>
-            <Button.Success onClick={this.findOrder}>Finn ordre</Button.Success>
+            <Button.Info onClick={this.findOrder}>Finn ordre</Button.Info>
             <br />
           </List>
           <List>
-            <Button.Success onClick={this.customer}>Kunde</Button.Success>
+            <Button.Info onClick={this.customer}>Kunde</Button.Info>
             <br />
           </List>
           <List>
-            <Button.Success onClick={this.storageStatus}>Lagerstatus</Button.Success>
+            <Button.Info onClick={this.storageStatus}>Lagerstatus</Button.Info>
             <br />
           </List>
           <List>
-            <Button.Success onClick={this.employee}>Ansatte</Button.Success>
+            <Button.Info onClick={this.employee}>Ansatte</Button.Info>
           </List>
         </Card>
       </div>
