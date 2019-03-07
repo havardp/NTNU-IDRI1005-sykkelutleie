@@ -6,6 +6,11 @@ import { employeeService } from './services';
 import { Card, List, Row, Column, NavBar, Button, Form } from './widgets';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import Alert from 'react-bootstrap/Alert';
+import Modal from 'react-bootstrap/Modal';
+import ModalBody from 'react-bootstrap/ModalBody';
+import Table from 'react-bootstrap/Table';
 
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
@@ -16,18 +21,30 @@ class Menu extends Component {
   render() {
     return (
       <NavBar brand="Sykkelutleie AS">
-        <DropdownButton id="dropdown-item-button" title={sessionStorage.getItem('userName')} variant="secondary">
-          <Dropdown.Item onClick={() => history.push('/myPage')}>Min side</Dropdown.Item>
-          <Dropdown.Item onClick={() => history.push('/home')}>Hovedside</Dropdown.Item>
-          <Dropdown.Item
-            onClick={() => {
-              history.push('/');
-              sessionStorage.clear();
-            }}
-          >
-            Logg ut
-          </Dropdown.Item>
-        </DropdownButton>
+        {localStorage.getItem('userLoggedIn') == 'true' ? (
+          <ButtonGroup vertical>
+            <DropdownButton
+              id="dropdown-item-button"
+              alignRight
+              title={localStorage.getItem('userName')}
+              variant="secondary"
+            >
+              <Dropdown.Item onClick={() => history.push('/myPage')}>Mn side</Dropdown.Item>
+              <Dropdown.Item onClick={() => history.push('/home')}>Hovedside</Dropdown.Item>
+              <Dropdown.Item
+                onClick={() => {
+                  history.push('/');
+                  localStorage.clear();
+                }}
+              >
+                {' '}
+                Logg ut
+              </Dropdown.Item>
+            </DropdownButton>
+          </ButtonGroup>
+        ) : (
+          ''
+        )}
       </NavBar>
     );
   }
@@ -35,7 +52,11 @@ class Menu extends Component {
 
 class Login extends Component {
   user = [];
-  state = { errorMessage: '' };
+  state = { errorMessage: false, modalShow: false };
+
+  handleClose() {
+    this.setState({ show: false });
+  }
 
   render() {
     return (
@@ -44,7 +65,13 @@ class Login extends Component {
           <List>
             <Form.Input type="text" placeholder="Brukernavn" onChange={e => (this.user.name = e.target.value)} />
             <Form.Input type="password" placeholder="Passord" onChange={e => (this.user.password = e.target.value)} />
-            <Form.Label>{this.state.errorMessage}</Form.Label>
+            <Form.Label>
+              {this.state.errorMessage ? (
+                <Alert variant="danger"> Du har skrevet inn feil brukernavn eller passord </Alert>
+              ) : (
+                ''
+              )}
+            </Form.Label>
           </List>
           <Row>
             <Column>
@@ -55,8 +82,17 @@ class Login extends Component {
             </Column>
           </Row>
         </Card>
+        <Modal show={this.state.show} onHide={this.handleClose} centered>
+          <Modal.Body>Hvis du er usikker på passord eller brukernavn, kontakt en administrator</Modal.Body>
+        </Modal>
       </div>
     );
+  }
+
+  mounted() {
+    if (localStorage.getItem('userLoggedIn') == 'true') {
+      history.push('/home');
+    }
   }
 
   login() {
@@ -64,23 +100,21 @@ class Login extends Component {
       this.user.name,
       result => {
         if (bcrypt.compareSync(this.user.password, result.password)) {
-          sessionStorage.setItem('userName', this.user.name);
-          sessionStorage.setItem('userLoggedIn', true);
+          localStorage.setItem('userName', this.user.name);
+          localStorage.setItem('userLoggedIn', true);
           history.push('/home');
         } else {
-          // this.errorMessage = 'Du har skrevet feil brukernavn eller passord, prøv igjen!';
-          // this.render();
-          this.setState({ errorMessage: 'Du har skrevet feil brukernavn eller passord, prøv igjen!' });
+          this.setState({ errorMessage: true });
         }
       },
       () => {
-        this.setState({ errorMessage: 'Du har skrevet feil brukernavn eller passord, prøv igjen!' });
+        this.setState({ errorMessage: true });
       }
     );
   }
 
   help() {
-    alert('Kontakt en administrator ved glemt brukernavn eller passord.');
+    this.setState({ show: true });
   }
 }
 
@@ -109,7 +143,7 @@ class Home extends Component {
     );
   }
   newOrder() {
-    console.log(sessionStorage.getItem('userLoggedIn'));
+    console.log(localStorage.getItem('userLoggedIn'));
   }
   findOrder() {}
   customer() {}
@@ -122,94 +156,48 @@ class MyPage extends Component {
   render() {
     return (
       <Card title="Personalia">
-        <List>
-          <List.Item>
-            <Row>
-              <Column>
-                <Form.Label>Ansatt id</Form.Label>
-              </Column>
-              <Column>
-                <Form.Label>{this.state.e_id}</Form.Label>
-              </Column>
-            </Row>
-          </List.Item>
-          <List.Item>
-            <Row>
-              <Column>
-                <Form.Label>Fornavn</Form.Label>
-              </Column>
-              <Column>
-                <Form.Label>{this.state.fname}</Form.Label>
-              </Column>
-            </Row>
-          </List.Item>
-          <List.Item>
-            <Row>
-              <Column>
-                <Form.Label>Etternavn</Form.Label>
-              </Column>
-              <Column>
-                <Form.Label>{this.state.lname}</Form.Label>
-              </Column>
-            </Row>
-          </List.Item>
-          <List.Item>
-            <Row>
-              <Column>
-                <Form.Label>Avdeling</Form.Label>
-              </Column>
-              <Column>
-                <Form.Label>{this.state.department}</Form.Label>
-              </Column>
-            </Row>
-          </List.Item>
-          <List.Item>
-            <Row>
-              <Column>
-                <Form.Label>Telefon</Form.Label>
-              </Column>
-              <Column>
-                <Form.Label>{this.state.tlf}</Form.Label>
-              </Column>
-            </Row>
-          </List.Item>
-          <List.Item>
-            <Row>
-              <Column>
-                <Form.Label>Email</Form.Label>
-              </Column>
-              <Column>
-                <Form.Label>{this.state.email}</Form.Label>
-              </Column>
-            </Row>
-          </List.Item>
-          <List.Item>
-            <Row>
-              <Column>
-                <Form.Label>Adresse</Form.Label>
-              </Column>
-              <Column>
-                <Form.Label>{this.state.adress}</Form.Label>
-              </Column>
-            </Row>
-          </List.Item>
-          <List.Item>
-            <Row>
-              <Column>
-                <Form.Label>Fødselsdato</Form.Label>
-              </Column>
-              <Column>
-                <Form.Label>{this.state.dob}</Form.Label>
-              </Column>
-            </Row>
-          </List.Item>
-        </List>
+        <Table striped bordered hover>
+          <tbody>
+            <tr>
+              <td>Ansatt id</td>
+              <td>{this.state.e_id}</td>
+            </tr>
+            <tr>
+              <td>Fornavn</td>
+              <td>{this.state.fname}</td>
+            </tr>
+            <tr>
+              <td>Etternavn</td>
+              <td>{this.state.lname}</td>
+            </tr>
+            <tr>
+              <td>Avdeling</td>
+              <td>{this.state.department}</td>
+            </tr>
+            <tr>
+              <td>Telefon</td>
+              <td>{this.state.tlf}</td>
+            </tr>
+            <tr>
+              <td>Email</td>
+              <td>{this.state.email}</td>
+            </tr>
+            <tr>
+              <td>Adresse</td>
+              <td>{this.state.adress}</td>
+            </tr>
+            <tr>
+              <td>Fødselsdato</td>
+              <td>{this.state.dob}</td>
+            </tr>
+          </tbody>
+        </Table>
       </Card>
     );
   }
   mounted() {
     employeeService.getEmployee(
-      sessionStorage.getItem('userName'),
+      localStorage.getItem('userName'),
       result => {
         this.setState({ e_id: result.e_id });
         this.setState({ fname: result.fname });
@@ -223,233 +211,11 @@ class MyPage extends Component {
         });
       },
       () => {
-        console.log('failure');
+        console.log('failure, ingen bruker logget inn');
       }
     );
   }
 }
-
-// class StudentList extends Component {
-//   students = [];
-//
-//   render() {
-//     return (
-//       <Card title="Students">
-//         <List>
-//           {this.students.map(student => (
-//             <List.Item key={student.id} to={'/students/' + student.id}>
-//               {student.name}
-//             </List.Item>
-//           ))}
-//         </List>
-//         <List>
-//           <Button.Success onClick={this.add}>Add</Button.Success>
-//         </List>
-//       </Card>
-//     );
-//   }
-//
-//   mounted() {
-//     studentService.getStudents(students => {
-//       this.students = students;
-//     });
-//   }
-//
-//   add() {
-//     history.push('/students/add');
-//   }
-// }
-//
-// class StudentDetails extends Component {
-//   student = null;
-//   subjects = [];
-//   notSubjects = [];
-//   emnenavn = '';
-//
-//   render() {
-//     if (!this.student) return null;
-//
-//     return (
-//       <div>
-//         <Card title="Student details">
-//           <Row>
-//             <Column width={2}>Name:</Column>
-//             <Column>{this.student.name}</Column>
-//           </Row>
-//           <Row>
-//             <Column width={2}>Email:</Column>
-//             <Column>{this.student.email}</Column>
-//           </Row>
-//         </Card>
-//         <Card title="Enrolled subjects">
-//           <List>
-//             {this.subjects.map(subject => (
-//               <List.Item key={subject.id} to={'/subjects/' + subject.id}>
-//                 {subject.emnenavn}{' '}
-//                 <Button.Danger
-//                   onClick={e => {
-//                     e.preventDefault();
-//                     this.remove(subject.emnekode);
-//                   }}
-//                 >
-//                   X
-//                 </Button.Danger>
-//               </List.Item>
-//             ))}
-//             <List.Item>
-//               <select onChange={e => (this.emnenavn = e.target.value)}>
-//                 {this.notSubjects.map(subject => (
-//                   <option key={subject.emnekode}>{subject.emnenavn}</option>
-//                 ))}
-//               </select>
-//               <Button.Success onClick={this.add}>Add</Button.Success>
-//             </List.Item>
-//           </List>
-//         </Card>
-//         <Button.Light onClick={this.edit}>Edit</Button.Light>
-//       </div>
-//     );
-//   }
-//
-//   mounted() {
-//     studentService.getStudent(this.props.match.params.id, student => {
-//       this.student = student;
-//     });
-//     studentService.getSubjects(this.props.match.params.id, subjects => {
-//       this.subjects = subjects;
-//     });
-//     studentService.getNotSubjects(this.props.match.params.id, notSubjects => {
-//       this.notSubjects = notSubjects;
-//
-//       this.emnenavn = this.notSubjects[0].emnenavn;
-//     });
-//   }
-//
-//   edit() {
-//     history.push('/students/' + this.student.id + '/edit');
-//   }
-//
-//   add() {
-//     studentService.addSubject(this.props.match.params.id, this.emnenavn, () => {
-//       studentService.getSubjects(this.props.match.params.id, subjects => {
-//         this.subjects = subjects;
-//       });
-//       studentService.getNotSubjects(this.props.match.params.id, notSubjects => {
-//         this.notSubjects = notSubjects;
-//         this.emnenavn = this.notSubjects[0].emnenavn;
-//       });
-//     });
-//   }
-//
-//   remove(id) {
-//     studentService.removeSubject(id, this.props.match.params.id, () => {
-//       studentService.getSubjects(this.props.match.params.id, subjects => {
-//         this.subjects = subjects;
-//       });
-//       studentService.getNotSubjects(this.props.match.params.id, notSubjects => {
-//         this.notSubjects = notSubjects;
-//         this.emnenavn = this.notSubjects[0].emnenavn;
-//       });
-//     });
-//   }
-// }
-//
-// class StudentEdit extends Component {
-//   student = null;
-//
-//   render() {
-//     if (!this.student) return null;
-//
-//     return (
-//       <div>
-//         <Card title="Edit student">
-//           <Form.Label>Name:</Form.Label>
-//           <Form.Input type="text" value={this.student.name} onChange={e => (this.student.name = e.target.value)} />
-//           <Form.Label>Email:</Form.Label>
-//           <Form.Input type="text" value={this.student.email} onChange={e => (this.student.email = e.target.value)} />
-//         </Card>
-//         <Row>
-//           <Column>
-//             <Button.Success onClick={this.save}>Save</Button.Success>
-//           </Column>
-//           <Column right>
-//             <Button.Danger onClick={this.delete}>Delete</Button.Danger>
-//           </Column>
-//         </Row>
-//         <Row>
-//           <Column right>
-//             <Button.Light onClick={this.cancel}>Cancel</Button.Light>
-//           </Column>
-//         </Row>
-//       </div>
-//     );
-//   }
-//
-//   mounted() {
-//     studentService.getStudent(this.props.match.params.id, student => {
-//       this.student = student;
-//     });
-//   }
-//
-//   save() {
-//     studentService.updateStudent(this.student, () => {
-//       history.push('/students/' + this.props.match.params.id);
-//     });
-//   }
-//
-//   cancel() {
-//     history.push('/students/' + this.props.match.params.id);
-//   }
-//
-//   delete() {
-//     studentService.deleteStudent(this.props.match.params.id, () => {
-//       history.push('/students/');
-//     });
-//   }
-// }
-//
-// class StudentAdd extends Component {
-//   student = [];
-//
-//   render() {
-//     if (!this.student) return null;
-//
-//     return (
-//       <div>
-//         <Card title="Add subject">
-//           <Form.Label>Name:</Form.Label>
-//           <Form.Input type="text" onChange={e => (this.student.navn = e.target.value)} />
-//           <Form.Label>Email:</Form.Label>
-//           <Form.Input type="text" onChange={e => (this.student.email = e.target.value)} />
-//         </Card>
-//         <Row>
-//           <Column>
-//             <Button.Success onClick={this.add}>Add</Button.Success>
-//           </Column>
-//           <Column right>
-//             <Button.Light onClick={this.cancel}>Cancel</Button.Light>
-//           </Column>
-//         </Row>
-//       </div>
-//     );
-//   }
-//
-//   mounted() {
-//     studentService.getStudents(student => {
-//       this.student = student;
-//     });
-//   }
-//
-//   cancel() {
-//     history.push('/students/');
-//   }
-//
-//   add() {
-//     studentService.addStudent(this.student, () => {
-//       history.push('/students/');
-//     });
-//   }
-// }
 
 ReactDOM.render(
   <HashRouter>
