@@ -221,7 +221,6 @@ class MyPage extends Component {
         this.setState({
           dob: result.DOB.getDate() + '-' + (result.DOB.getMonth() + 1) + '-' + result.DOB.getFullYear()
         });
-        this.setState({ errormessage: 'test' });
       },
       () => {
         console.log('failure');
