@@ -119,7 +119,12 @@ class ButtonDanger extends Component {
 class ButtonInfo extends Component {
   render() {
     return (
-      <button type="button" className="btn btn-info" onClick={this.props.onClick}>
+      <button
+        type="button"
+        className="btn btn-info"
+        onClick={this.props.onClick}
+        style={{ marginTop: 20, marginLeft: 80, marginRight: 80 }}
+      >
         {this.props.children}
       </button>
     );

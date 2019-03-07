@@ -15,7 +15,7 @@ class Menu extends Component {
   render() {
     return (
       <NavBar brand="Sykkelutleie AS">
-        <DropdownButton id="dropdown-item-button" title="Profil" variant="secondary">
+        <DropdownButton id="dropdown-item-button" title="&#128100; Min Profil" variant="secondary">
           <Dropdown.Item onClick={() => history.push('/myPage')}>Min side</Dropdown.Item>
           <Dropdown.Item onClick={() => history.push('/home')}>Hovedside</Dropdown.Item>
           <Dropdown.Item onClick={() => history.push('/')}>Logg ut</Dropdown.Item>
@@ -27,7 +27,7 @@ class Menu extends Component {
 
 class Login extends Component {
   user = [];
-  errorMessage = '';
+  state = { errorMessage: '' };
 
   render() {
     return (
@@ -35,7 +35,7 @@ class Login extends Component {
         <Card title="Login">
           <Form.Input type="text" placeholder="Brukernavn" onChange={e => (this.user.name = e.target.value)} />
           <Form.Input type="password" placeholder="Passord" onChange={e => (this.user.password = e.target.value)} />
-          <Form.Label>{this.errorMessage}</Form.Label>
+          <Form.Label>{this.state.errorMessage}</Form.Label>
         </Card>
         <Row>
           <Column>
@@ -55,13 +55,13 @@ class Login extends Component {
       result => {
         if (bcrypt.compareSync(this.user.password, result.password)) history.push('/home');
         else {
-          this.errorMessage = 'Du har skrevet feil brukernavn eller passord, prøv igjen!';
-          this.render();
+          // this.errorMessage = 'Du har skrevet feil brukernavn eller passord, prøv igjen!';
+          // this.render();
+          this.setState({ errorMessage: 'Du har skrevet feil brukernavn eller passord, prøv igjen!' });
         }
       },
       () => {
-        this.errorMessage = 'Du har skrevet feil brukernavn eller passord, prøv igjen!';
-        this.render();
+        this.setState({ errorMessage: 'Du har skrevet feil brukernavn eller passord, prøv igjen!' });
       }
     );
   }
@@ -78,19 +78,15 @@ class Home extends Component {
         <Card>
           <List>
             <Button.Info onClick={this.newOrder}>Ny ordre</Button.Info>
-            <br />
           </List>
           <List>
             <Button.Info onClick={this.findOrder}>Finn ordre</Button.Info>
-            <br />
           </List>
           <List>
             <Button.Info onClick={this.customer}>Kunde</Button.Info>
-            <br />
           </List>
           <List>
             <Button.Info onClick={this.storageStatus}>Lagerstatus</Button.Info>
-            <br />
           </List>
           <List>
             <Button.Info onClick={this.employee}>Ansatte</Button.Info>
