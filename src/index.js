@@ -18,7 +18,7 @@ class Menu extends Component {
         <DropdownButton id="dropdown-item-button" title="&#128100; Min Profil" variant="secondary">
           <Dropdown.Item onClick={() => history.push('/myPage')}>Min side</Dropdown.Item>
           <Dropdown.Item onClick={() => history.push('/home')}>Hovedside</Dropdown.Item>
-          <Dropdown.Item onClick={() => history.push('/')}>Logg inn</Dropdown.Item>
+          <Dropdown.Item onClick={() => history.push('/')}>Logg ut</Dropdown.Item>
         </DropdownButton>
       </NavBar>
     );
