@@ -31,7 +31,9 @@ class Menu extends Component {
               title={localStorage.getItem('userName')}
               variant="secondary"
             >
-              <Dropdown.Item onClick={() => history.push('/myPage')}>Min side</Dropdown.Item>
+              <Dropdown.Item onClick={() => history.push('/employees/' + localStorage.getItem('userName'))}>
+                Min side
+              </Dropdown.Item>
               <Dropdown.Item
                 onClick={() => {
                   history.push('/');
@@ -159,7 +161,7 @@ class Home extends Component {
   }
 }
 
-class MyPage extends Component {
+class EmployeeDetail extends Component {
   user = { e_id: ' ', fname: ' ', lname: ' ', department: ' ', email: ' ', tlf: ' ', adress: ' ', dob: ' ' };
   render() {
     return (
@@ -205,7 +207,7 @@ class MyPage extends Component {
   }
 
   mounted() {
-    employeeService.getEmployee(localStorage.getItem('userName'), result => {
+    employeeService.getEmployee(this.props.match.params.id, result => {
       this.user.e_id = result.e_id;
       this.user.fname = result.fname;
       this.user.lname = result.lname;
@@ -266,7 +268,7 @@ class Employees extends Component {
         </thead>
         <tbody>
           {this.employees.map(employee => (
-            <tr key={employee.e_id}>
+            <tr key={employee.e_id} onClick={() => history.push('/employees/' + employee.e_id)}>
               <td>{employee.e_id}</td>
               <td>{employee.fname}</td>
               <td>{employee.lname}</td>
@@ -289,9 +291,9 @@ ReactDOM.render(
       <Menu />
       <Route exact path="/" component={Login} />
       <Route exact path="/home" component={Home} />
-      <Route exact path="/myPage" component={MyPage} />
       <Route exact path="/customers" component={Customers} />
       <Route exact path="/employees" component={Employees} />
+      <Route exact path="/employees/:id" component={EmployeeDetail} />
     </div>
   </HashRouter>,
   document.getElementById('root')
