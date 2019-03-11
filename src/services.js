@@ -11,6 +11,14 @@ class EmployeeService {
       success(results[0]);
     });
   }
+
+  getEmployees(success) {
+    connection.query('select * from Employee', (error, results) => {
+      if (error) return console.error(error);
+
+      success(results);
+    });
+  }
 }
 
 export let employeeService = new EmployeeService();

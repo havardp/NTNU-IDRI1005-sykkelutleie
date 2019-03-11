@@ -11,6 +11,7 @@ import Alert from 'react-bootstrap/Alert';
 import Modal from 'react-bootstrap/Modal';
 import ModalBody from 'react-bootstrap/ModalBody';
 import Table from 'react-bootstrap/Table';
+import Collapse from 'react-bootstrap/Collapse';
 
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
@@ -29,8 +30,7 @@ class Menu extends Component {
               title={localStorage.getItem('userName')}
               variant="secondary"
             >
-              <Dropdown.Item onClick={() => history.push('/myPage')}>Mn side</Dropdown.Item>
-              <Dropdown.Item onClick={() => history.push('/home')}>Hovedside</Dropdown.Item>
+              <Dropdown.Item onClick={() => history.push('/myPage')}>Min side</Dropdown.Item>
               <Dropdown.Item
                 onClick={() => {
                   history.push('/');
@@ -52,10 +52,19 @@ class Menu extends Component {
 
 class Login extends Component {
   user = [];
-  state = { errorMessage: false, modalShow: false };
+  collapseShow = false;
+  modalShow = false;
 
-  handleClose() {
-    this.setState({ show: false });
+  modalClose() {
+    this.modalShow = false;
+  }
+
+  collapseClose() {
+    this.collapseShow = false;
+  }
+
+  modalOpen() {
+    this.modalShow = true;
   }
 
   render() {
@@ -65,24 +74,24 @@ class Login extends Component {
           <List>
             <Form.Input type="text" placeholder="Brukernavn" onChange={e => (this.user.name = e.target.value)} />
             <Form.Input type="password" placeholder="Passord" onChange={e => (this.user.password = e.target.value)} />
-            <Form.Label>
-              {this.state.errorMessage ? (
-                <Alert variant="danger"> Du har skrevet inn feil brukernavn eller passord </Alert>
-              ) : (
-                ''
-              )}
-            </Form.Label>
           </List>
+          <div onClick={this.collapseClose}>
+            <Collapse in={this.collapseShow}>
+              <div id="example-collapse-text">
+                <Alert variant="danger"> Du har skrevet inn feil brukernavn eller passord </Alert>
+              </div>
+            </Collapse>
+          </div>
           <Row>
             <Column>
               <Button.Light onClick={this.login}>Logg inn</Button.Light>
             </Column>
             <Column right>
-              <Button.Light onClick={this.help}>Hjelp &#x2753;</Button.Light>
+              <Button.Light onClick={this.modalOpen}>Hjelp &#x2753;</Button.Light>
             </Column>
           </Row>
         </Card>
-        <Modal show={this.state.show} onHide={this.handleClose} centered>
+        <Modal show={this.modalShow} onHide={this.modalClose} centered>
           <Modal.Body>Hvis du er usikker på passord eller brukernavn, kontakt en administrator</Modal.Body>
         </Modal>
       </div>
@@ -99,22 +108,18 @@ class Login extends Component {
     employeeService.getEmployee(
       this.user.name,
       result => {
-        if (bcrypt.compareSync(this.user.password, result.password)) {
+        if (bcrypt.compareSync(this.user.password ? this.user.password : '', result.password)) {
           localStorage.setItem('userName', this.user.name);
           localStorage.setItem('userLoggedIn', true);
           history.push('/home');
         } else {
-          this.setState({ errorMessage: true });
+          this.collapseShow = true;
         }
       },
       () => {
-        this.setState({ errorMessage: true });
+        this.collapseShow = true;
       }
     );
-  }
-
-  help() {
-    this.setState({ show: true });
   }
 }
 
@@ -142,17 +147,17 @@ class Home extends Component {
       </div>
     );
   }
-  newOrder() {
-    console.log(localStorage.getItem('userLoggedIn'));
-  }
+  newOrder() {}
   findOrder() {}
   customer() {}
   storageStatus() {}
-  employee() {}
+  employee() {
+    history.push('/employees');
+  }
 }
 
 class MyPage extends Component {
-  state = { e_id: ' ', fname: ' ', lname: ' ', department: ' ', email: ' ', tlf: ' ', adress: ' ', dob: ' ' };
+  user = { e_id: ' ', fname: ' ', lname: ' ', department: ' ', email: ' ', tlf: ' ', adress: ' ', dob: ' ' };
   render() {
     return (
       <Card title="Personalia">
@@ -160,60 +165,84 @@ class MyPage extends Component {
           <tbody>
             <tr>
               <td>Ansatt id</td>
-              <td>{this.state.e_id}</td>
+              <td>{this.user.e_id}</td>
             </tr>
             <tr>
               <td>Fornavn</td>
-              <td>{this.state.fname}</td>
+              <td>{this.user.fname}</td>
             </tr>
             <tr>
               <td>Etternavn</td>
-              <td>{this.state.lname}</td>
+              <td>{this.user.lname}</td>
             </tr>
             <tr>
               <td>Avdeling</td>
-              <td>{this.state.department}</td>
+              <td>{this.user.department}</td>
             </tr>
             <tr>
               <td>Telefon</td>
-              <td>{this.state.tlf}</td>
+              <td>{this.user.tlf}</td>
             </tr>
             <tr>
               <td>Email</td>
-              <td>{this.state.email}</td>
+              <td>{this.user.email}</td>
             </tr>
             <tr>
               <td>Adresse</td>
-              <td>{this.state.adress}</td>
+              <td>{this.user.adress}</td>
             </tr>
             <tr>
               <td>Fødselsdato</td>
-              <td>{this.state.dob}</td>
+              <td>{this.user.dob}</td>
             </tr>
           </tbody>
         </Table>
       </Card>
     );
   }
+
   mounted() {
-    employeeService.getEmployee(
-      localStorage.getItem('userName'),
-      result => {
-        this.setState({ e_id: result.e_id });
-        this.setState({ fname: result.fname });
-        this.setState({ lname: result.lname });
-        this.setState({ department: result.department });
-        this.setState({ email: result.email });
-        this.setState({ tlf: result.tlf });
-        this.setState({ adress: result.adress });
-        this.setState({
-          dob: result.DOB.getDate() + '-' + (result.DOB.getMonth() + 1) + '-' + result.DOB.getFullYear()
-        });
-      },
-      () => {
-        console.log('failure, ingen bruker logget inn');
-      }
+    employeeService.getEmployee(localStorage.getItem('userName'), result => {
+      this.user.e_id = result.e_id;
+      this.user.fname = result.fname;
+      this.user.lname = result.lname;
+      this.user.department = result.department;
+      this.user.email = result.email;
+      this.user.tlf = result.tlf;
+      this.user.adress = result.adress;
+      this.user.dob = result.DOB.getDate() + '-' + (result.DOB.getMonth() + 1) + '-' + result.DOB.getFullYear();
+    });
+  }
+}
+
+class Employees extends Component {
+  employees = [];
+  render() {
+    return (
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <td>Ansatt id</td>
+            <td>Fornavn</td>
+            <td>Etternavn</td>
+          </tr>
+        </thead>
+        <tbody>
+          {this.employees.map(employee => (
+            <tr key={employee.e_id}>
+              <td>{employee.e_id}</td>
+              <td>{employee.fname}</td>
+              <td>{employee.lname}</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
     );
+  }
+  mounted() {
+    employeeService.getEmployees(employees => {
+      this.employees = employees;
+    });
   }
 }
 
@@ -224,6 +253,7 @@ ReactDOM.render(
       <Route exact path="/" component={Login} />
       <Route exact path="/home" component={Home} />
       <Route exact path="/myPage" component={MyPage} />
+      <Route exact path="/employees" component={Employees} />
     </div>
   </HashRouter>,
   document.getElementById('root')
