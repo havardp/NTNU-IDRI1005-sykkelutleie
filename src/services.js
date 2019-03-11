@@ -21,7 +21,19 @@ class EmployeeService {
   }
 }
 
+class CustomerService {
+
+  getCustomer(success) {
+    connection.query('select * from Customer', (error, results) => {
+      if (error) return console.error(error);
+
+      success(results);
+    });
+  }
+}
+
 export let employeeService = new EmployeeService();
+export let customerService = new CustomerService();
 // class StudentService {
 //   getStudents(success) {
 //     connection.query('select * from Students', (error, results) => {

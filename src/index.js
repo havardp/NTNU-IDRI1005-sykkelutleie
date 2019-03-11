@@ -3,6 +3,7 @@ import { Component } from 'react-simplified';
 import ReactDOM from 'react-dom';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { employeeService } from './services';
+import { customerService } from './services';
 import { Card, List, Row, Column, NavBar, Button, Form } from './widgets';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -149,7 +150,9 @@ class Home extends Component {
   }
   newOrder() {}
   findOrder() {}
-  customer() {}
+  customer() {
+    history.push('/customers');
+  }
   storageStatus() {}
   employee() {
     history.push('/employees');
@@ -215,6 +218,40 @@ class MyPage extends Component {
   }
 }
 
+class Customers extends Component {
+  customers = [];
+  render() {
+    return (
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <td>Kunde id</td>
+            <td>Fornavn</td>
+            <td>Etternavn</td>
+            <td>Antall ordrer</td>
+          </tr>
+        </thead>
+        <tbody>
+          {this.customers.map(customer => (
+            <tr key={customer.c_id}>
+              <td>{customer.c_id}</td>
+              <td>{customer.c_fname}</td>
+              <td>{customer.c_lname}</td>
+              <td>0</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+    );
+  }
+  mounted() {
+    customerService.getCustomer(customers => {
+      this.customers = customers;
+    });
+  }
+}
+
+
 class Employees extends Component {
   employees = [];
   render() {
@@ -253,6 +290,7 @@ ReactDOM.render(
       <Route exact path="/" component={Login} />
       <Route exact path="/home" component={Home} />
       <Route exact path="/myPage" component={MyPage} />
+      <Route exact path="/customers" component={Customers} />
       <Route exact path="/employees" component={Employees} />
     </div>
   </HashRouter>,
