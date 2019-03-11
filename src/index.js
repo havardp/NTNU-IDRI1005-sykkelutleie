@@ -220,6 +220,57 @@ class EmployeeDetail extends Component {
   }
 }
 
+class CustomerDetail extends Component {
+  user = { c_id: ' ', c_fname: ' ', c_lname: ' ', email: ' ', tlf: ' ', adress: ' ', c_zip: ' ' };
+  render() {
+    return (
+      <Card title="Personalia">
+        <Table striped bordered hover>
+          <tbody>
+            <tr>
+              <td>Kunde id</td>
+              <td>{this.user.c_id}</td>
+            </tr>
+            <tr>
+              <td>Fornavn</td>
+              <td>{this.user.c_fname}</td>
+            </tr>
+            <tr>
+              <td>Etternavn</td>
+              <td>{this.user.c_lname}</td>
+            </tr>
+            <tr>
+              <td>Telefon</td>
+              <td>{this.user.c_tlf}</td>
+            </tr>
+            <tr>
+              <td>Email</td>
+              <td>{this.user.c_email}</td>
+            </tr>
+            <tr>
+              <td>Adresse</td>
+              <td>{this.user.c_adress}</td>
+            </tr>
+          </tbody>
+        </Table>
+      </Card>
+    );
+  }
+
+  mounted() {
+    customerService.getCustomer(this.props.match.params.id, result => {
+      this.user.c_id = result.c_id;
+      this.user.c_fname = result.c_fname;
+      this.user.c_lname = result.c_lname;
+      this.user.c_email = result.c_email;
+      this.user.c_tlf = result.c_tlf;
+      this.user.c_adress = result.c_adress;
+    });
+    console.log(this.user)
+  }
+}
+
+
 class Customers extends Component {
   customers = [];
   render() {
@@ -235,7 +286,7 @@ class Customers extends Component {
         </thead>
         <tbody>
           {this.customers.map(customer => (
-            <tr key={customer.c_id}>
+            <tr key={customer.c_id} onClick={() => history.push('/customers/' + customer.c_id)}>
               <td>{customer.c_id}</td>
               <td>{customer.c_fname}</td>
               <td>{customer.c_lname}</td>
@@ -247,7 +298,7 @@ class Customers extends Component {
     );
   }
   mounted() {
-    customerService.getCustomer(customers => {
+    customerService.getCustomers(customers => {
       this.customers = customers;
     });
   }
@@ -292,6 +343,7 @@ ReactDOM.render(
       <Route exact path="/" component={Login} />
       <Route exact path="/home" component={Home} />
       <Route exact path="/customers" component={Customers} />
+      <Route exact path="/customers/:id" component={CustomerDetail} />
       <Route exact path="/employees" component={Employees} />
       <Route exact path="/employees/:id" component={EmployeeDetail} />
     </div>
