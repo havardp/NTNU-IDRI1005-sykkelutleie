@@ -3,15 +3,15 @@ import { Component } from 'react-simplified';
 import ReactDOM from 'react-dom';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { employeeService } from './services';
-import { Card, List, Row, Column, NavBar, Button, Form } from './widgets';
+import { Card, List, Row, Column, NavBar, Button, Alert } from './widgets';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import Alert from 'react-bootstrap/Alert';
 import Modal from 'react-bootstrap/Modal';
 import ModalBody from 'react-bootstrap/ModalBody';
 import Table from 'react-bootstrap/Table';
 import Collapse from 'react-bootstrap/Collapse';
+import Form from 'react-bootstrap/Form';
 
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
@@ -74,13 +74,13 @@ class Login extends Component {
       <div>
         <Card title="Login">
           <List>
-            <Form.Input type="text" placeholder="Brukernavn" onChange={e => (this.user.name = e.target.value)} />
-            <Form.Input type="password" placeholder="Passord" onChange={e => (this.user.password = e.target.value)} />
+            <Form.Control type="text" placeholder="Brukernavn" onChange={e => (this.user.name = e.target.value)} />
+            <Form.Control type="password" placeholder="Passord" onChange={e => (this.user.password = e.target.value)} />
           </List>
           <div onClick={this.collapseClose}>
             <Collapse in={this.collapseShow}>
               <div id="example-collapse-text">
-                <Alert variant="danger"> Du har skrevet inn feil brukernavn eller passord </Alert>
+                <Alert role="danger"> Du har skrevet inn feil brukernavn eller passord </Alert>
               </div>
             </Collapse>
           </div>
@@ -137,7 +137,7 @@ class Home extends Component {
             <Button.Info onClick={this.findOrder}>Finn ordre</Button.Info>
           </List>
           <List>
-            <Button.Info onClick={this.customer}>Kunde</Button.Info>
+            <Button.Info onClick={this.customer}>Kunder</Button.Info>
           </List>
           <List>
             <Button.Info onClick={this.storageStatus}>Lagerstatus</Button.Info>
@@ -149,7 +149,9 @@ class Home extends Component {
       </div>
     );
   }
-  newOrder() {}
+  newOrder() {
+    history.push('/newOrder');
+  }
   findOrder() {}
   customer() {}
   storageStatus() {}
@@ -248,6 +250,62 @@ class Employees extends Component {
   }
 }
 
+class NewOrder extends Component {
+  render() {
+    return (
+      <Card>
+        <Form>
+          <Form.Row>
+            <Form.Group as={Column} controlId="formGridEmail">
+              <Form.Label>Fornavn</Form.Label>
+              <Form.Control type="text" placeholder="Skriv her" />
+            </Form.Group>
+
+            <Form.Group as={Column} controlId="formGridPassword">
+              <Form.Label>Etternavn</Form.Label>
+              <Form.Control type="password" placeholder="Password" />
+            </Form.Group>
+          </Form.Row>
+
+          <Form.Group controlId="formGridAddress1">
+            <Form.Label>Address</Form.Label>
+            <Form.Control placeholder="1234 Main St" />
+          </Form.Group>
+
+          <Form.Group controlId="formGridAddress2">
+            <Form.Label>Address 2</Form.Label>
+            <Form.Control placeholder="Apartment, studio, or floor" />
+          </Form.Group>
+
+          <Form.Row>
+            <Form.Group as={Column} controlId="formGridCity">
+              <Form.Label>City</Form.Label>
+              <Form.Control />
+            </Form.Group>
+
+            <Form.Group as={Column} controlId="formGridState">
+              <Form.Label>State</Form.Label>
+              <Form.Control as="select">
+                <option>Choose...</option>
+                <option>...</option>
+              </Form.Control>
+            </Form.Group>
+
+            <Form.Group as={Column} controlId="formGridZip">
+              <Form.Label>Zip</Form.Label>
+              <Form.Control />
+            </Form.Group>
+          </Form.Row>
+
+          <Form.Group id="formGridCheckbox">
+            <Form.Check type="checkbox" label="Check me out" />
+          </Form.Group>
+        </Form>
+      </Card>
+    );
+  }
+}
+
 ReactDOM.render(
   <HashRouter>
     <div>
@@ -256,6 +314,7 @@ ReactDOM.render(
       <Route exact path="/home" component={Home} />
       <Route exact path="/employees" component={Employees} />
       <Route exact path="/employees/:id" component={EmployeeDetail} />
+      <Route exact path="/newOrder" component={NewOrder} />
     </div>
   </HashRouter>,
   document.getElementById('root')
