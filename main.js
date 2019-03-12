@@ -14,7 +14,7 @@ require('electron-reload')(path.join(__dirname, 'src'), {
 
 let mainWindow;
 app.on('ready', () => {
-  mainWindow = new BrowserWindow({ width: 1920, height: 1080, webPreferences: { nodeIntegration: true } });
+  mainWindow = new BrowserWindow({ width: 1000, height: 600, webPreferences: { nodeIntegration: true } });
 
   // Open Development Tools
   mainWindow.openDevTools();
@@ -24,4 +24,13 @@ app.on('ready', () => {
 
 app.on('window-all-closed', () => {
   app.quit();
+});
+
+//change window size depending on if at login screen or inside the program
+let { ipcMain } = electron;
+ipcMain.on('maximize', function(e) {
+  mainWindow.maximize();
+});
+ipcMain.on('minimize', function(e) {
+  mainWindow.restore();
 });

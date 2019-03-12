@@ -1,25 +1,43 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
 import ReactDOM from 'react-dom';
+
+//Bootstrap imports
 import { NavLink, HashRouter, Route } from 'react-router-dom';
-import { employeeService, customerService } from './services';
 import { Card, List, Row, Column, NavBar, Button, Alert } from './widgets';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import Modal from 'react-bootstrap/Modal';
 import ModalBody from 'react-bootstrap/ModalBody';
 import Table from 'react-bootstrap/Table';
-import Collapse from 'react-bootstrap/Collapse';
 import Form from 'react-bootstrap/Form';
 
+//Import of all components "login, customer, employee etc."
+import { Login } from './login.js';
+
+//Imports for sql queries
+import { employeeService, customerService } from './services';
+
+//To be able to change path
 import createHashHistory from 'history/createHashHistory';
-const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
-const bcrypt = require('bcryptjs');
+const history = createHashHistory();
+
+//To be able to call main.js to change window size
+const electron = require('electron');
+let { ipcRenderer } = electron;
+
+//Export a class to be able to change path from different components
+class HistoryRoute {
+  changePath(path) {
+    history.push(path);
+  }
+}
+export let historyRoute = new HistoryRoute();
 
 class Menu extends Component {
   //"&#128100;" profil ikon
   render() {
+    if (localStorage.getItem('userLoggedIn') != 'true') return null;
     return (
       <NavBar brand="Sykkelutleie AS">
         {localStorage.getItem('userLoggedIn') == 'true' ? (
@@ -35,8 +53,9 @@ class Menu extends Component {
               </Dropdown.Item>
               <Dropdown.Item
                 onClick={() => {
-                  history.push('/');
                   localStorage.clear();
+                  ipcRenderer.send('minimize');
+                  history.push('/');
                 }}
               >
                 {' '}
@@ -48,79 +67,6 @@ class Menu extends Component {
           ''
         )}
       </NavBar>
-    );
-  }
-}
-
-class Login extends Component {
-  user = [];
-  collapseShow = false;
-  modalShow = false;
-
-  modalClose() {
-    this.modalShow = false;
-  }
-
-  collapseClose() {
-    this.collapseShow = false;
-  }
-
-  modalOpen() {
-    this.modalShow = true;
-  }
-
-  render() {
-    return (
-      <div>
-        <Card title="Login">
-          <List>
-            <Form.Control type="text" placeholder="Brukernavn" onChange={e => (this.user.name = e.target.value)} />
-            <Form.Control type="password" placeholder="Passord" onChange={e => (this.user.password = e.target.value)} />
-          </List>
-          <div onClick={this.collapseClose}>
-            <Collapse in={this.collapseShow}>
-              <div id="example-collapse-text">
-                <Alert role="danger"> Du har skrevet inn feil brukernavn eller passord </Alert>
-              </div>
-            </Collapse>
-          </div>
-          <Row>
-            <Column>
-              <Button.Light onClick={this.login}>Logg inn</Button.Light>
-            </Column>
-            <Column right>
-              <Button.Light onClick={this.modalOpen}>Hjelp &#x2753;</Button.Light>
-            </Column>
-          </Row>
-        </Card>
-        <Modal show={this.modalShow} onHide={this.modalClose} centered>
-          <Modal.Body>Hvis du er usikker på passord eller brukernavn, kontakt en administrator</Modal.Body>
-        </Modal>
-      </div>
-    );
-  }
-
-  mounted() {
-    if (localStorage.getItem('userLoggedIn') == 'true') {
-      history.push('/home');
-    }
-  }
-
-  login() {
-    employeeService.getEmployee(
-      this.user.name,
-      result => {
-        if (bcrypt.compareSync(this.user.password ? this.user.password : '', result.password)) {
-          localStorage.setItem('userName', this.user.name);
-          localStorage.setItem('userLoggedIn', true);
-          history.push('/home');
-        } else {
-          this.collapseShow = true;
-        }
-      },
-      () => {
-        this.collapseShow = true;
-      }
     );
   }
 }
@@ -337,57 +283,7 @@ class Employees extends Component {
 
 class NewOrder extends Component {
   render() {
-    return (
-      <Card>
-        <Form>
-          <Form.Row>
-            <Form.Group as={Column} controlId="formGridEmail">
-              <Form.Label>Fornavn</Form.Label>
-              <Form.Control type="text" placeholder="Skriv her" />
-            </Form.Group>
-
-            <Form.Group as={Column} controlId="formGridPassword">
-              <Form.Label>Etternavn</Form.Label>
-              <Form.Control type="password" placeholder="Password" />
-            </Form.Group>
-          </Form.Row>
-
-          <Form.Group controlId="formGridAddress1">
-            <Form.Label>Address</Form.Label>
-            <Form.Control placeholder="1234 Main St" />
-          </Form.Group>
-
-          <Form.Group controlId="formGridAddress2">
-            <Form.Label>Address 2</Form.Label>
-            <Form.Control placeholder="Apartment, studio, or floor" />
-          </Form.Group>
-
-          <Form.Row>
-            <Form.Group as={Column} controlId="formGridCity">
-              <Form.Label>City</Form.Label>
-              <Form.Control />
-            </Form.Group>
-
-            <Form.Group as={Column} controlId="formGridState">
-              <Form.Label>State</Form.Label>
-              <Form.Control as="select">
-                <option>Choose...</option>
-                <option>...</option>
-              </Form.Control>
-            </Form.Group>
-
-            <Form.Group as={Column} controlId="formGridZip">
-              <Form.Label>Zip</Form.Label>
-              <Form.Control />
-            </Form.Group>
-          </Form.Row>
-
-          <Form.Group id="formGridCheckbox">
-            <Form.Check type="checkbox" label="Check me out" />
-          </Form.Group>
-        </Form>
-      </Card>
-    );
+    return <div>test</div>;
   }
 }
 
