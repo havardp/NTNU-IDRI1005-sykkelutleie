@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Component } from 'react-simplified';
 import ReactDOM from 'react-dom';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
-import { employeeService } from './services';
+import { employeeService, customerService } from './services';
 import { Card, List, Row, Column, NavBar, Button, Alert } from './widgets';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -153,7 +153,9 @@ class Home extends Component {
     history.push('/newOrder');
   }
   findOrder() {}
-  customer() {}
+  customer() {
+    history.push('/customers');
+  }
   storageStatus() {}
   employee() {
     history.push('/employees');
@@ -215,6 +217,89 @@ class EmployeeDetail extends Component {
       this.user.tlf = result.tlf;
       this.user.adress = result.adress;
       this.user.dob = result.DOB.getDate() + '-' + (result.DOB.getMonth() + 1) + '-' + result.DOB.getFullYear();
+    });
+  }
+}
+
+class CustomerDetail extends Component {
+  user = { c_id: ' ', c_fname: ' ', c_lname: ' ', email: ' ', tlf: ' ', adress: ' ', c_zip: ' ' };
+  render() {
+    return (
+      <Card title="Personalia">
+        <Table striped bordered hover>
+          <tbody>
+            <tr>
+              <td>Kunde id</td>
+              <td>{this.user.c_id}</td>
+            </tr>
+            <tr>
+              <td>Fornavn</td>
+              <td>{this.user.c_fname}</td>
+            </tr>
+            <tr>
+              <td>Etternavn</td>
+              <td>{this.user.c_lname}</td>
+            </tr>
+            <tr>
+              <td>Telefon</td>
+              <td>{this.user.c_tlf}</td>
+            </tr>
+            <tr>
+              <td>Email</td>
+              <td>{this.user.c_email}</td>
+            </tr>
+            <tr>
+              <td>Adresse</td>
+              <td>{this.user.c_adress}</td>
+            </tr>
+          </tbody>
+        </Table>
+      </Card>
+    );
+  }
+
+  mounted() {
+    customerService.getCustomer(this.props.match.params.id, result => {
+      this.user.c_id = result.c_id;
+      this.user.c_fname = result.c_fname;
+      this.user.c_lname = result.c_lname;
+      this.user.c_email = result.c_email;
+      this.user.c_tlf = result.c_tlf;
+      this.user.c_adress = result.c_adress;
+    });
+    console.log(this.user);
+  }
+}
+
+class Customers extends Component {
+  customers = [];
+  render() {
+    return (
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <td>Kunde id</td>
+            <td>Fornavn</td>
+            <td>Etternavn</td>
+            <td>Antall ordrer</td>
+          </tr>
+        </thead>
+        <tbody>
+          {this.customers.map(customer => (
+            <tr key={customer.c_id} onClick={() => history.push('/customers/' + customer.c_id)}>
+              <td>{customer.c_id}</td>
+              <td>{customer.c_fname}</td>
+              <td>{customer.c_lname}</td>
+              <td>0</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+    );
+  }
+  mounted() {
+    customerService.getCustomers(customers => {
+      this.customers = customers;
     });
   }
 }
@@ -312,6 +397,8 @@ ReactDOM.render(
       <Menu />
       <Route exact path="/" component={Login} />
       <Route exact path="/home" component={Home} />
+      <Route exact path="/customers" component={Customers} />
+      <Route exact path="/customers/:id" component={CustomerDetail} />
       <Route exact path="/employees" component={Employees} />
       <Route exact path="/employees/:id" component={EmployeeDetail} />
       <Route exact path="/newOrder" component={NewOrder} />
