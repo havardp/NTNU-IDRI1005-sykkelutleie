@@ -22,7 +22,6 @@ class EmployeeService {
 }
 
 class CustomerService {
-
   getCustomers(success) {
     connection.query('select * from Customer', (error, results) => {
       if (error) return console.error(error);
@@ -32,13 +31,12 @@ class CustomerService {
   }
 
   getCustomer(c_id, success) {
-    connection.query('select * from Customer where c_id = ?',[c_id] ,(error, results) => {
+    connection.query('select * from Customer where c_id = ?', [c_id], (error, results) => {
       if (error) return console.error(error);
 
       success(results[0]);
     });
   }
-
 }
 
 class StorageService {
