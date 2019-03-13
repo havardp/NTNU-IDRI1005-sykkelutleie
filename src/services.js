@@ -41,8 +41,20 @@ class CustomerService {
 
 }
 
+class StorageService {
+
+  getStorage(success) {
+    connection.query('select * from Product_Type',(error, results) => {
+      if (error) return console.error(error);
+
+      success(results);
+    });
+  }
+}
+
 export let employeeService = new EmployeeService();
 export let customerService = new CustomerService();
+export let storageService = new StorageService();
 // class StudentService {
 //   getStudents(success) {
 //     connection.query('select * from Students', (error, results) => {

@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 import { employeeService } from './services';
 import { customerService } from './services';
+import { storageService } from './services';
 import { Card, List, Row, Column, NavBar, Button, Form } from './widgets';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -155,7 +156,9 @@ class Home extends Component {
   customer() {
     history.push('/customers');
   }
-  storageStatus() {}
+  storageStatus() {
+    history.push('/storagestatus');
+  }
   employee() {
     history.push('/employees');
   }
@@ -226,6 +229,7 @@ class CustomerDetail extends Component {
     return (
       <Card title="Personalia">
         <Table striped bordered hover>
+        <CardSubtitle>Card subtitle</CardSubtitle>
           <tbody>
             <tr>
               <td>Kunde id</td>
@@ -336,6 +340,47 @@ class Employees extends Component {
   }
 }
 
+class StorageStatus extends Component {
+  storagestatus = [];
+  render() {
+    return (
+      <div>
+      <Card title="LAGERSTATUS"></Card>
+      <Card title= "Sykler">
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <td>Modell</td>
+            <td>Beskrivelse</td>
+            <td>Timepris</td>
+            <td>Dagpris</td>
+          </tr>
+        </thead>
+        <tbody>
+          {this.storagestatus.map(product_type => (
+            <tr key={product_type.model} onClick={() => history.push('/product_type/' + product_type.model)}>
+              <td>{product_type.model}</td>
+              <td>{product_type.description}</td>
+              <td>{product_type.hour_price}</td>
+              <td>{product_type.day_price}</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+      </Card>
+      <Card title="Utstyr"></Card>
+      </div>
+    );
+  }
+  mounted() {
+    storageService.getStorage(storagestatus => {
+      this.storagestatus = storagestatus;
+    });
+  }
+}
+
+
+
 ReactDOM.render(
   <HashRouter>
     <div>
@@ -346,6 +391,7 @@ ReactDOM.render(
       <Route exact path="/customers/:id" component={CustomerDetail} />
       <Route exact path="/employees" component={Employees} />
       <Route exact path="/employees/:id" component={EmployeeDetail} />
+      <Route exact path="/storagestatus" component={StorageStatus} />
     </div>
   </HashRouter>,
   document.getElementById('root')
