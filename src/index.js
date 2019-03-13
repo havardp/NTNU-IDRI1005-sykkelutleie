@@ -4,10 +4,8 @@ import ReactDOM from 'react-dom';
 
 //Bootstrap imports
 import { NavLink, HashRouter, Route } from 'react-router-dom';
-import { employeeService } from './services';
-import { customerService } from './services';
-import { storageService } from './services';
-import { Card, List, Row, Column, NavBar, Button, Form } from './widgets';
+import { employeeService, customerService, storageService } from './services';
+import { Card, List, Row, Column, NavBar, Button } from './widgets';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
@@ -18,8 +16,6 @@ import Form from 'react-bootstrap/Form';
 //Import of all components "login, customer, employee etc."
 import { Login } from './login.js';
 
-//Imports for sql queries
-import { employeeService, customerService } from './services';
 
 //To be able to change path
 import createHashHistory from 'history/createHashHistory';
