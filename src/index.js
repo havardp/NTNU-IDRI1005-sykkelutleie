@@ -109,7 +109,7 @@ class Home extends Component {
 }
 
 class EmployeeDetail extends Component {
-  user = { e_id: ' ', fname: ' ', lname: ' ', department: ' ', email: ' ', tlf: ' ', adress: ' ', dob: ' ' };
+  user = { e_id: ' ', fname: ' ', lname: ' ', department: ' ', email: ' ', tlf: ' ', address: ' ', dob: ' ' };
   render() {
     return (
       <Card title="Personalia">
@@ -141,7 +141,7 @@ class EmployeeDetail extends Component {
             </tr>
             <tr>
               <td>Adresse</td>
-              <td>{this.user.adress}</td>
+              <td>{this.user.address}</td>
             </tr>
             <tr>
               <td>Fødselsdato</td>
@@ -161,14 +161,14 @@ class EmployeeDetail extends Component {
       this.user.department = result.department;
       this.user.email = result.email;
       this.user.tlf = result.tlf;
-      this.user.adress = result.adress;
+      this.user.address = result.address;
       this.user.dob = result.DOB.getDate() + '-' + (result.DOB.getMonth() + 1) + '-' + result.DOB.getFullYear();
     });
   }
 }
 
 class CustomerDetail extends Component {
-  user = { c_id: ' ', c_fname: ' ', c_lname: ' ', email: ' ', tlf: ' ', adress: ' ', c_zip: ' ' };
+  user = { c_id: ' ', c_fname: ' ', c_lname: ' ', email: ' ', tlf: ' ', address: ' ', c_zip: ' ' };
   render() {
     return (
       <Card title="Personalia">
@@ -196,7 +196,7 @@ class CustomerDetail extends Component {
             </tr>
             <tr>
               <td>Adresse</td>
-              <td>{this.user.c_adress}</td>
+              <td>{this.user.c_address}</td>
             </tr>
           </tbody>
         </Table>
@@ -211,7 +211,7 @@ class CustomerDetail extends Component {
       this.user.c_lname = result.c_lname;
       this.user.c_email = result.c_email;
       this.user.c_tlf = result.c_tlf;
-      this.user.c_adress = result.c_adress;
+      this.user.c_address = result.c_address;
     });
     console.log(this.user);
   }
