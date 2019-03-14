@@ -105,6 +105,7 @@ export class Login extends Component {
   }
 
   mounted() {
+    console.log('login side');
     if (sessionStorage.getItem('userLoggedIn') == 'true') {
       historyRoute.changePath('/home');
     }
