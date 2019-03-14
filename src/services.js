@@ -39,6 +39,8 @@ class CustomerService {
   }
 }
 
+
+
 class StorageService {
 
   getStorage(success) {

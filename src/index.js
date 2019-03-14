@@ -93,10 +93,10 @@ class Home extends Component {
       </div>
     );
   }
-  newOrder() {
-    
+  newOrder() {}
+  findOrder() {
+    history.push('/orders')
   }
-  findOrder() {}
   customer() {
     history.push('/customers');
   }
@@ -392,6 +392,89 @@ class StorageDetail extends Component {
 }
 
 
+class OrderDetail extends Component {
+  user = { c_id: ' ', c_fname: ' ', c_lname: ' ', email: ' ', tlf: ' ', address: ' ', c_zip: ' ' };
+  render() {
+    return (
+      <Card title="Personalia">
+        <Table striped bordered hover>
+          <tbody>
+            <tr>
+              <td>Kunde id</td>
+              <td>{this.user.c_id}</td>
+            </tr>
+            <tr>
+              <td>Fornavn</td>
+              <td>{this.user.c_fname}</td>
+            </tr>
+            <tr>
+              <td>Etternavn</td>
+              <td>{this.user.c_lname}</td>
+            </tr>
+            <tr>
+              <td>Telefon</td>
+              <td>{this.user.c_tlf}</td>
+            </tr>
+            <tr>
+              <td>Email</td>
+              <td>{this.user.c_email}</td>
+            </tr>
+            <tr>
+              <td>Adresse</td>
+              <td>{this.user.c_address}</td>
+            </tr>
+          </tbody>
+        </Table>
+      </Card>
+    );
+  }
+
+  mounted() {
+    customerService.getCustomer(this.props.match.params.id, result => {
+      this.user.c_id = result.c_id;
+      this.user.c_fname = result.c_fname;
+      this.user.c_lname = result.c_lname;
+      this.user.c_email = result.c_email;
+      this.user.c_tlf = result.c_tlf;
+      this.user.c_address = result.c_address;
+    });
+    console.log(this.user);
+  }
+}
+
+class Orders extends Component {
+  orders = [];
+  render() {
+    return (
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <td>Kunde id</td>
+            <td>Fornavn</td>
+            <td>Etternavn</td>
+            <td>Antall ordrer</td>
+          </tr>
+        </thead>
+        <tbody>
+          {this.customers.map(customer => (
+            <tr key={customer.c_id} onClick={() => history.push('/customers/' + customer.c_id)}>
+              <td>{customer.c_id}</td>
+              <td>{customer.c_fname}</td>
+              <td>{customer.c_lname}</td>
+              <td>0</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+    );
+  }
+  mounted() {
+    customerService.getCustomers(customers => {
+      this.customers = customers;
+    });
+  }
+}
+
 
 ReactDOM.render(
   <HashRouter>
@@ -405,6 +488,8 @@ ReactDOM.render(
       <Route exact path="/employees/:id" component={EmployeeDetail} />
       <Route exact path="/storagestatus" component={StorageStatus} />
       <Route exact path="/storagestatus/:id" component={StorageDetail} />
+      <Route exact path="/orders" component={Orders} />
+      <Route exact path="/orders/:id" component={OrderDetail} />
     </div>
   </HashRouter>,
   document.getElementById('root')
