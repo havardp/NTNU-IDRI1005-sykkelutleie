@@ -56,7 +56,7 @@ class Menu extends Component {
               onClick={() => {
                 sessionStorage.clear();
                 ipcRenderer.send('minimize');
-                history.push('/');
+                history.push('/home');
               }}
             >
               {' '}
@@ -151,7 +151,7 @@ class EmployeeDetail extends Component {
               </tr>
               <tr>
                 <td>Adresse</td>
-                <td>{this.user.adress}</td>
+                <td>{this.user.address}</td>
               </tr>
               <tr>
                 <td>Fødselsdato</td>
@@ -353,48 +353,52 @@ class StorageDetail extends Component {
   render() {
     return (
       <div className="main">
-      <Card title="Detaljer">
-        <Table striped bordered hover responsive>
-          <thead>
-            <tr>
-              <td>Chassis id</td>
-              <td>Modell</td>
-              <td>Gir</td>
-              <td>Hjulstørrelse</td>
-              <td>Rep.dato</td>
-              <td>Ødelagt</td>
-              <td>Lokasjon</td>
-              <td>Tilholdssted</td>
-              <td>Bagasjebrett</td>
+        <Card title="Detaljer">
+          <Table striped bordered hover responsive>
+            <thead>
+              <tr>
+                <td>Chassis id</td>
+                <td>Modell</td>
+                <td>Gir</td>
+                <td>Hjulstørrelse</td>
+                <td>Rep.dato</td>
+                <td>Ødelagt</td>
+                <td>Lokasjon</td>
+                <td>Tilholdssted</td>
+                <td>Bagasjebrett</td>
               </tr>
-          </thead>
-          <tbody>
-          {this.Allbikes.map(bike => (
-            <tr key={bike.chassis_id}>
-              <td>{bike.chassis_id}</td>
-              <td>{bike.model}</td>
-              <td>{bike.gear}</td>
-              <td>{bike.wheel_size}</td>
-              <td>{bike.rep_date}</td>
-              <td>{bike.broken}</td>
-              <td>{bike.location}</td>
-              <td>{bike.storage}</td>
-              <td>{bike.luggage}</td>
-              <td><button>&#9881;</button></td>
-              <td><button>&#10004;</button></td>
-            </tr>
-          ))}
-          </tbody>
-          <td>
-        <button className="btn btn-info btn-lg">
-          <span className="glyphicon glyphicon-plus"></span>&#10010;
-        </button>
-      </td>
-          <tbody>
-
-          </tbody>
-        </Table>
-      </Card>
+            </thead>
+            <tbody>
+              {this.Allbikes.map(bike => (
+                <tr key={bike.chassis_id}>
+                  <td>{bike.chassis_id}</td>
+                  <td>{bike.model}</td>
+                  <td>{bike.gear}</td>
+                  <td>{bike.wheel_size}</td>
+                  <td>{bike.rep_date}</td>
+                  <td>{bike.broken}</td>
+                  <td>{bike.location}</td>
+                  <td>{bike.storage}</td>
+                  <td>{bike.luggage}</td>
+                  <td>
+                    <button>&#9881;</button>
+                  </td>
+                  <td>
+                    <button>&#10004;</button>
+                  </td>
+                </tr>
+              ))}
+              <tr>
+                <td>
+                  <button className="btn btn-info btn-lg">
+                    <span className="glyphicon glyphicon-plus" />
+                    &#10010;
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </Table>
+        </Card>
       </div>
     );
   }
