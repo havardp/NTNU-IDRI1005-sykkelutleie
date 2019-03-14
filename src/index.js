@@ -56,7 +56,7 @@ class Menu extends Component {
               onClick={() => {
                 sessionStorage.clear();
                 ipcRenderer.send('minimize');
-                history.push('/');
+                history.push('/home');
               }}
             >
               {' '}
@@ -351,51 +351,52 @@ class StorageDetail extends Component {
   Allbikes = [];
   render() {
     return (
-      <Card title="Detaljer">
-        {this.Allbikes.map(bike => (
-          <Table striped bordered hover key={bike.chassis_id}>
-            <tbody>
-              <tr>
-                <td>Chassis id</td>
-                <td>{bike.chassis_id}</td>
-              </tr>
-              <tr>
-                <td>Modell</td>
-                <td>{bike.model}</td>
-              </tr>
-              <tr>
-                <td>Gir</td>
-                <td>{bike.gear}</td>
-              </tr>
-              <tr>
-                <td>Hjulstørrelse</td>
-                <td>{bike.wheel_size}</td>
-              </tr>
-              <tr>
-                <td>Reperasjonsdato</td>
-                <td>{bike.rep_date}</td>
-              </tr>
-              <tr>
-                <td>Ødelagt</td>
-                <td>{bike.broken}</td>
-              </tr>
-              <tr>
-                <td>Lokasjon</td>
-                <td>{bike.location}</td>
-              </tr>
-              <tr>
-                <td>Tilholdssted</td>
-                <td>{bike.storage}</td>
-              </tr>
-              <tr>
-                <td>Bagasjebrett</td>
-                <td>{bike.luggage}</td>
-              </tr>
-            </tbody>
-          </Table>
-        ))}
-        ;
-      </Card>
+      <div className="main">
+        <Card title="Detaljer">
+          {this.Allbikes.map(bike => (
+            <Table striped bordered hover key={bike.chassis_id}>
+              <tbody>
+                <tr>
+                  <td>Chassis id</td>
+                  <td>{bike.chassis_id}</td>
+                </tr>
+                <tr>
+                  <td>Modell</td>
+                  <td>{bike.model}</td>
+                </tr>
+                <tr>
+                  <td>Gir</td>
+                  <td>{bike.gear}</td>
+                </tr>
+                <tr>
+                  <td>Hjulstørrelse</td>
+                  <td>{bike.wheel_size}</td>
+                </tr>
+                <tr>
+                  <td>Reperasjonsdato</td>
+                  <td>{bike.rep_date}</td>
+                </tr>
+                <tr>
+                  <td>Ødelagt</td>
+                  <td>{bike.broken}</td>
+                </tr>
+                <tr>
+                  <td>Lokasjon</td>
+                  <td>{bike.location}</td>
+                </tr>
+                <tr>
+                  <td>Tilholdssted</td>
+                  <td>{bike.storage}</td>
+                </tr>
+                <tr>
+                  <td>Bagasjebrett</td>
+                  <td>{bike.luggage}</td>
+                </tr>
+              </tbody>
+            </Table>
+          ))}
+        </Card>
+      </div>
     );
   }
 
