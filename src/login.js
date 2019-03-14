@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
 import ReactDOM from 'react-dom';
+import { NavLink, HashRouter, Route } from 'react-router-dom';
 
 //Bootstrap imports
-import { NavLink, HashRouter, Route } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
 import ModalBody from 'react-bootstrap/ModalBody';
 import Collapse from 'react-bootstrap/Collapse';
@@ -105,7 +105,7 @@ export class Login extends Component {
   }
 
   mounted() {
-    if (localStorage.getItem('userLoggedIn') == 'true') {
+    if (sessionStorage.getItem('userLoggedIn') == 'true') {
       historyRoute.changePath('/home');
     }
   }
@@ -116,8 +116,8 @@ export class Login extends Component {
         this.user.name,
         result => {
           if (bcrypt.compareSync(this.user.password ? this.user.password : '', result.password)) {
-            localStorage.setItem('userName', this.user.name);
-            localStorage.setItem('userLoggedIn', true);
+            sessionStorage.setItem('userName', this.user.name);
+            sessionStorage.setItem('userLoggedIn', true);
             ipcRenderer.send('maximize');
             historyRoute.changePath('/home');
           } else {

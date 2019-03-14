@@ -97,6 +97,7 @@ export class NavBar extends Component {
             className="navbar-brand"
             activeClassName="active"
             to={localStorage.getItem('userLoggedIn') == 'true' ? '/home' : '/'}
+            style={{ fontSize: 30 }}
           >
             {this.props.brand}
           </NavLink>
