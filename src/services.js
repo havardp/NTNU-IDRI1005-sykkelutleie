@@ -41,16 +41,17 @@ class CustomerService {
 
 class StorageService {
 
-  getStorage(success) {
-    connection.query('select * from Product_Type',(error, results) => {
+
+  getBikeModels(success) {
+    connection.query('SELECT Product_Type.model, description, hour_price, day_price, count(*) as "countBikes" FROM `Bike`, Product_Type where Bike.model = Product_Type.model Group by Product_Type.model', (error, results) => {
       if (error) return console.error(error);
 
+      console.log(results);
       success(results);
     });
   }
-
-  getBikes(id, success) {
-    connection.query('select * from Bike', (error, results) => {
+  getEquipmentModels(success) {
+    connection.query('SELECT Product_Type.model, description, hour_price, day_price, count(*) as "countEquipment" FROM `Equipment`, Product_Type where Equipment.model = Product_Type.model Group by Product_Type.model', (error, results) => {
       if (error) return console.error(error);
 
       console.log(results);
@@ -59,6 +60,14 @@ class StorageService {
   }
   getBike(id, success) {
     connection.query('select * from Bike where model = ?', [id], (error, results) => {
+      if (error) return console.error(error);
+
+      console.log(results);
+      success(results);
+    });
+  }
+  getEquipment(id, success) {
+    connection.query('select * from Equipment where model = ?', [id], (error, results) => {
       if (error) return console.error(error);
 
       console.log(results);
