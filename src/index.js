@@ -14,6 +14,9 @@ import Form from 'react-bootstrap/Form';
 import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
 
+//import mysql queries
+import { customerService, employeeService, storageService } from './services.js';
+
 //Import of all components "login, customer, employee etc."
 import { Login } from './login.js';
 
