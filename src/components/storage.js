@@ -9,7 +9,7 @@ import { Card } from '../widgets';
 import { storageService } from '../services';
 
 //Import the hashistory from index.js to be able to change path
-import { historyRoute } from '../index.js';
+import { history } from '../index.js';
 
 export class StorageStatus extends Component {
   bikestatus = [];
@@ -31,10 +31,7 @@ export class StorageStatus extends Component {
             </thead>
             <tbody>
               {this.bikestatus.map(product_type => (
-                <tr
-                  key={product_type.model}
-                  onClick={() => historyRoute.changePath('/bikedetails/' + product_type.model)}
-                >
+                <tr key={product_type.model} onClick={() => history.push('/bikedetails/' + product_type.model)}>
                   <td>{product_type.model}</td>
                   <td>{product_type.description}</td>
                   <td>{product_type.hour_price}</td>
@@ -58,10 +55,7 @@ export class StorageStatus extends Component {
             </thead>
             <tbody>
               {this.equipmentstatus.map(product_type => (
-                <tr
-                  key={product_type.model}
-                  onClick={() => historyRoute.changePath('/equipmentdetails/' + product_type.model)}
-                >
+                <tr key={product_type.model} onClick={() => history.push('/equipmentdetails/' + product_type.model)}>
                   <td>{product_type.model}</td>
                   <td>{product_type.description}</td>
                   <td>{product_type.hour_price}</td>

@@ -8,7 +8,7 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 
 //Import the hashistory from index.js to be able to change path
-import { historyRoute } from '../index.js';
+import { history } from '../index.js';
 
 import { loginHandler } from './login.js';
 

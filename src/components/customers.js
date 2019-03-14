@@ -9,7 +9,7 @@ import { Card } from '../widgets';
 import { customerService } from '../services';
 
 //Import the hashistory from index.js to be able to change path
-import { historyRoute } from '../index.js';
+import { history } from '../index.js';
 
 export class Customers extends Component {
   customers = [];
@@ -27,7 +27,7 @@ export class Customers extends Component {
           </thead>
           <tbody>
             {this.customers.map(customer => (
-              <tr key={customer.c_id} onClick={() => historyRoute.changePath('/customers/' + customer.c_id)}>
+              <tr key={customer.c_id} onClick={() => history.push('/customers/' + customer.c_id)}>
                 <td>{customer.c_id}</td>
                 <td>{customer.c_fname}</td>
                 <td>{customer.c_lname}</td>

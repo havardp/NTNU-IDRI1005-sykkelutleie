@@ -15,7 +15,7 @@ const electron = require('electron');
 let { ipcRenderer } = electron;
 
 //Import the hashistory from index.js to be able to change path
-import { historyRoute } from '../index.js';
+import { history } from '../index.js';
 const bcrypt = require('bcryptjs');
 
 export class Login extends Component {
@@ -105,7 +105,7 @@ export class Login extends Component {
   mounted() {
     console.log('login side');
     if (sessionStorage.getItem('userLoggedIn') == 'true') {
-      historyRoute.changePath('/home');
+      history.push('/home');
     }
   }
 
@@ -117,7 +117,7 @@ export class Login extends Component {
           if (bcrypt.compareSync(this.user.password ? this.user.password : '', result.password)) {
             sessionStorage.setItem('userName', this.user.name);
             sessionStorage.setItem('userLoggedIn', true);
-            historyRoute.changePath('/home');
+            history.push('/home');
             ipcRenderer.send('maximize');
           } else {
             this.collapseShow = true;
@@ -133,7 +133,7 @@ export class Login extends Component {
   logout() {
     sessionStorage.clear();
     ipcRenderer.send('minimize');
-    historyRoute.changePath('/');
+    history.push('/');
   }
 }
 

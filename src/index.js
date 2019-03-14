@@ -14,15 +14,7 @@ import { Home } from './components/home.js';
 
 //To be able to change path
 import createHashHistory from 'history/createHashHistory';
-const history = createHashHistory();
-
-//Export a class to be able to change path from different components
-class HistoryRoute {
-  changePath(path) {
-    history.push(path);
-  }
-}
-export let historyRoute = new HistoryRoute();
+export const history = createHashHistory();
 
 ReactDOM.render(
   <HashRouter>
