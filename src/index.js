@@ -1,17 +1,21 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
 import ReactDOM from 'react-dom';
+import { NavLink, HashRouter, Route } from 'react-router-dom';
 
 //Bootstrap imports
-import { NavLink, HashRouter, Route } from 'react-router-dom';
-import { employeeService, customerService, storageService } from './services';
-import { Card, List, Row, Column, NavBar, Button } from './widgets';
+import { Card, List, Row, Column, NavBar, Alert } from './widgets';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import ModalBody from 'react-bootstrap/ModalBody';
 import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
+import Navbar from 'react-bootstrap/Navbar';
+import Button from 'react-bootstrap/Button';
+
+//import mysql queries
+import { customerService, employeeService, storageService } from './services.js';
 
 //Import of all components "login, customer, employee etc."
 import { Login } from './login.js';
@@ -35,67 +39,65 @@ export let historyRoute = new HistoryRoute();
 class Menu extends Component {
   //"&#128100;" profil ikon
   render() {
-    if (localStorage.getItem('userLoggedIn') != 'true') return null;
+    if (sessionStorage.getItem('userLoggedIn') != 'true') return null;
     return (
       <NavBar brand="Sykkelutleie AS">
-        {localStorage.getItem('userLoggedIn') == 'true' ? (
-          <ButtonGroup vertical>
-            <DropdownButton
-              id="dropdown-item-button"
-              alignRight
-              title={localStorage.getItem('userName')}
-              variant="secondary"
+        <ButtonGroup vertical>
+          <DropdownButton
+            id="dropdown-item-button"
+            alignRight
+            title={sessionStorage.getItem('userName')}
+            variant="outline-secondary"
+          >
+            <Dropdown.Item onClick={() => history.push('/employees/' + sessionStorage.getItem('userName'))}>
+              Min side
+            </Dropdown.Item>
+            <Dropdown.Item
+              onClick={() => {
+                sessionStorage.clear();
+                ipcRenderer.send('minimize');
+                history.push('/');
+              }}
             >
-              <Dropdown.Item onClick={() => history.push('/employees/' + localStorage.getItem('userName'))}>
-                Min side
-              </Dropdown.Item>
-              <Dropdown.Item
-                onClick={() => {
-                  localStorage.clear();
-                  ipcRenderer.send('minimize');
-                  history.push('/');
-                }}
-              >
-                {' '}
-                Logg ut
-              </Dropdown.Item>
-            </DropdownButton>
-          </ButtonGroup>
-        ) : (
-          ''
-        )}
+              {' '}
+              Logg ut
+            </Dropdown.Item>
+          </DropdownButton>
+        </ButtonGroup>
       </NavBar>
     );
   }
 }
 
-class Home extends Component {
+class SideNav extends Component {
   render() {
+    if (sessionStorage.getItem('userLoggedIn') != 'true') return null;
     return (
-      <div>
-        <Card>
-          <List>
-            <Button.Info onClick={this.newOrder}>Ny ordre</Button.Info>
-          </List>
-          <List>
-            <Button.Info onClick={this.findOrder}>Finn ordre</Button.Info>
-          </List>
-          <List>
-            <Button.Info onClick={this.customer}>Kunder</Button.Info>
-          </List>
-          <List>
-            <Button.Info onClick={this.storageStatus}>Lagerstatus</Button.Info>
-          </List>
-          <List>
-            <Button.Info onClick={this.employee}>Ansatte</Button.Info>
-          </List>
-        </Card>
+      <div className="sidenav">
+        <Button variant="outline-secondary" block onClick={this.newOrder}>
+          Ny ordre
+        </Button>
+
+        <Button variant="outline-secondary" block onClick={this.findOrder}>
+          Finn ordre
+        </Button>
+
+        <Button variant="outline-secondary" block onClick={this.customer}>
+          Kunder
+        </Button>
+
+        <Button variant="outline-secondary" block onClick={this.storageStatus}>
+          Lagerstatus
+        </Button>
+
+        <Button variant="outline-secondary" block onClick={this.employee}>
+          Ansatte
+        </Button>
       </div>
     );
   }
-  newOrder() {
-    history.push('/newOrder');
-  }
+
+  newOrder() {}
   findOrder() {}
   customer() {
     history.push('/customers');
@@ -108,48 +110,56 @@ class Home extends Component {
   }
 }
 
+class Home extends Component {
+  render() {
+    return <div className="main">HOME</div>;
+  }
+}
+
 class EmployeeDetail extends Component {
   user = { e_id: ' ', fname: ' ', lname: ' ', department: ' ', email: ' ', tlf: ' ', address: ' ', dob: ' ' };
   render() {
     return (
-      <Card title="Personalia">
-        <Table striped bordered hover>
-          <tbody>
-            <tr>
-              <td>Ansatt id</td>
-              <td>{this.user.e_id}</td>
-            </tr>
-            <tr>
-              <td>Fornavn</td>
-              <td>{this.user.fname}</td>
-            </tr>
-            <tr>
-              <td>Etternavn</td>
-              <td>{this.user.lname}</td>
-            </tr>
-            <tr>
-              <td>Avdeling</td>
-              <td>{this.user.department}</td>
-            </tr>
-            <tr>
-              <td>Telefon</td>
-              <td>{this.user.tlf}</td>
-            </tr>
-            <tr>
-              <td>Email</td>
-              <td>{this.user.email}</td>
-            </tr>
-            <tr>
-              <td>Adresse</td>
-              <td>{this.user.address}</td>
-            </tr>
-            <tr>
-              <td>Fødselsdato</td>
-              <td>{this.user.dob}</td>
-            </tr>
-          </tbody>
-        </Table>
-      </Card>
+      <div className="main">
+        <Card title="Personalia">
+          <Table striped bordered hover>
+            <tbody>
+              <tr>
+                <td>Ansatt id</td>
+                <td>{this.user.e_id}</td>
+              </tr>
+              <tr>
+                <td>Fornavn</td>
+                <td>{this.user.fname}</td>
+              </tr>
+              <tr>
+                <td>Etternavn</td>
+                <td>{this.user.lname}</td>
+              </tr>
+              <tr>
+                <td>Avdeling</td>
+                <td>{this.user.department}</td>
+              </tr>
+              <tr>
+                <td>Telefon</td>
+                <td>{this.user.tlf}</td>
+              </tr>
+              <tr>
+                <td>Email</td>
+                <td>{this.user.email}</td>
+              </tr>
+              <tr>
+                <td>Adresse</td>
+                <td>{this.user.adress}</td>
+              </tr>
+              <tr>
+                <td>Fødselsdato</td>
+                <td>{this.user.dob}</td>
+              </tr>
+            </tbody>
+          </Table>
+        </Card>
+      </div>
     );
   }
 
@@ -171,37 +181,38 @@ class CustomerDetail extends Component {
   user = { c_id: ' ', c_fname: ' ', c_lname: ' ', email: ' ', tlf: ' ', address: ' ', c_zip: ' ' };
   render() {
     return (
-      <Card title="Personalia">
-        <Table striped bordered hover>
-        <CardSubtitle>Card subtitle</CardSubtitle>
-          <tbody>
-            <tr>
-              <td>Kunde id</td>
-              <td>{this.user.c_id}</td>
-            </tr>
-            <tr>
-              <td>Fornavn</td>
-              <td>{this.user.c_fname}</td>
-            </tr>
-            <tr>
-              <td>Etternavn</td>
-              <td>{this.user.c_lname}</td>
-            </tr>
-            <tr>
-              <td>Telefon</td>
-              <td>{this.user.c_tlf}</td>
-            </tr>
-            <tr>
-              <td>Email</td>
-              <td>{this.user.c_email}</td>
-            </tr>
-            <tr>
-              <td>Adresse</td>
-              <td>{this.user.c_address}</td>
-            </tr>
-          </tbody>
-        </Table>
-      </Card>
+      <div className="main">
+        <Card title="Personalia">
+          <Table striped bordered hover>
+            <tbody>
+              <tr>
+                <td>Kunde id</td>
+                <td>{this.user.c_id}</td>
+              </tr>
+              <tr>
+                <td>Fornavn</td>
+                <td>{this.user.c_fname}</td>
+              </tr>
+              <tr>
+                <td>Etternavn</td>
+                <td>{this.user.c_lname}</td>
+              </tr>
+              <tr>
+                <td>Telefon</td>
+                <td>{this.user.c_tlf}</td>
+              </tr>
+              <tr>
+                <td>Email</td>
+                <td>{this.user.c_email}</td>
+              </tr>
+              <tr>
+                <td>Adresse</td>
+                <td>{this.user.c_adress}</td>
+              </tr>
+            </tbody>
+          </Table>
+        </Card>
+      </div>
     );
   }
 
@@ -222,26 +233,28 @@ class Customers extends Component {
   customers = [];
   render() {
     return (
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <td>Kunde id</td>
-            <td>Fornavn</td>
-            <td>Etternavn</td>
-            <td>Antall ordrer</td>
-          </tr>
-        </thead>
-        <tbody>
-          {this.customers.map(customer => (
-            <tr key={customer.c_id} onClick={() => history.push('/customers/' + customer.c_id)}>
-              <td>{customer.c_id}</td>
-              <td>{customer.c_fname}</td>
-              <td>{customer.c_lname}</td>
-              <td>0</td>
+      <div className="main">
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <td>Kunde id</td>
+              <td>Fornavn</td>
+              <td>Etternavn</td>
+              <td>Antall ordrer</td>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {this.customers.map(customer => (
+              <tr key={customer.c_id} onClick={() => history.push('/customers/' + customer.c_id)}>
+                <td>{customer.c_id}</td>
+                <td>{customer.c_fname}</td>
+                <td>{customer.c_lname}</td>
+                <td>0</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
     );
   }
   mounted() {
@@ -255,24 +268,26 @@ class Employees extends Component {
   employees = [];
   render() {
     return (
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <td>Ansatt id</td>
-            <td>Fornavn</td>
-            <td>Etternavn</td>
-          </tr>
-        </thead>
-        <tbody>
-          {this.employees.map(employee => (
-            <tr key={employee.e_id} onClick={() => history.push('/employees/' + employee.e_id)}>
-              <td>{employee.e_id}</td>
-              <td>{employee.fname}</td>
-              <td>{employee.lname}</td>
+      <div className="main">
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <td>Ansatt id</td>
+              <td>Fornavn</td>
+              <td>Etternavn</td>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {this.employees.map(employee => (
+              <tr key={employee.e_id} onClick={() => history.push('/employees/' + employee.e_id)}>
+                <td>{employee.e_id}</td>
+                <td>{employee.fname}</td>
+                <td>{employee.lname}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
     );
   }
   mounted() {
@@ -286,31 +301,31 @@ class StorageStatus extends Component {
   storagestatus = [];
   render() {
     return (
-      <div>
-      <Card title="LAGERSTATUS"></Card>
-      <Card title= "Sykler">
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <td>Modell</td>
-            <td>Beskrivelse</td>
-            <td>Timepris</td>
-            <td>Dagpris</td>
-          </tr>
-        </thead>
-        <tbody>
-          {this.storagestatus.map(product_type => (
-            <tr key={product_type.model} onClick={() => history.push('/storagestatus/' + product_type.model)}>
-              <td>{product_type.model}</td>
-              <td>{product_type.description}</td>
-              <td>{product_type.hour_price}</td>
-              <td>{product_type.day_price}</td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-      </Card>
-      <Card title="Utstyr"></Card>
+      <div className="main">
+        <Card title="LAGERSTATUS" />
+        <Card title="Sykler">
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <td>Modell</td>
+                <td>Beskrivelse</td>
+                <td>Timepris</td>
+                <td>Dagpris</td>
+              </tr>
+            </thead>
+            <tbody>
+              {this.storagestatus.map(product_type => (
+                <tr key={product_type.model} onClick={() => history.push('/storagestatus/' + product_type.model)}>
+                  <td>{product_type.model}</td>
+                  <td>{product_type.description}</td>
+                  <td>{product_type.hour_price}</td>
+                  <td>{product_type.day_price}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </Card>
+        <Card title="Utstyr" />
       </div>
     );
   }
@@ -322,7 +337,17 @@ class StorageStatus extends Component {
 }
 
 class StorageDetail extends Component {
-  name = { chassis_id: ' ', model: ' ', gear: ' ', wheel_size: ' ', rep_date: ' ', broken: ' ', location: ' ', storage: ' ', luggage: ' '   };
+  name = {
+    chassis_id: ' ',
+    model: ' ',
+    gear: ' ',
+    wheel_size: ' ',
+    rep_date: ' ',
+    broken: ' ',
+    location: ' ',
+    storage: ' ',
+    luggage: ' '
+  };
   Allbikes = [];
   render() {
     return (
@@ -374,7 +399,7 @@ class StorageDetail extends Component {
   mounted() {
     storageService.getBike(this.props.match.params.id, result => {
       this.Allbikes = result;
-  /*    this.name.chassis_id = result.chassis_id;
+      /*    this.name.chassis_id = result.chassis_id;
       this.name.model = result.model;
       this.name.gear = result.gear;
       this.name.wheel_size = result.wheel_size;
@@ -387,12 +412,11 @@ class StorageDetail extends Component {
   }
 }
 
-
-
 ReactDOM.render(
   <HashRouter>
     <div>
       <Menu />
+      <SideNav />
       <Route exact path="/" component={Login} />
       <Route exact path="/home" component={Home} />
       <Route exact path="/customers" component={Customers} />
