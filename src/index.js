@@ -90,7 +90,7 @@ class SideNav extends Component {
   }
   newOrder() {}
   findOrder() {
-    history.push('/orders')
+    history.push('/orders');
   }
   customer() {
     history.push('/customers');
@@ -200,7 +200,7 @@ class CustomerDetail extends Component {
               </tr>
               <tr>
                 <td>Adresse</td>
-                <td>{this.user.c_adress}</td>
+                <td>{this.user.c_address}</td>
               </tr>
             </tbody>
           </Table>
@@ -245,11 +245,13 @@ class Customers extends Component {
                 <td>0</td>
               </tr>
             ))}
+            <tr>
+              <td>
+                <button className="btn btn-info btn-lg">&#10010;</button>
+              </td>
+            </tr>
           </tbody>
         </Table>
-        <td>
-      <button className="btn btn-info btn-lg">&#10010;</button>
-        </td>
       </div>
     );
   }
@@ -353,88 +355,72 @@ class StorageStatus extends Component {
   }
   mounted() {
     storageService.getBikeModels(bikestatus => {
-      console.log(bikestatus)
+      console.log(bikestatus);
       this.bikestatus = bikestatus;
-    })
-
-  {
-    storageService.getEquipmentModels(equipmentstatus => {
-      console.log(equipmentstatus)
-      this.equipmentstatus = equipmentstatus;
     });
-  }}
+
+    {
+      storageService.getEquipmentModels(equipmentstatus => {
+        console.log(equipmentstatus);
+        this.equipmentstatus = equipmentstatus;
+      });
+    }
+  }
 }
 
 class BikeDetail extends Component {
-  name = {
-    chassis_id: ' ',
-    model: ' ',
-    gear: ' ',
-    wheel_size: ' ',
-    rep_date: ' ',
-    broken: ' ',
-    location: ' ',
-    storage: ' ',
-    luggage: ' '
-  };
   Allbikes = [];
-  render() { return (
+  render() {
+    return (
       <div className="main">
-      <Card title={this.props.match.params.id}>
-        <Table striped bordered hover responsive>
-          <thead>
-            <tr>
-              <td>Chassis id</td>
-              <td>Gir</td>
-              <td>Hjulstørrelse</td>
-              <td>Rep.dato</td>
-              <td>Ødelagt</td>
-              <td>Lokasjon</td>
-              <td>Tilholdssted</td>
-              <td>Bagasjebrett</td>
+        <Card title={this.props.match.params.id}>
+          <Table striped bordered hover responsive>
+            <thead>
+              <tr>
+                <td>Chassis id</td>
+                <td>Gir</td>
+                <td>Hjulstørrelse</td>
+                <td>Rep.dato</td>
+                <td>Ødelagt</td>
+                <td>Lokasjon</td>
+                <td>Tilholdssted</td>
+                <td>Bagasjebrett</td>
               </tr>
-          </thead>
-          <tbody>
-          {this.Allbikes.map(bike => (
-            <tr key={bike.chassis_id}>
-              <td>{bike.chassis_id}</td>
-              <td>{bike.gear}</td>
-              <td>{bike.wheel_size}</td>
-              <td>{bike.rep_date}</td>
-              <td>{bike.broken}</td>
-              <td>{bike.location}</td>
-              <td>{bike.storage}</td>
-              <td>{bike.luggage}</td>
-              <td><button>&#9881;</button></td>
-              <td><button>&#10004;</button></td>
-            </tr>
-          ))}
-          </tbody>
-          <td>
-        <button className="btn btn-info btn-lg">&#10010;</button>
-          </td>
-          <tbody>
-
-          </tbody>
-        </Table>
-      </Card>
+            </thead>
+            <tbody>
+              {this.Allbikes.map(bike => (
+                <tr key={bike.chassis_id}>
+                  <td>{bike.chassis_id}</td>
+                  <td>{bike.gear}</td>
+                  <td>{bike.wheel_size}</td>
+                  <td>{bike.rep_date}</td>
+                  <td>{bike.broken}</td>
+                  <td>{bike.location}</td>
+                  <td>{bike.storage}</td>
+                  <td>{bike.luggage}</td>
+                  <td>
+                    <button>&#9881;</button>
+                  </td>
+                  <td>
+                    <button>&#10004;</button>
+                  </td>
+                </tr>
+              ))}
+              <tr>
+                <td>
+                  <button className="btn btn-info btn-lg">&#10010;</button>
+                </td>
+              </tr>
+            </tbody>
+          </Table>
+        </Card>
       </div>
     );
-
   }
 
   mounted() {
     storageService.getBike(this.props.match.params.id, result => {
       this.Allbikes = result;
-      /*    this.name.chassis_id = result.chassis_id;
-      this.name.model = result.model;
-      this.name.gear = result.gear;
-      this.name.wheel_size = result.wheel_size;
-      this.name.rep_date = result.rep_date;
-      this.name.broken = result.broken;
-      this.name.location = result.location;
-      this.name.storage = result.storage;
-      this.name.luggage = result.luggage; */
     });
   }
 }
@@ -442,40 +428,43 @@ class BikeDetail extends Component {
 class EquipmentDetail extends Component {
   name = {
     eq_id: ' ',
-    model: ' ',
+    model: ' '
   };
   Allequipment = [];
-  render() { return (
+  render() {
+    return (
       <div className="main">
-      <Card title={this.props.match.params.id}>
-        <Table striped bordered hover responsive>
-          <thead>
-            <tr>
-              <td>Utstyrs-id</td>
-              <td>Modell</td>
+        <Card title={this.props.match.params.id}>
+          <Table striped bordered hover responsive>
+            <thead>
+              <tr>
+                <td>Utstyrs-id</td>
+                <td>Modell</td>
               </tr>
-          </thead>
-          <tbody>
-          {this.Allequipment.map(equipment => (
-            <tr key={equipment.eq_id}>
-              <td>{equipment.eq_id}</td>
-              <td>{equipment.model}</td>
-              <td><button>&#9881;</button></td>
-              <td><button>&#10004;</button></td>
-            </tr>
-          ))}
-          </tbody>
-          <td>
-        <button className="btn btn-info btn-lg">&#10010;</button>
-          </td>
-          <tbody>
-
-          </tbody>
-        </Table>
-      </Card>
+            </thead>
+            <tbody>
+              {this.Allequipment.map(equipment => (
+                <tr key={equipment.eq_id}>
+                  <td>{equipment.eq_id}</td>
+                  <td>{equipment.model}</td>
+                  <td>
+                    <button>&#9881;</button>
+                  </td>
+                  <td>
+                    <button>&#10004;</button>
+                  </td>
+                </tr>
+              ))}
+              <tr>
+                <td>
+                  <button className="btn btn-info btn-lg">&#10010;</button>
+                </td>
+              </tr>
+            </tbody>
+          </Table>
+        </Card>
       </div>
     );
-
   }
 
   mounted() {
@@ -549,31 +538,32 @@ class Orders extends Component {
   render() {
     return (
       <div className="main">
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <td>Ordrenummer</td>
-            <td>Kundenummer</td>
-            <td>Kundenavn</td>
-          </tr>
-        </thead>
-        <tbody>
-          {this.orders.map(orders => (
-            <tr key={orders.order_nr} onClick={() => history.push('/orders/' + orders.orders_nr)}>
-              <td>{orders.order_nr}</td>
-              <td>{orders.c_id}</td>
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <td>Ordrenummer</td>
+              <td>Kundenummer</td>
+              <td>Kundenavn</td>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {this.orders.map(orders => (
+              <tr key={orders.order_nr} onClick={() => history.push('/orders/' + orders.orders_nr)}>
+                <td>{orders.order_nr}</td>
+                <td>{orders.c_id}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
       </div>
     );
   }
   mounted() {
     orderService.getOrders(orders => {
       this.orders = orders;
-
-  })}}
+    });
+  }
+}
 ReactDOM.render(
   <HashRouter>
     <div>
