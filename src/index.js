@@ -15,7 +15,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
 
 //import mysql queries
-import { customerService, employeeService, storageService } from './services.js';
+import { customerService, employeeService, storageService, orderService } from './services.js';
 
 //Import of all components "login, customer, employee etc."
 import { Login } from './login.js';
@@ -420,7 +420,7 @@ class StorageDetail extends Component {
 }
 
 
-class OrderDetail extends Component {
+/* class OrderDetail extends Component {
   user = { c_id: ' ', c_fname: ' ', c_lname: ' ', email: ' ', tlf: ' ', address: ' ', c_zip: ' ' };
   render() {
     return (
@@ -468,37 +468,36 @@ class OrderDetail extends Component {
     });
     console.log(this.user);
   }
-}
+} */
 
 class Orders extends Component {
   orders = [];
   render() {
     return (
+      <div className="main">
       <Table striped bordered hover>
         <thead>
           <tr>
-            <td>Kunde id</td>
-            <td>Fornavn</td>
-            <td>Etternavn</td>
-            <td>Antall ordrer</td>
+            <td>Ordrenummer</td>
+            <td>Kundenummer</td>
+            <td>Kundenavn</td>
           </tr>
         </thead>
         <tbody>
-          {this.customers.map(customer => (
-            <tr key={customer.c_id} onClick={() => history.push('/customers/' + customer.c_id)}>
-              <td>{customer.c_id}</td>
-              <td>{customer.c_fname}</td>
-              <td>{customer.c_lname}</td>
-              <td>0</td>
+          {this.orders.map(orders => (
+            <tr key={orders.order_nr} onClick={() => history.push('/orders/' + orders.orders_nr)}>
+              <td>{orders.order_nr}</td>
+              <td>{orders.c_id}</td>
             </tr>
           ))}
         </tbody>
       </Table>
+      </div>
     );
   }
   mounted() {
-    customerService.getCustomers(customers => {
-      this.customers = customers;
+    orderService.getOrders(orders => {
+      this.orders = orders;
     });
   }
 }
@@ -518,7 +517,7 @@ ReactDOM.render(
       <Route exact path="/storagestatus" component={StorageStatus} />
       <Route exact path="/storagestatus/:id" component={StorageDetail} />
       <Route exact path="/orders" component={Orders} />
-      <Route exact path="/orders/:id" component={OrderDetail} />
+
     </div>
   </HashRouter>,
   document.getElementById('root')
