@@ -68,6 +68,7 @@ class Menu extends Component {
 
 class SideNav extends Component {
   render() {
+    if (sessionStorage.getItem('userLoggedIn') != 'true') return null;
     return (
       <div className="sidenav">
         <Button variant="outline-secondary" block onClick={this.newOrder}>
