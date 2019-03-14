@@ -18,7 +18,6 @@ app.on('ready', () => {
   //mainWindow.setMenu(null); //fjerner toolbar, alternativt ", frame: false" fjerner alt
   // Open Development Tools
   //mainWindow.openDevTools();
-  mainWindow.openDevTools();
   mainWindow.loadURL('file://' + __dirname + '/public/index.html');
 });
 
