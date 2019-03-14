@@ -17,9 +17,6 @@ import Button from 'react-bootstrap/Button';
 //Import of all components "login, customer, employee etc."
 import { Login } from './login.js';
 
-//Imports for sql queries
-import { employeeService, customerService } from './services';
-
 //To be able to change path
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory();
@@ -96,14 +93,14 @@ class SideNav extends Component {
     );
   }
 
-  newOrder() {
-    history.push('/newOrder');
-  }
+  newOrder() {}
   findOrder() {}
   customer() {
     history.push('/customers');
   }
-  storageStatus() {}
+  storageStatus() {
+    history.push('/storagestatus');
+  }
   employee() {
     history.push('/employees');
   }
@@ -116,7 +113,7 @@ class Home extends Component {
 }
 
 class EmployeeDetail extends Component {
-  user = { e_id: ' ', fname: ' ', lname: ' ', department: ' ', email: ' ', tlf: ' ', adress: ' ', dob: ' ' };
+  user = { e_id: ' ', fname: ' ', lname: ' ', department: ' ', email: ' ', tlf: ' ', address: ' ', dob: ' ' };
   render() {
     return (
       <div className="main">
@@ -170,14 +167,14 @@ class EmployeeDetail extends Component {
       this.user.department = result.department;
       this.user.email = result.email;
       this.user.tlf = result.tlf;
-      this.user.adress = result.adress;
+      this.user.address = result.address;
       this.user.dob = result.DOB.getDate() + '-' + (result.DOB.getMonth() + 1) + '-' + result.DOB.getFullYear();
     });
   }
 }
 
 class CustomerDetail extends Component {
-  user = { c_id: ' ', c_fname: ' ', c_lname: ' ', email: ' ', tlf: ' ', adress: ' ', c_zip: ' ' };
+  user = { c_id: ' ', c_fname: ' ', c_lname: ' ', email: ' ', tlf: ' ', address: ' ', c_zip: ' ' };
   render() {
     return (
       <div className="main">
@@ -222,7 +219,7 @@ class CustomerDetail extends Component {
       this.user.c_lname = result.c_lname;
       this.user.c_email = result.c_email;
       this.user.c_tlf = result.c_tlf;
-      this.user.c_adress = result.c_adress;
+      this.user.c_address = result.c_address;
     });
     console.log(this.user);
   }
@@ -296,9 +293,121 @@ class Employees extends Component {
   }
 }
 
-class NewOrder extends Component {
+class StorageStatus extends Component {
+  storagestatus = [];
   render() {
-    return <div className="main">test</div>;
+    return (
+      <div className="main">
+        <Card title="LAGERSTATUS" />
+        <Card title="Sykler">
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <td>Modell</td>
+                <td>Beskrivelse</td>
+                <td>Timepris</td>
+                <td>Dagpris</td>
+              </tr>
+            </thead>
+            <tbody>
+              {this.storagestatus.map(product_type => (
+                <tr key={product_type.model} onClick={() => history.push('/storagestatus/' + product_type.model)}>
+                  <td>{product_type.model}</td>
+                  <td>{product_type.description}</td>
+                  <td>{product_type.hour_price}</td>
+                  <td>{product_type.day_price}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </Card>
+        <Card title="Utstyr" />
+      </div>
+    );
+  }
+  mounted() {
+    storageService.getStorage(storagestatus => {
+      this.storagestatus = storagestatus;
+    });
+  }
+}
+
+class StorageDetail extends Component {
+  name = {
+    chassis_id: ' ',
+    model: ' ',
+    gear: ' ',
+    wheel_size: ' ',
+    rep_date: ' ',
+    broken: ' ',
+    location: ' ',
+    storage: ' ',
+    luggage: ' '
+  };
+  Allbikes = [];
+  render() {
+    return (
+      <Card title="Detaljer">
+        {this.Allbikes.map(bike => (
+          <Table striped bordered hover key={bike.chassis_id}>
+            <tbody>
+              <tr>
+                <td>Chassis id</td>
+                <td>{bike.chassis_id}</td>
+              </tr>
+              <tr>
+                <td>Modell</td>
+                <td>{bike.model}</td>
+              </tr>
+              <tr>
+                <td>Gir</td>
+                <td>{bike.gear}</td>
+              </tr>
+              <tr>
+                <td>Hjulstørrelse</td>
+                <td>{bike.wheel_size}</td>
+              </tr>
+              <tr>
+                <td>Reperasjonsdato</td>
+                <td>{bike.rep_date}</td>
+              </tr>
+              <tr>
+                <td>Ødelagt</td>
+                <td>{bike.broken}</td>
+              </tr>
+              <tr>
+                <td>Lokasjon</td>
+                <td>{bike.location}</td>
+              </tr>
+              <tr>
+                <td>Tilholdssted</td>
+                <td>{bike.storage}</td>
+              </tr>
+              <tr>
+                <td>Bagasjebrett</td>
+                <td>{bike.luggage}</td>
+              </tr>
+            </tbody>
+          </Table>
+        ))}
+        ;
+      </Card>
+    );
+  }
+
+  mounted() {
+    storageService.getBikes(this.props.match.params.id, result => {
+      this.Allbikes = result;
+      /*    this.name.chassis_id = result.chassis_id;
+      this.name.model = result.model;
+      this.name.gear = result.gear;
+      this.name.wheel_size = result.wheel_size;
+      this.name.rep_date = result.rep_date;
+      this.name.broken = result.broken;
+      this.name.location = result.location;
+      this.name.storage = result.storage;
+      this.name.luggage = result.luggage; */
+    });
   }
 }
 
@@ -313,7 +422,8 @@ ReactDOM.render(
       <Route exact path="/customers/:id" component={CustomerDetail} />
       <Route exact path="/employees" component={Employees} />
       <Route exact path="/employees/:id" component={EmployeeDetail} />
-      <Route exact path="/newOrder" component={NewOrder} />
+      <Route exact path="/storagestatus" component={StorageStatus} />
+      <Route exact path="/storagestatus/:id" component={StorageDetail} />
     </div>
   </HashRouter>,
   document.getElementById('root')
