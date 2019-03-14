@@ -1,7 +1,5 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import ReactDOM from 'react-dom';
-import { NavLink, HashRouter, Route } from 'react-router-dom';
 
 //Bootstrap imports
 import Modal from 'react-bootstrap/Modal';
@@ -10,17 +8,17 @@ import Collapse from 'react-bootstrap/Collapse';
 import Alert from 'react-bootstrap/Alert';
 
 //Imports for sql queries
-import { employeeService } from './services';
+import { employeeService } from '../services';
 
 //To be able to call main.js to change window size
 const electron = require('electron');
 let { ipcRenderer } = electron;
 
 //Import the hashistory from index.js to be able to change path
-import { historyRoute } from './index.js';
+import { historyRoute } from '../index.js';
 const bcrypt = require('bcryptjs');
 
-export class LoginHandler extends Component {
+export class Login extends Component {
   user = [];
   collapseShow = false;
   modalShow = false;
@@ -139,4 +137,4 @@ export class LoginHandler extends Component {
   }
 }
 
-export let login = new LoginHandler();
+export let loginHandler = new Login();
