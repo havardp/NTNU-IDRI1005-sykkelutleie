@@ -19,15 +19,11 @@ import Nav from 'react-bootstrap/Nav';
 import { customerService, employeeService, storageService, orderService } from './services.js';
 
 //Import of all components "login, customer, employee etc."
-import { Login } from './login.js';
+import { LoginHandler, login } from './login.js';
 
 //To be able to change path
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory();
-
-//To be able to call main.js to change window size
-const electron = require('electron');
-let { ipcRenderer } = electron;
 
 //Export a class to be able to change path from different components
 class HistoryRoute {
@@ -59,16 +55,7 @@ class Menu extends Component {
           <Dropdown.Item onClick={() => history.push('/employees/' + sessionStorage.getItem('userName'))}>
             Min side
           </Dropdown.Item>
-          <Dropdown.Item
-            onClick={() => {
-              sessionStorage.clear();
-              ipcRenderer.send('minimize');
-              history.push('/');
-            }}
-          >
-            {' '}
-            Logg ut
-          </Dropdown.Item>
+          <Dropdown.Item onClick={() => login.logout()}> Logg ut</Dropdown.Item>
         </DropdownButton>
       </Navbar>
     );
@@ -147,13 +134,7 @@ class EmployeeDetail extends Component {
     employeeService.getEmployee(
       this.props.match.params.id,
       result => {
-        this.user.e_id = result.e_id;
-        this.user.fname = result.fname;
-        this.user.lname = result.lname;
-        this.user.department = result.department;
-        this.user.email = result.email;
-        this.user.tlf = result.tlf;
-        this.user.address = result.address;
+        this.user = result;
         this.user.dob = result.DOB.getDate() + '-' + (result.DOB.getMonth() + 1) + '-' + result.DOB.getFullYear();
       },
       () => console.log('failure')
@@ -162,7 +143,7 @@ class EmployeeDetail extends Component {
 }
 
 class CustomerDetail extends Component {
-  user = { c_id: ' ', c_fname: ' ', c_lname: ' ', email: ' ', tlf: ' ', address: ' ', c_zip: ' ' };
+  customer = [];
   render() {
     return (
       <div className="main">
@@ -171,27 +152,27 @@ class CustomerDetail extends Component {
             <tbody>
               <tr>
                 <td>Kunde id</td>
-                <td>{this.user.c_id}</td>
+                <td>{this.customer.c_id}</td>
               </tr>
               <tr>
                 <td>Fornavn</td>
-                <td>{this.user.c_fname}</td>
+                <td>{this.customer.c_fname}</td>
               </tr>
               <tr>
                 <td>Etternavn</td>
-                <td>{this.user.c_lname}</td>
+                <td>{this.customer.c_lname}</td>
               </tr>
               <tr>
                 <td>Telefon</td>
-                <td>{this.user.c_tlf}</td>
+                <td>{this.customer.c_tlf}</td>
               </tr>
               <tr>
                 <td>Email</td>
-                <td>{this.user.c_email}</td>
+                <td>{this.customer.c_email}</td>
               </tr>
               <tr>
                 <td>Adresse</td>
-                <td>{this.user.c_address}</td>
+                <td>{this.customer.c_address}</td>
               </tr>
             </tbody>
           </Table>
@@ -202,12 +183,7 @@ class CustomerDetail extends Component {
 
   mounted() {
     customerService.getCustomer(this.props.match.params.id, result => {
-      this.user.c_id = result.c_id;
-      this.user.c_fname = result.c_fname;
-      this.user.c_lname = result.c_lname;
-      this.user.c_email = result.c_email;
-      this.user.c_tlf = result.c_tlf;
-      this.user.c_address = result.c_address;
+      this.customer = result;
     });
   }
 }
@@ -556,7 +532,7 @@ ReactDOM.render(
     <div>
       <Menu />
       <SideNav />
-      <Route exact path="/" component={Login} />
+      <Route exact path="/" component={LoginHandler} />
       <Route exact path="/home" component={Home} />
       <Route exact path="/customers" component={Customers} />
       <Route exact path="/customers/:id" component={CustomerDetail} />

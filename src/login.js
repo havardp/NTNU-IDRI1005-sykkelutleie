@@ -20,7 +20,7 @@ let { ipcRenderer } = electron;
 import { historyRoute } from './index.js';
 const bcrypt = require('bcryptjs');
 
-export class Login extends Component {
+export class LoginHandler extends Component {
   user = [];
   collapseShow = false;
   modalShow = false;
@@ -131,4 +131,12 @@ export class Login extends Component {
       );
     }
   }
+
+  logout() {
+    sessionStorage.clear();
+    ipcRenderer.send('minimize');
+    historyRoute.changePath('/');
+  }
 }
+
+export let login = new LoginHandler();
