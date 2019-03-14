@@ -45,7 +45,7 @@ class Menu extends Component {
       <Navbar bg="light" variant="light">
         <Navbar.Brand href="#home">Sykkelutleie AS</Navbar.Brand>
         <Nav className="mr-auto">
-          <Nav.Link href="#order">Ordre</Nav.Link>
+          <Nav.Link href="#orders">Ordre</Nav.Link>
           <Nav.Link href="#customers">Kunde</Nav.Link>
           <Nav.Link href="#employees">Ansatte</Nav.Link>
           <Nav.Link href="#storagestatus">Lager</Nav.Link>
@@ -63,7 +63,7 @@ class Menu extends Component {
             onClick={() => {
               sessionStorage.clear();
               ipcRenderer.send('minimize');
-              history.push('/home');
+              history.push('/');
             }}
           >
             {' '}
@@ -88,19 +88,6 @@ class SideNav extends Component {
       </div>
     );
   }
-  newOrder() {}
-  findOrder() {
-    history.push('/orders');
-  }
-  customer() {
-    history.push('/customers');
-  }
-  storageStatus() {
-    history.push('/storagestatus');
-  }
-  employee() {
-    history.push('/employees');
-  }
 }
 
 class Home extends Component {
@@ -110,7 +97,7 @@ class Home extends Component {
 }
 
 class EmployeeDetail extends Component {
-  user = { e_id: ' ', fname: ' ', lname: ' ', department: ' ', email: ' ', tlf: ' ', address: ' ', dob: ' ' };
+  user = [];
   render() {
     return (
       <div className="main">
@@ -157,16 +144,20 @@ class EmployeeDetail extends Component {
   }
 
   mounted() {
-    employeeService.getEmployee(this.props.match.params.id, result => {
-      this.user.e_id = result.e_id;
-      this.user.fname = result.fname;
-      this.user.lname = result.lname;
-      this.user.department = result.department;
-      this.user.email = result.email;
-      this.user.tlf = result.tlf;
-      this.user.address = result.address;
-      this.user.dob = result.DOB.getDate() + '-' + (result.DOB.getMonth() + 1) + '-' + result.DOB.getFullYear();
-    });
+    employeeService.getEmployee(
+      this.props.match.params.id,
+      result => {
+        this.user.e_id = result.e_id;
+        this.user.fname = result.fname;
+        this.user.lname = result.lname;
+        this.user.department = result.department;
+        this.user.email = result.email;
+        this.user.tlf = result.tlf;
+        this.user.address = result.address;
+        this.user.dob = result.DOB.getDate() + '-' + (result.DOB.getMonth() + 1) + '-' + result.DOB.getFullYear();
+      },
+      () => console.log('failure')
+    );
   }
 }
 
@@ -218,7 +209,6 @@ class CustomerDetail extends Component {
       this.user.c_tlf = result.c_tlf;
       this.user.c_address = result.c_address;
     });
-    console.log(this.user);
   }
 }
 
@@ -355,13 +345,11 @@ class StorageStatus extends Component {
   }
   mounted() {
     storageService.getBikeModels(bikestatus => {
-      console.log(bikestatus);
       this.bikestatus = bikestatus;
     });
 
     {
       storageService.getEquipmentModels(equipmentstatus => {
-        console.log(equipmentstatus);
         this.equipmentstatus = equipmentstatus;
       });
     }
@@ -529,7 +517,6 @@ class EquipmentDetail extends Component {
       this.user.c_tlf = result.c_tlf;
       this.user.c_address = result.c_address;
     });
-    console.log(this.user);
   }
 } */
 

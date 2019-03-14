@@ -119,8 +119,8 @@ export class Login extends Component {
           if (bcrypt.compareSync(this.user.password ? this.user.password : '', result.password)) {
             sessionStorage.setItem('userName', this.user.name);
             sessionStorage.setItem('userLoggedIn', true);
-            ipcRenderer.send('maximize');
             historyRoute.changePath('/home');
+            ipcRenderer.send('maximize');
           } else {
             this.collapseShow = true;
           }
