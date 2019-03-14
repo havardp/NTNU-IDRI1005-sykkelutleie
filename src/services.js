@@ -48,6 +48,15 @@ class StorageService {
       success(results);
     });
   }
+
+  getBikes(id, success) {
+    connection.query('select * from Bike', (error, results) => {
+      if (error) return console.error(error);
+
+      console.log(results);
+      success(results);
+    });
+  }
 }
 
 export let employeeService = new EmployeeService();

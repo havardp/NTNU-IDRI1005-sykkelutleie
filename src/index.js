@@ -16,7 +16,6 @@ import Form from 'react-bootstrap/Form';
 //Import of all components "login, customer, employee etc."
 import { Login } from './login.js';
 
-
 //To be able to change path
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory();
@@ -300,7 +299,7 @@ class StorageStatus extends Component {
         </thead>
         <tbody>
           {this.storagestatus.map(product_type => (
-            <tr key={product_type.model} onClick={() => history.push('/product_type/' + product_type.model)}>
+            <tr key={product_type.model} onClick={() => history.push('/storagestatus/' + product_type.model)}>
               <td>{product_type.model}</td>
               <td>{product_type.description}</td>
               <td>{product_type.hour_price}</td>
@@ -321,6 +320,77 @@ class StorageStatus extends Component {
   }
 }
 
+class StorageDetail extends Component {
+  name = { chassis_id: ' ', model: ' ', gear: ' ', wheel_size: ' ', rep_date: ' ', broken: ' ', location: ' ', storage: ' ', luggage: ' '   };
+  Allbikes = [];
+  render() {
+    return (
+      <Card title="Detaljer">
+        {this.Allbikes.map(bike => (
+        <Table striped bordered hover key={bike.chassis_id}>
+
+          <tbody>
+            <tr>
+              <td>Chassis id</td>
+              <td>{bike.chassis_id}</td>
+            </tr>
+            <tr>
+              <td>Modell</td>
+              <td>{bike.model}</td>
+            </tr>
+            <tr>
+              <td>Gir</td>
+              <td>{bike.gear}</td>
+            </tr>
+            <tr>
+              <td>Hjulstørrelse</td>
+              <td>{bike.wheel_size}</td>
+            </tr>
+            <tr>
+              <td>Reperasjonsdato</td>
+              <td>{bike.rep_date}</td>
+            </tr>
+            <tr>
+              <td>Ødelagt</td>
+              <td>{bike.broken}</td>
+            </tr>
+            <tr>
+              <td>Lokasjon</td>
+              <td>{bike.location}</td>
+            </tr>
+            <tr>
+              <td>Tilholdssted</td>
+              <td>{bike.storage}</td>
+            </tr>
+            <tr>
+              <td>Bagasjebrett</td>
+              <td>{bike.luggage}</td>
+            </tr>
+
+          </tbody>
+        </Table>
+
+          ))};
+      </Card>
+    );
+  }
+
+  mounted() {
+    storageService.getBikes(this.props.match.params.id, result => {
+      this.Allbikes = result;
+  /*    this.name.chassis_id = result.chassis_id;
+      this.name.model = result.model;
+      this.name.gear = result.gear;
+      this.name.wheel_size = result.wheel_size;
+      this.name.rep_date = result.rep_date;
+      this.name.broken = result.broken;
+      this.name.location = result.location;
+      this.name.storage = result.storage;
+      this.name.luggage = result.luggage; */
+    });
+  }
+}
+
 
 
 ReactDOM.render(
@@ -334,6 +404,7 @@ ReactDOM.render(
       <Route exact path="/employees" component={Employees} />
       <Route exact path="/employees/:id" component={EmployeeDetail} />
       <Route exact path="/storagestatus" component={StorageStatus} />
+      <Route exact path="/storagestatus/:id" component={StorageDetail} />
     </div>
   </HashRouter>,
   document.getElementById('root')
