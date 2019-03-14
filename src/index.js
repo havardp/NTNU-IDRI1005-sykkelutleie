@@ -247,6 +247,9 @@ class Customers extends Component {
             ))}
           </tbody>
         </Table>
+        <td>
+      <button className="btn btn-info btn-lg">&#10010;</button>
+        </td>
       </div>
     );
   }
@@ -291,7 +294,8 @@ class Employees extends Component {
 }
 
 class StorageStatus extends Component {
-  storagestatus = [];
+  bikestatus = [];
+  equipmentstatus = [];
   render() {
     return (
       <div className="main">
@@ -304,32 +308,64 @@ class StorageStatus extends Component {
                 <td>Beskrivelse</td>
                 <td>Timepris</td>
                 <td>Dagpris</td>
+                <td>Antall</td>
               </tr>
             </thead>
             <tbody>
-              {this.storagestatus.map(product_type => (
-                <tr key={product_type.model} onClick={() => history.push('/storagestatus/' + product_type.model)}>
+              {this.bikestatus.map(product_type => (
+                <tr key={product_type.model} onClick={() => history.push('/bikedetails/' + product_type.model)}>
                   <td>{product_type.model}</td>
                   <td>{product_type.description}</td>
                   <td>{product_type.hour_price}</td>
                   <td>{product_type.day_price}</td>
+                  <td>{product_type.countBikes}</td>
                 </tr>
               ))}
             </tbody>
           </Table>
         </Card>
-        <Card title="Utstyr" />
+        <Card title="Utstyr">
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <td>Modell</td>
+                <td>Beskrivelse</td>
+                <td>Timepris</td>
+                <td>Dagpris</td>
+                <td>Antall</td>
+              </tr>
+            </thead>
+            <tbody>
+              {this.equipmentstatus.map(product_type => (
+                <tr key={product_type.model} onClick={() => history.push('/equipmentdetails/' + product_type.model)}>
+                  <td>{product_type.model}</td>
+                  <td>{product_type.description}</td>
+                  <td>{product_type.hour_price}</td>
+                  <td>{product_type.day_price}</td>
+                  <td>{product_type.countEquipment}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </Card>
       </div>
     );
   }
   mounted() {
-    storageService.getStorage(storagestatus => {
-      this.storagestatus = storagestatus;
+    storageService.getBikeModels(bikestatus => {
+      console.log(bikestatus)
+      this.bikestatus = bikestatus;
+    })
+
+  {
+    storageService.getEquipmentModels(equipmentstatus => {
+      console.log(equipmentstatus)
+      this.equipmentstatus = equipmentstatus;
     });
-  }
+  }}
 }
 
-class StorageDetail extends Component {
+class BikeDetail extends Component {
   name = {
     chassis_id: ' ',
     model: ' ',
@@ -342,57 +378,49 @@ class StorageDetail extends Component {
     luggage: ' '
   };
   Allbikes = [];
-  render() {
-    return (
+  render() { return (
       <div className="main">
-        <Card title="Detaljer">
-          <Table striped bordered hover responsive>
-            <thead>
-              <tr>
-                <td>Chassis id</td>
-                <td>Modell</td>
-                <td>Gir</td>
-                <td>Hjulstørrelse</td>
-                <td>Rep.dato</td>
-                <td>Ødelagt</td>
-                <td>Lokasjon</td>
-                <td>Tilholdssted</td>
-                <td>Bagasjebrett</td>
+      <Card title={this.props.match.params.id}>
+        <Table striped bordered hover responsive>
+          <thead>
+            <tr>
+              <td>Chassis id</td>
+              <td>Gir</td>
+              <td>Hjulstørrelse</td>
+              <td>Rep.dato</td>
+              <td>Ødelagt</td>
+              <td>Lokasjon</td>
+              <td>Tilholdssted</td>
+              <td>Bagasjebrett</td>
               </tr>
-            </thead>
-            <tbody>
-              {this.Allbikes.map(bike => (
-                <tr key={bike.chassis_id}>
-                  <td>{bike.chassis_id}</td>
-                  <td>{bike.model}</td>
-                  <td>{bike.gear}</td>
-                  <td>{bike.wheel_size}</td>
-                  <td>{bike.rep_date}</td>
-                  <td>{bike.broken}</td>
-                  <td>{bike.location}</td>
-                  <td>{bike.storage}</td>
-                  <td>{bike.luggage}</td>
-                  <td>
-                    <button>&#9881;</button>
-                  </td>
-                  <td>
-                    <button>&#10004;</button>
-                  </td>
-                </tr>
-              ))}
-              <tr>
-                <td>
-                  <button className="btn btn-info btn-lg">
-                    <span className="glyphicon glyphicon-plus" />
-                    &#10010;
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </Table>
-        </Card>
+          </thead>
+          <tbody>
+          {this.Allbikes.map(bike => (
+            <tr key={bike.chassis_id}>
+              <td>{bike.chassis_id}</td>
+              <td>{bike.gear}</td>
+              <td>{bike.wheel_size}</td>
+              <td>{bike.rep_date}</td>
+              <td>{bike.broken}</td>
+              <td>{bike.location}</td>
+              <td>{bike.storage}</td>
+              <td>{bike.luggage}</td>
+              <td><button>&#9881;</button></td>
+              <td><button>&#10004;</button></td>
+            </tr>
+          ))}
+          </tbody>
+          <td>
+        <button className="btn btn-info btn-lg">&#10010;</button>
+          </td>
+          <tbody>
+
+          </tbody>
+        </Table>
+      </Card>
       </div>
     );
+
   }
 
   mounted() {
@@ -411,6 +439,60 @@ class StorageDetail extends Component {
   }
 }
 
+class EquipmentDetail extends Component {
+  name = {
+    eq_id: ' ',
+    model: ' ',
+  };
+  Allequipment = [];
+  render() { return (
+      <div className="main">
+      <Card title={this.props.match.params.id}>
+        <Table striped bordered hover responsive>
+          <thead>
+            <tr>
+              <td>Utstyrs-id</td>
+              <td>Modell</td>
+              </tr>
+          </thead>
+          <tbody>
+          {this.Allequipment.map(equipment => (
+            <tr key={equipment.eq_id}>
+              <td>{equipment.eq_id}</td>
+              <td>{equipment.model}</td>
+              <td><button>&#9881;</button></td>
+              <td><button>&#10004;</button></td>
+            </tr>
+          ))}
+          </tbody>
+          <td>
+        <button className="btn btn-info btn-lg">&#10010;</button>
+          </td>
+          <tbody>
+
+          </tbody>
+        </Table>
+      </Card>
+      </div>
+    );
+
+  }
+
+  mounted() {
+    storageService.getEquipment(this.props.match.params.id, result => {
+      this.Allequipment = result;
+      /*    this.name.chassis_id = result.chassis_id;
+      this.name.model = result.model;
+      this.name.gear = result.gear;
+      this.name.wheel_size = result.wheel_size;
+      this.name.rep_date = result.rep_date;
+      this.name.broken = result.broken;
+      this.name.location = result.location;
+      this.name.storage = result.storage;
+      this.name.luggage = result.luggage; */
+    });
+  }
+}
 
 /* class OrderDetail extends Component {
   user = { c_id: ' ', c_fname: ' ', c_lname: ' ', email: ' ', tlf: ' ', address: ' ', c_zip: ' ' };
@@ -490,11 +572,8 @@ class Orders extends Component {
   mounted() {
     orderService.getOrders(orders => {
       this.orders = orders;
-    });
-  }
-}
 
-
+  })}}
 ReactDOM.render(
   <HashRouter>
     <div>
@@ -507,9 +586,9 @@ ReactDOM.render(
       <Route exact path="/employees" component={Employees} />
       <Route exact path="/employees/:id" component={EmployeeDetail} />
       <Route exact path="/storagestatus" component={StorageStatus} />
-      <Route exact path="/storagestatus/:id" component={StorageDetail} />
       <Route exact path="/orders" component={Orders} />
-
+      <Route exact path="/bikedetails/:id" component={BikeDetail} />
+      <Route exact path="/equipmentdetails/:id" component={EquipmentDetail} />
     </div>
   </HashRouter>,
   document.getElementById('root')
