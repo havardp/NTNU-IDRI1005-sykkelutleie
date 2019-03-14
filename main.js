@@ -14,11 +14,11 @@ require('electron-reload')(path.join(__dirname, 'src'), {
 
 let mainWindow;
 app.on('ready', () => {
-  mainWindow = new BrowserWindow({ width: 1000, height: 600, webPreferences: { nodeIntegration: true } });
-
+  mainWindow = new BrowserWindow({ width: 400, height: 520, webPreferences: { nodeIntegration: true }, frame: false });
+  //mainWindow.setMenu(null); //fjerner toolbar, alternativt ", frame: false" fjerner alt
   // Open Development Tools
+  //mainWindow.openDevTools();
   mainWindow.openDevTools();
-
   mainWindow.loadURL('file://' + __dirname + '/public/index.html');
 });
 
@@ -30,7 +30,9 @@ app.on('window-all-closed', () => {
 let { ipcMain } = electron;
 ipcMain.on('maximize', function(e) {
   mainWindow.maximize();
+  mainWindow.openDevTools();
 });
 ipcMain.on('minimize', function(e) {
   mainWindow.restore();
+  mainWindow.closeDevTools();
 });

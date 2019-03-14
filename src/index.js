@@ -1,16 +1,18 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
 import ReactDOM from 'react-dom';
+import { NavLink, HashRouter, Route } from 'react-router-dom';
 
 //Bootstrap imports
-import { NavLink, HashRouter, Route } from 'react-router-dom';
-import { Card, List, Row, Column, NavBar, Button, Alert } from './widgets';
+import { Card, List, Row, Column, NavBar, Alert } from './widgets';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import ModalBody from 'react-bootstrap/ModalBody';
 import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
+import Navbar from 'react-bootstrap/Navbar';
+import Button from 'react-bootstrap/Button';
 
 //Import of all components "login, customer, employee etc."
 import { Login } from './login.js';
@@ -37,64 +39,63 @@ export let historyRoute = new HistoryRoute();
 class Menu extends Component {
   //"&#128100;" profil ikon
   render() {
-    if (localStorage.getItem('userLoggedIn') != 'true') return null;
+    if (sessionStorage.getItem('userLoggedIn') != 'true') return null;
     return (
       <NavBar brand="Sykkelutleie AS">
-        {localStorage.getItem('userLoggedIn') == 'true' ? (
-          <ButtonGroup vertical>
-            <DropdownButton
-              id="dropdown-item-button"
-              alignRight
-              title={localStorage.getItem('userName')}
-              variant="secondary"
+        <ButtonGroup vertical>
+          <DropdownButton
+            id="dropdown-item-button"
+            alignRight
+            title={sessionStorage.getItem('userName')}
+            variant="outline-secondary"
+          >
+            <Dropdown.Item onClick={() => history.push('/employees/' + sessionStorage.getItem('userName'))}>
+              Min side
+            </Dropdown.Item>
+            <Dropdown.Item
+              onClick={() => {
+                sessionStorage.clear();
+                ipcRenderer.send('minimize');
+                history.push('/');
+              }}
             >
-              <Dropdown.Item onClick={() => history.push('/employees/' + localStorage.getItem('userName'))}>
-                Min side
-              </Dropdown.Item>
-              <Dropdown.Item
-                onClick={() => {
-                  localStorage.clear();
-                  ipcRenderer.send('minimize');
-                  history.push('/');
-                }}
-              >
-                {' '}
-                Logg ut
-              </Dropdown.Item>
-            </DropdownButton>
-          </ButtonGroup>
-        ) : (
-          ''
-        )}
+              {' '}
+              Logg ut
+            </Dropdown.Item>
+          </DropdownButton>
+        </ButtonGroup>
       </NavBar>
     );
   }
 }
 
-class Home extends Component {
+class SideNav extends Component {
   render() {
     return (
-      <div>
-        <Card>
-          <List>
-            <Button.Info onClick={this.newOrder}>Ny ordre</Button.Info>
-          </List>
-          <List>
-            <Button.Info onClick={this.findOrder}>Finn ordre</Button.Info>
-          </List>
-          <List>
-            <Button.Info onClick={this.customer}>Kunder</Button.Info>
-          </List>
-          <List>
-            <Button.Info onClick={this.storageStatus}>Lagerstatus</Button.Info>
-          </List>
-          <List>
-            <Button.Info onClick={this.employee}>Ansatte</Button.Info>
-          </List>
-        </Card>
+      <div className="sidenav">
+        <Button variant="outline-secondary" block onClick={this.newOrder}>
+          Ny ordre
+        </Button>
+
+        <Button variant="outline-secondary" block onClick={this.findOrder}>
+          Finn ordre
+        </Button>
+
+        <Button variant="outline-secondary" block onClick={this.customer}>
+          Kunder
+        </Button>
+
+        <Button variant="outline-secondary" block onClick={this.storageStatus}>
+          Lagerstatus
+        </Button>
+
+        <Button variant="outline-secondary" block onClick={this.employee}>
+          Ansatte
+        </Button>
       </div>
     );
   }
+
   newOrder() {
     history.push('/newOrder');
   }
@@ -108,48 +109,56 @@ class Home extends Component {
   }
 }
 
+class Home extends Component {
+  render() {
+    return <div className="main">HOME</div>;
+  }
+}
+
 class EmployeeDetail extends Component {
   user = { e_id: ' ', fname: ' ', lname: ' ', department: ' ', email: ' ', tlf: ' ', adress: ' ', dob: ' ' };
   render() {
     return (
-      <Card title="Personalia">
-        <Table striped bordered hover>
-          <tbody>
-            <tr>
-              <td>Ansatt id</td>
-              <td>{this.user.e_id}</td>
-            </tr>
-            <tr>
-              <td>Fornavn</td>
-              <td>{this.user.fname}</td>
-            </tr>
-            <tr>
-              <td>Etternavn</td>
-              <td>{this.user.lname}</td>
-            </tr>
-            <tr>
-              <td>Avdeling</td>
-              <td>{this.user.department}</td>
-            </tr>
-            <tr>
-              <td>Telefon</td>
-              <td>{this.user.tlf}</td>
-            </tr>
-            <tr>
-              <td>Email</td>
-              <td>{this.user.email}</td>
-            </tr>
-            <tr>
-              <td>Adresse</td>
-              <td>{this.user.adress}</td>
-            </tr>
-            <tr>
-              <td>Fødselsdato</td>
-              <td>{this.user.dob}</td>
-            </tr>
-          </tbody>
-        </Table>
-      </Card>
+      <div className="main">
+        <Card title="Personalia">
+          <Table striped bordered hover>
+            <tbody>
+              <tr>
+                <td>Ansatt id</td>
+                <td>{this.user.e_id}</td>
+              </tr>
+              <tr>
+                <td>Fornavn</td>
+                <td>{this.user.fname}</td>
+              </tr>
+              <tr>
+                <td>Etternavn</td>
+                <td>{this.user.lname}</td>
+              </tr>
+              <tr>
+                <td>Avdeling</td>
+                <td>{this.user.department}</td>
+              </tr>
+              <tr>
+                <td>Telefon</td>
+                <td>{this.user.tlf}</td>
+              </tr>
+              <tr>
+                <td>Email</td>
+                <td>{this.user.email}</td>
+              </tr>
+              <tr>
+                <td>Adresse</td>
+                <td>{this.user.adress}</td>
+              </tr>
+              <tr>
+                <td>Fødselsdato</td>
+                <td>{this.user.dob}</td>
+              </tr>
+            </tbody>
+          </Table>
+        </Card>
+      </div>
     );
   }
 
@@ -171,36 +180,38 @@ class CustomerDetail extends Component {
   user = { c_id: ' ', c_fname: ' ', c_lname: ' ', email: ' ', tlf: ' ', adress: ' ', c_zip: ' ' };
   render() {
     return (
-      <Card title="Personalia">
-        <Table striped bordered hover>
-          <tbody>
-            <tr>
-              <td>Kunde id</td>
-              <td>{this.user.c_id}</td>
-            </tr>
-            <tr>
-              <td>Fornavn</td>
-              <td>{this.user.c_fname}</td>
-            </tr>
-            <tr>
-              <td>Etternavn</td>
-              <td>{this.user.c_lname}</td>
-            </tr>
-            <tr>
-              <td>Telefon</td>
-              <td>{this.user.c_tlf}</td>
-            </tr>
-            <tr>
-              <td>Email</td>
-              <td>{this.user.c_email}</td>
-            </tr>
-            <tr>
-              <td>Adresse</td>
-              <td>{this.user.c_adress}</td>
-            </tr>
-          </tbody>
-        </Table>
-      </Card>
+      <div className="main">
+        <Card title="Personalia">
+          <Table striped bordered hover>
+            <tbody>
+              <tr>
+                <td>Kunde id</td>
+                <td>{this.user.c_id}</td>
+              </tr>
+              <tr>
+                <td>Fornavn</td>
+                <td>{this.user.c_fname}</td>
+              </tr>
+              <tr>
+                <td>Etternavn</td>
+                <td>{this.user.c_lname}</td>
+              </tr>
+              <tr>
+                <td>Telefon</td>
+                <td>{this.user.c_tlf}</td>
+              </tr>
+              <tr>
+                <td>Email</td>
+                <td>{this.user.c_email}</td>
+              </tr>
+              <tr>
+                <td>Adresse</td>
+                <td>{this.user.c_adress}</td>
+              </tr>
+            </tbody>
+          </Table>
+        </Card>
+      </div>
     );
   }
 
@@ -221,26 +232,28 @@ class Customers extends Component {
   customers = [];
   render() {
     return (
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <td>Kunde id</td>
-            <td>Fornavn</td>
-            <td>Etternavn</td>
-            <td>Antall ordrer</td>
-          </tr>
-        </thead>
-        <tbody>
-          {this.customers.map(customer => (
-            <tr key={customer.c_id} onClick={() => history.push('/customers/' + customer.c_id)}>
-              <td>{customer.c_id}</td>
-              <td>{customer.c_fname}</td>
-              <td>{customer.c_lname}</td>
-              <td>0</td>
+      <div className="main">
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <td>Kunde id</td>
+              <td>Fornavn</td>
+              <td>Etternavn</td>
+              <td>Antall ordrer</td>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {this.customers.map(customer => (
+              <tr key={customer.c_id} onClick={() => history.push('/customers/' + customer.c_id)}>
+                <td>{customer.c_id}</td>
+                <td>{customer.c_fname}</td>
+                <td>{customer.c_lname}</td>
+                <td>0</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
     );
   }
   mounted() {
@@ -254,24 +267,26 @@ class Employees extends Component {
   employees = [];
   render() {
     return (
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <td>Ansatt id</td>
-            <td>Fornavn</td>
-            <td>Etternavn</td>
-          </tr>
-        </thead>
-        <tbody>
-          {this.employees.map(employee => (
-            <tr key={employee.e_id} onClick={() => history.push('/employees/' + employee.e_id)}>
-              <td>{employee.e_id}</td>
-              <td>{employee.fname}</td>
-              <td>{employee.lname}</td>
+      <div className="main">
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <td>Ansatt id</td>
+              <td>Fornavn</td>
+              <td>Etternavn</td>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {this.employees.map(employee => (
+              <tr key={employee.e_id} onClick={() => history.push('/employees/' + employee.e_id)}>
+                <td>{employee.e_id}</td>
+                <td>{employee.fname}</td>
+                <td>{employee.lname}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
     );
   }
   mounted() {
@@ -283,7 +298,7 @@ class Employees extends Component {
 
 class NewOrder extends Component {
   render() {
-    return <div>test</div>;
+    return <div className="main">test</div>;
   }
 }
 
@@ -291,6 +306,7 @@ ReactDOM.render(
   <HashRouter>
     <div>
       <Menu />
+      <SideNav />
       <Route exact path="/" component={Login} />
       <Route exact path="/home" component={Home} />
       <Route exact path="/customers" component={Customers} />
