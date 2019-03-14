@@ -39,6 +39,25 @@ class CustomerService {
   }
 }
 
+
+class OrderService {
+  getOrders(success) {
+    connection.query('select * from Orders', (error, results) => {
+      if (error) return console.error(error);
+
+      success(results);
+    });
+  }
+
+  getOrder(order_nr, success) {
+    connection.query('select * from Customer where order_nr = ?', [order_nr], (error, results) => {
+      if (error) return console.error(error);
+
+      success(results[0]);
+    });
+  }
+}
+
 class StorageService {
 
   getStorage(success) {
@@ -70,6 +89,7 @@ class StorageService {
 export let employeeService = new EmployeeService();
 export let customerService = new CustomerService();
 export let storageService = new StorageService();
+export let orderService = new OrderService
 // class StudentService {
 //   getStudents(success) {
 //     connection.query('select * from Students', (error, results) => {
