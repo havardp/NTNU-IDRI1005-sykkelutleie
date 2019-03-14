@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 
 //Bootstrap imports
-import { Card, List, Row, Column, NavBar, Alert } from './widgets';
+import { Card, List, Row, Column, Alert } from './widgets';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
@@ -13,6 +13,7 @@ import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
 import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
+import Nav from 'react-bootstrap/Nav';
 
 //import mysql queries
 import { customerService, employeeService, storageService } from './services.js';
@@ -41,30 +42,35 @@ class Menu extends Component {
   render() {
     if (sessionStorage.getItem('userLoggedIn') != 'true') return null;
     return (
-      <NavBar brand="Sykkelutleie AS">
-        <ButtonGroup vertical>
-          <DropdownButton
-            id="dropdown-item-button"
-            alignRight
-            title={sessionStorage.getItem('userName')}
-            variant="outline-secondary"
+      <Navbar bg="light" variant="light">
+        <Navbar.Brand href="#home">Sykkelutleie AS</Navbar.Brand>
+        <Nav className="mr-auto">
+          <Nav.Link href="#order">Ordre</Nav.Link>
+          <Nav.Link href="#customers">Kunde</Nav.Link>
+          <Nav.Link href="#employees">Ansatte</Nav.Link>
+          <Nav.Link href="#storagestatus">Lager</Nav.Link>
+        </Nav>
+        <DropdownButton
+          id="dropdown-item-button"
+          alignRight
+          title={sessionStorage.getItem('userName')}
+          variant="outline-secondary"
+        >
+          <Dropdown.Item onClick={() => history.push('/employees/' + sessionStorage.getItem('userName'))}>
+            Min side
+          </Dropdown.Item>
+          <Dropdown.Item
+            onClick={() => {
+              sessionStorage.clear();
+              ipcRenderer.send('minimize');
+              history.push('/home');
+            }}
           >
-            <Dropdown.Item onClick={() => history.push('/employees/' + sessionStorage.getItem('userName'))}>
-              Min side
-            </Dropdown.Item>
-            <Dropdown.Item
-              onClick={() => {
-                sessionStorage.clear();
-                ipcRenderer.send('minimize');
-                history.push('/home');
-              }}
-            >
-              {' '}
-              Logg ut
-            </Dropdown.Item>
-          </DropdownButton>
-        </ButtonGroup>
-      </NavBar>
+            {' '}
+            Logg ut
+          </Dropdown.Item>
+        </DropdownButton>
+      </Navbar>
     );
   }
 }
@@ -74,25 +80,11 @@ class SideNav extends Component {
     if (sessionStorage.getItem('userLoggedIn') != 'true') return null;
     return (
       <div className="sidenav">
-        <Button variant="outline-secondary" block onClick={this.newOrder}>
-          Ny ordre
-        </Button>
-
-        <Button variant="outline-secondary" block onClick={this.findOrder}>
-          Finn ordre
-        </Button>
-
-        <Button variant="outline-secondary" block onClick={this.customer}>
-          Kunder
-        </Button>
-
-        <Button variant="outline-secondary" block onClick={this.storageStatus}>
-          Lagerstatus
-        </Button>
-
-        <Button variant="outline-secondary" block onClick={this.employee}>
-          Ansatte
-        </Button>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
+        magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+        pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+        laborum.
       </div>
     );
   }
