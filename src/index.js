@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import { NavLink, HashRouter, Route } from 'react-router-dom';
 
 //Bootstrap imports
-import { Card, List, Row, Column, NavBar, Alert } from './widgets';
+import { Card, List, Row, Column, Alert } from './widgets';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
@@ -13,6 +13,7 @@ import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
 import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
+import Nav from 'react-bootstrap/Nav';
 
 //import mysql queries
 import { customerService, employeeService, storageService, orderService } from './services.js';
@@ -41,30 +42,35 @@ class Menu extends Component {
   render() {
     if (sessionStorage.getItem('userLoggedIn') != 'true') return null;
     return (
-      <NavBar brand="Sykkelutleie AS">
-        <ButtonGroup vertical>
-          <DropdownButton
-            id="dropdown-item-button"
-            alignRight
-            title={sessionStorage.getItem('userName')}
-            variant="outline-secondary"
+      <Navbar bg="light" variant="light">
+        <Navbar.Brand href="#home">Sykkelutleie AS</Navbar.Brand>
+        <Nav className="mr-auto">
+          <Nav.Link href="#order">Ordre</Nav.Link>
+          <Nav.Link href="#customers">Kunde</Nav.Link>
+          <Nav.Link href="#employees">Ansatte</Nav.Link>
+          <Nav.Link href="#storagestatus">Lager</Nav.Link>
+        </Nav>
+        <DropdownButton
+          id="dropdown-item-button"
+          alignRight
+          title={sessionStorage.getItem('userName')}
+          variant="outline-secondary"
+        >
+          <Dropdown.Item onClick={() => history.push('/employees/' + sessionStorage.getItem('userName'))}>
+            Min side
+          </Dropdown.Item>
+          <Dropdown.Item
+            onClick={() => {
+              sessionStorage.clear();
+              ipcRenderer.send('minimize');
+              history.push('/home');
+            }}
           >
-            <Dropdown.Item onClick={() => history.push('/employees/' + sessionStorage.getItem('userName'))}>
-              Min side
-            </Dropdown.Item>
-            <Dropdown.Item
-              onClick={() => {
-                sessionStorage.clear();
-                ipcRenderer.send('minimize');
-                history.push('/home');
-              }}
-            >
-              {' '}
-              Logg ut
-            </Dropdown.Item>
-          </DropdownButton>
-        </ButtonGroup>
-      </NavBar>
+            {' '}
+            Logg ut
+          </Dropdown.Item>
+        </DropdownButton>
+      </Navbar>
     );
   }
 }
@@ -74,31 +80,17 @@ class SideNav extends Component {
     if (sessionStorage.getItem('userLoggedIn') != 'true') return null;
     return (
       <div className="sidenav">
-        <Button variant="outline-secondary" block onClick={this.newOrder}>
-          Ny ordre
-        </Button>
-
-        <Button variant="outline-secondary" block onClick={this.findOrder}>
-          Finn ordre
-        </Button>
-
-        <Button variant="outline-secondary" block onClick={this.customer}>
-          Kunder
-        </Button>
-
-        <Button variant="outline-secondary" block onClick={this.storageStatus}>
-          Lagerstatus
-        </Button>
-
-        <Button variant="outline-secondary" block onClick={this.employee}>
-          Ansatte
-        </Button>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
+        magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+        pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+        laborum.
       </div>
     );
   }
   newOrder() {}
   findOrder() {
-    history.push('/orders')
+    history.push('/orders');
   }
   customer() {
     history.push('/customers');
@@ -208,7 +200,7 @@ class CustomerDetail extends Component {
               </tr>
               <tr>
                 <td>Adresse</td>
-                <td>{this.user.c_adress}</td>
+                <td>{this.user.c_address}</td>
               </tr>
             </tbody>
           </Table>
@@ -253,6 +245,11 @@ class Customers extends Component {
                 <td>0</td>
               </tr>
             ))}
+            <tr>
+              <td>
+                <button className="btn btn-info btn-lg">&#10010;</button>
+              </td>
+            </tr>
           </tbody>
         </Table>
       </div>
@@ -299,7 +296,8 @@ class Employees extends Component {
 }
 
 class StorageStatus extends Component {
-  storagestatus = [];
+  bikestatus = [];
+  equipmentstatus = [];
   render() {
     return (
       <div className="main">
@@ -312,53 +310,74 @@ class StorageStatus extends Component {
                 <td>Beskrivelse</td>
                 <td>Timepris</td>
                 <td>Dagpris</td>
+                <td>Antall</td>
               </tr>
             </thead>
             <tbody>
-              {this.storagestatus.map(product_type => (
-                <tr key={product_type.model} onClick={() => history.push('/storagestatus/' + product_type.model)}>
+              {this.bikestatus.map(product_type => (
+                <tr key={product_type.model} onClick={() => history.push('/bikedetails/' + product_type.model)}>
                   <td>{product_type.model}</td>
                   <td>{product_type.description}</td>
                   <td>{product_type.hour_price}</td>
                   <td>{product_type.day_price}</td>
+                  <td>{product_type.countBikes}</td>
                 </tr>
               ))}
             </tbody>
           </Table>
         </Card>
-        <Card title="Utstyr" />
+        <Card title="Utstyr">
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <td>Modell</td>
+                <td>Beskrivelse</td>
+                <td>Timepris</td>
+                <td>Dagpris</td>
+                <td>Antall</td>
+              </tr>
+            </thead>
+            <tbody>
+              {this.equipmentstatus.map(product_type => (
+                <tr key={product_type.model} onClick={() => history.push('/equipmentdetails/' + product_type.model)}>
+                  <td>{product_type.model}</td>
+                  <td>{product_type.description}</td>
+                  <td>{product_type.hour_price}</td>
+                  <td>{product_type.day_price}</td>
+                  <td>{product_type.countEquipment}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </Card>
       </div>
     );
   }
   mounted() {
-    storageService.getStorage(storagestatus => {
-      this.storagestatus = storagestatus;
+    storageService.getBikeModels(bikestatus => {
+      console.log(bikestatus);
+      this.bikestatus = bikestatus;
     });
+
+    {
+      storageService.getEquipmentModels(equipmentstatus => {
+        console.log(equipmentstatus);
+        this.equipmentstatus = equipmentstatus;
+      });
+    }
   }
 }
 
-class StorageDetail extends Component {
-  name = {
-    chassis_id: ' ',
-    model: ' ',
-    gear: ' ',
-    wheel_size: ' ',
-    rep_date: ' ',
-    broken: ' ',
-    location: ' ',
-    storage: ' ',
-    luggage: ' '
-  };
+class BikeDetail extends Component {
   Allbikes = [];
   render() {
     return (
       <div className="main">
-        <Card title="Detaljer">
+        <Card title={this.props.match.params.id}>
           <Table striped bordered hover responsive>
             <thead>
               <tr>
                 <td>Chassis id</td>
-                <td>Modell</td>
                 <td>Gir</td>
                 <td>Hjulstørrelse</td>
                 <td>Rep.dato</td>
@@ -372,7 +391,6 @@ class StorageDetail extends Component {
               {this.Allbikes.map(bike => (
                 <tr key={bike.chassis_id}>
                   <td>{bike.chassis_id}</td>
-                  <td>{bike.model}</td>
                   <td>{bike.gear}</td>
                   <td>{bike.wheel_size}</td>
                   <td>{bike.rep_date}</td>
@@ -390,10 +408,7 @@ class StorageDetail extends Component {
               ))}
               <tr>
                 <td>
-                  <button className="btn btn-info btn-lg">
-                    <span className="glyphicon glyphicon-plus" />
-                    &#10010;
-                  </button>
+                  <button className="btn btn-info btn-lg">&#10010;</button>
                 </td>
               </tr>
             </tbody>
@@ -406,6 +421,55 @@ class StorageDetail extends Component {
   mounted() {
     storageService.getBike(this.props.match.params.id, result => {
       this.Allbikes = result;
+    });
+  }
+}
+
+class EquipmentDetail extends Component {
+  name = {
+    eq_id: ' ',
+    model: ' '
+  };
+  Allequipment = [];
+  render() {
+    return (
+      <div className="main">
+        <Card title={this.props.match.params.id}>
+          <Table striped bordered hover responsive>
+            <thead>
+              <tr>
+                <td>Utstyrs-id</td>
+                <td>Modell</td>
+              </tr>
+            </thead>
+            <tbody>
+              {this.Allequipment.map(equipment => (
+                <tr key={equipment.eq_id}>
+                  <td>{equipment.eq_id}</td>
+                  <td>{equipment.model}</td>
+                  <td>
+                    <button>&#9881;</button>
+                  </td>
+                  <td>
+                    <button>&#10004;</button>
+                  </td>
+                </tr>
+              ))}
+              <tr>
+                <td>
+                  <button className="btn btn-info btn-lg">&#10010;</button>
+                </td>
+              </tr>
+            </tbody>
+          </Table>
+        </Card>
+      </div>
+    );
+  }
+
+  mounted() {
+    storageService.getEquipment(this.props.match.params.id, result => {
+      this.Allequipment = result;
       /*    this.name.chassis_id = result.chassis_id;
       this.name.model = result.model;
       this.name.gear = result.gear;
@@ -418,7 +482,6 @@ class StorageDetail extends Component {
     });
   }
 }
-
 
 /* class OrderDetail extends Component {
   user = { c_id: ' ', c_fname: ' ', c_lname: ' ', email: ' ', tlf: ' ', address: ' ', c_zip: ' ' };
@@ -490,9 +553,16 @@ class Orders extends Component {
               <td>{orders.c_id}</td>
               <td>{orders.c_fname + " " + orders.c_lname}</td>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {this.orders.map(orders => (
+              <tr key={orders.order_nr} onClick={() => history.push('/orders/' + orders.orders_nr)}>
+                <td>{orders.order_nr}</td>
+                <td>{orders.c_id}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
       </div>
     );
   }
@@ -502,8 +572,6 @@ class Orders extends Component {
     });
   }
 }
-
-
 ReactDOM.render(
   <HashRouter>
     <div>
@@ -516,9 +584,9 @@ ReactDOM.render(
       <Route exact path="/employees" component={Employees} />
       <Route exact path="/employees/:id" component={EmployeeDetail} />
       <Route exact path="/storagestatus" component={StorageStatus} />
-      <Route exact path="/storagestatus/:id" component={StorageDetail} />
       <Route exact path="/orders" component={Orders} />
-
+      <Route exact path="/bikedetails/:id" component={BikeDetail} />
+      <Route exact path="/equipmentdetails/:id" component={EquipmentDetail} />
     </div>
   </HashRouter>,
   document.getElementById('root')
