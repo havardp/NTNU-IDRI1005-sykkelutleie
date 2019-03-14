@@ -351,8 +351,9 @@ class StorageDetail extends Component {
   Allbikes = [];
   render() {
     return (
+      <div className="main">
       <Card title="Detaljer">
-        <Table striped bordered hover>
+        <Table striped bordered hover responsive>
           <thead>
             <tr>
               <td>Chassis id</td>
@@ -393,6 +394,7 @@ class StorageDetail extends Component {
           </tbody>
         </Table>
       </Card>
+      </div>
     );
   }
 
