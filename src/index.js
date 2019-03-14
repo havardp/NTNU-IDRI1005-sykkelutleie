@@ -553,15 +553,9 @@ class Orders extends Component {
               <td>{orders.c_id}</td>
               <td>{orders.c_fname + " " + orders.c_lname}</td>
             </tr>
-          </thead>
-          <tbody>
-            {this.orders.map(orders => (
-              <tr key={orders.order_nr} onClick={() => history.push('/orders/' + orders.orders_nr)}>
-                <td>{orders.order_nr}</td>
-                <td>{orders.c_id}</td>
-              </tr>
-            ))}
-          </tbody>
+          ))}
+
+            </tbody>
         </Table>
       </div>
     );
