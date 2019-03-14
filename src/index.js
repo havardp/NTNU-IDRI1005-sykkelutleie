@@ -95,7 +95,7 @@ class Home extends Component {
     );
   }
   newOrder() {
-    history.push('/newOrder');
+    
   }
   findOrder() {}
   customer() {
@@ -174,7 +174,6 @@ class CustomerDetail extends Component {
     return (
       <Card title="Personalia">
         <Table striped bordered hover>
-        <CardSubtitle>Card subtitle</CardSubtitle>
           <tbody>
             <tr>
               <td>Kunde id</td>
