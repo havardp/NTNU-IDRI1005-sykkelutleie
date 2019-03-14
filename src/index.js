@@ -352,56 +352,55 @@ class StorageDetail extends Component {
   Allbikes = [];
   render() {
     return (
+      <div className="main">
       <Card title="Detaljer">
-        {this.Allbikes.map(bike => (
-          <Table striped bordered hover key={bike.chassis_id}>
-            <tbody>
-              <tr>
-                <td>Chassis id</td>
-                <td>{bike.chassis_id}</td>
+        <Table striped bordered hover responsive>
+          <thead>
+            <tr>
+              <td>Chassis id</td>
+              <td>Modell</td>
+              <td>Gir</td>
+              <td>Hjulstørrelse</td>
+              <td>Rep.dato</td>
+              <td>Ødelagt</td>
+              <td>Lokasjon</td>
+              <td>Tilholdssted</td>
+              <td>Bagasjebrett</td>
               </tr>
-              <tr>
-                <td>Modell</td>
-                <td>{bike.model}</td>
-              </tr>
-              <tr>
-                <td>Gir</td>
-                <td>{bike.gear}</td>
-              </tr>
-              <tr>
-                <td>Hjulstørrelse</td>
-                <td>{bike.wheel_size}</td>
-              </tr>
-              <tr>
-                <td>Reperasjonsdato</td>
-                <td>{bike.rep_date}</td>
-              </tr>
-              <tr>
-                <td>Ødelagt</td>
-                <td>{bike.broken}</td>
-              </tr>
-              <tr>
-                <td>Lokasjon</td>
-                <td>{bike.location}</td>
-              </tr>
-              <tr>
-                <td>Tilholdssted</td>
-                <td>{bike.storage}</td>
-              </tr>
-              <tr>
-                <td>Bagasjebrett</td>
-                <td>{bike.luggage}</td>
-              </tr>
-            </tbody>
-          </Table>
-        ))}
-        ;
+          </thead>
+          <tbody>
+          {this.Allbikes.map(bike => (
+            <tr key={bike.chassis_id}>
+              <td>{bike.chassis_id}</td>
+              <td>{bike.model}</td>
+              <td>{bike.gear}</td>
+              <td>{bike.wheel_size}</td>
+              <td>{bike.rep_date}</td>
+              <td>{bike.broken}</td>
+              <td>{bike.location}</td>
+              <td>{bike.storage}</td>
+              <td>{bike.luggage}</td>
+              <td><button>&#9881;</button></td>
+              <td><button>&#10004;</button></td>
+            </tr>
+          ))}
+          </tbody>
+          <td>
+        <button className="btn btn-info btn-lg">
+          <span className="glyphicon glyphicon-plus"></span>&#10010;
+        </button>
+      </td>
+          <tbody>
+
+          </tbody>
+        </Table>
       </Card>
+      </div>
     );
   }
 
   mounted() {
-    storageService.getBikes(this.props.match.params.id, result => {
+    storageService.getBike(this.props.match.params.id, result => {
       this.Allbikes = result;
       /*    this.name.chassis_id = result.chassis_id;
       this.name.model = result.model;

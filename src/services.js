@@ -59,6 +59,14 @@ class StorageService {
       success(results);
     });
   }
+  getBike(id, success) {
+    connection.query('select * from Bike where model = ?', [id], (error, results) => {
+      if (error) return console.error(error);
+
+      console.log(results);
+      success(results);
+    });
+  }
 }
 
 export let employeeService = new EmployeeService();
