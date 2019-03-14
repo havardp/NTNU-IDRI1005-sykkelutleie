@@ -501,22 +501,24 @@ class Orders extends Component {
   render() {
     return (
       <div className="main">
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <td>Ordrenummer</td>
-              <td>Kundenummer</td>
-              <td>Kundenavn</td>
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <td>Ordrenummer</td>
+            <td>Kundenummer</td>
+            <td>Kundenavn</td>
+          </tr>
+        </thead>
+        <tbody>
+          {this.orders.map(orders => (
+            <tr key={orders.order_nr} onClick={() => history.push('/orders/' + orders.orders_nr)}>
+              <td>{orders.order_nr}</td>
+              <td>{orders.c_id}</td>
+              <td>{orders.c_fname + " " + orders.c_lname}</td>
             </tr>
-          </thead>
-          <tbody>
-            {this.orders.map(orders => (
-              <tr key={orders.order_nr} onClick={() => history.push('/orders/' + orders.orders_nr)}>
-                <td>{orders.order_nr}</td>
-                <td>{orders.c_id}</td>
-              </tr>
-            ))}
-          </tbody>
+          ))}
+
+            </tbody>
         </Table>
       </div>
     );
