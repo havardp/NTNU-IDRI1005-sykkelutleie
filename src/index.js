@@ -150,7 +150,7 @@ class EmployeeDetail extends Component {
               </tr>
               <tr>
                 <td>Adresse</td>
-                <td>{this.user.adress}</td>
+                <td>{this.user.address}</td>
               </tr>
               <tr>
                 <td>Fødselsdato</td>
