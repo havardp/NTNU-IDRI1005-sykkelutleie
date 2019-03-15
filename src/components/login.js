@@ -44,7 +44,7 @@ export class Login extends Component {
               <div className="card card-signin my-5">
                 <div className="card-body">
                   <h5 className="card-title text-center">Sykkelutleie AS</h5>
-                  <form className="form-signin">
+                  <div className="form-signin">
                     <div className="form-label-group">
                       <input
                         type="text"
@@ -68,18 +68,10 @@ export class Login extends Component {
                       <label htmlFor="inputPassword">Passord</label>
                     </div>
                     <hr className="my-4" />
-                    <button
-                      className="btn btn-lg btn-primary btn-block text-uppercase"
-                      type="submit"
-                      onClick={this.login}
-                    >
+                    <button className="btn btn-lg btn-primary btn-block text-uppercase" onClick={this.login}>
                       Logg inn
                     </button>
-                    <button
-                      className="btn btn-lg btn-primary btn-block text-uppercase"
-                      type="submit"
-                      onClick={this.modalOpen}
-                    >
+                    <button className="btn btn-lg btn-primary btn-block text-uppercase" onClick={this.modalOpen}>
                       Hjelp
                     </button>
                     <div onClick={this.collapseClose}>
@@ -89,7 +81,7 @@ export class Login extends Component {
                         </div>
                       </Collapse>
                     </div>
-                  </form>
+                  </div>
                 </div>
               </div>
             </div>
@@ -100,13 +92,6 @@ export class Login extends Component {
         </Modal>
       </div>
     );
-  }
-
-  mounted() {
-    console.log('login side');
-    if (sessionStorage.getItem('userLoggedIn') == 'true') {
-      history.push('/home');
-    }
   }
 
   login() {
@@ -132,8 +117,8 @@ export class Login extends Component {
 
   logout() {
     sessionStorage.clear();
-    ipcRenderer.send('minimize');
     history.push('/');
+    ipcRenderer.send('minimize');
   }
 }
 

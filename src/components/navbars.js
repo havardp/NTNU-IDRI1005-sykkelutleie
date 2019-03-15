@@ -9,7 +9,6 @@ import Dropdown from 'react-bootstrap/Dropdown';
 
 //Import the hashistory from index.js to be able to change path
 import { history } from '../index.js';
-
 import { loginHandler } from './login.js';
 
 export class Menu extends Component {
@@ -35,7 +34,13 @@ export class Menu extends Component {
           <Dropdown.Item onClick={() => history.push('/employees/' + sessionStorage.getItem('userName'))}>
             Min side
           </Dropdown.Item>
-          <Dropdown.Item onClick={() => loginHandler.logout()}> Logg ut</Dropdown.Item>
+          <Dropdown.Item
+            onClick={() => {
+              loginHandler.logout();
+            }}
+          >
+            Logg ut
+          </Dropdown.Item>
         </DropdownButton>
       </Navbar>
     );
