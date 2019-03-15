@@ -6,6 +6,7 @@ import Modal from 'react-bootstrap/Modal';
 import ModalBody from 'react-bootstrap/ModalBody';
 import Collapse from 'react-bootstrap/Collapse';
 import Alert from 'react-bootstrap/Alert';
+import Fade from 'react-bootstrap/Fade';
 
 //Imports for sql queries
 import { employeeService } from '../services';
@@ -40,8 +41,8 @@ export class Login extends Component {
       <div>
         <div className="container">
           <div className="row">
-            <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
-              <div className="card card-signin my-5">
+            <div className="col-lg-5 mx-auto">
+              <div className="card card-signin my-3">
                 <div className="card-body">
                   <h5 className="card-title text-center">Sykkelutleie AS</h5>
                   <div className="form-signin">
@@ -67,20 +68,18 @@ export class Login extends Component {
                       />
                       <label htmlFor="inputPassword">Passord</label>
                     </div>
-                    <hr className="my-4" />
-                    <button className="btn btn-lg btn-primary btn-block text-uppercase" onClick={this.login}>
+                    <Fade in={this.collapseShow}>
+                      <div onClick={this.collapseClose} id="loginError">
+                        <Alert variant="danger"> Du har skrevet inn feil brukernavn eller passord </Alert>
+                      </div>
+                    </Fade>
+                    <hr className="my-3" />
+                    <button className="btn btn-lg btn-secondary btn-block text-uppercase" onClick={this.login}>
                       Logg inn
                     </button>
-                    <button className="btn btn-lg btn-primary btn-block text-uppercase" onClick={this.modalOpen}>
+                    <button className="btn btn-lg btn-secondary btn-block text-uppercase" onClick={this.modalOpen}>
                       Hjelp
                     </button>
-                    <div onClick={this.collapseClose}>
-                      <Collapse in={this.collapseShow}>
-                        <div className="example-collapse-text" id="loginError">
-                          <Alert variant="danger"> Du har skrevet inn feil brukernavn eller passord </Alert>
-                        </div>
-                      </Collapse>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -112,6 +111,8 @@ export class Login extends Component {
           this.collapseShow = true;
         }
       );
+    } else {
+      this.collapseShow = true;
     }
   }
 

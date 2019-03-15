@@ -5,8 +5,6 @@
 
 .card-signin {
   border: 0;
-  border-radius: 1rem;
-  box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
 }
 
 .card-signin .card-title {
@@ -16,7 +14,7 @@
 }
 
 .card-signin .card-body {
-  padding: 2rem;
+  padding: 1rem;
 }
 
 .form-signin {
@@ -25,7 +23,6 @@
 
 .form-signin .btn {
   font-size: 80%;
-  border-radius: 5rem;
   letter-spacing: 0.1rem;
   font-weight: bold;
   padding: 1rem;
@@ -39,7 +36,6 @@
 
 .form-label-group input {
   height: auto;
-  border-radius: 2rem;
 }
 
 .form-label-group > input,
@@ -96,11 +92,10 @@
 
 #loginError {
   font-size: 80%;
-  border-radius: 5rem;
   letter-spacing: 0.1rem;
   font-weight: bold;
-  padding: 1rem;
   transition: all 1s;
+  margin: 0px;
 }
 
 /* The sidebar menu */

@@ -14,7 +14,12 @@ require('electron-reload')(path.join(__dirname, 'src'), {
 
 let mainWindow;
 app.on('ready', () => {
-  mainWindow = new BrowserWindow({ width: 400, height: 520, webPreferences: { nodeIntegration: true }, frame: false });
+  mainWindow = new BrowserWindow({
+    width: 490,
+    height: 459,
+    webPreferences: { nodeIntegration: true },
+    frame: false
+  });
   //mainWindow.setMenu(null); //fjerner toolbar, alternativt ", frame: false" fjerner alt
   // Open Development Tools
   //mainWindow.openDevTools();
