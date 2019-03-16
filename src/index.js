@@ -483,8 +483,8 @@ class EquipmentDetail extends Component {
   }
 }
 
-/* class OrderDetail extends Component {
-  user = { c_id: ' ', c_fname: ' ', c_lname: ' ', email: ' ', tlf: ' ', address: ' ', c_zip: ' ' };
+ class OrderDetail extends Component {
+  order = { c_id: ' ', c_fname: ' ', c_lname: ' ', email: ' ', tlf: ' ', address: ' ', c_zip: ' ' };
   render() {
     return (
       <Card title="Personalia">
@@ -531,7 +531,7 @@ class EquipmentDetail extends Component {
     });
     console.log(this.user);
   }
-} */
+}
 
 class Orders extends Component {
   orders = [];
