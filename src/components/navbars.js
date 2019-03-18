@@ -19,7 +19,7 @@ export class Menu extends Component {
       <Navbar bg="light" variant="light">
         <Navbar.Brand href="#home">Sykkelutleie AS</Navbar.Brand>
         <Nav className="mr-auto">
-          <Nav.Link href="#neworder">Ny ordre(ingenting her)</Nav.Link>
+          <Nav.Link href="#neworder">Ny ordre</Nav.Link>
           <Nav.Link href="#orders">Finn ordre</Nav.Link>
           <Nav.Link href="#storagestatus">Lager</Nav.Link>
           <Nav.Link href="#customers">Kunde</Nav.Link>
