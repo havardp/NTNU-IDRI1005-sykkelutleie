@@ -26,7 +26,7 @@ export class Orders extends Component {
           </thead>
           <tbody>
             {this.orders.map(orders => (
-              <tr key={orders.order_nr} onClick={() => history.push('/orders/' + orders.orders_nr)}>
+              <tr key={orders.order_nr} onClick={() => history.push('/orders/' + orders.order_nr)}>
                 <td>{orders.order_nr}</td>
                 <td>{orders.c_id}</td>
                 <td>{orders.c_fname + ' ' + orders.c_lname}</td>
@@ -44,51 +44,59 @@ export class Orders extends Component {
   }
 }
 
-/* export class OrderDetail extends Component {
-  user = { c_id: ' ', c_fname: ' ', c_lname: ' ', email: ' ', tlf: ' ', address: ' ', c_zip: ' ' };
+
+ export class OrderDetail extends Component {
+  order = { order_nr: ' ', e_id: ' ', c_id: ' ', from_date: ' ', to_date: ' ', from_place: ' ', to_place: ' ' };
   render() {
     return (
-      <Card title="Personalia">
+      <div className="main">
+      <Card title="Ordredetaljer">
       <Table striped bordered hover>
       <tbody>
       <tr>
+      <td>Ordrenummer</td>
+      <td>{this.order.order_nr}</td>
+      </tr>
+      <tr>
+      <td>Ansatt id</td>
+      <td>{this.order.e_id}</td>
+      </tr>
+      <tr>
       <td>Kunde id</td>
-      <td>{this.user.c_id}</td>
+      <td>{this.order.c_id}</td>
       </tr>
       <tr>
-      <td>Fornavn</td>
-      <td>{this.user.c_fname}</td>
+      <td>Fra-dato</td>
+      <td>{this.order.from_date}</td>
       </tr>
       <tr>
-      <td>Etternavn</td>
-      <td>{this.user.c_lname}</td>
+      <td>Til-dato</td>
+      <td>{this.order.to_date}</td>
       </tr>
       <tr>
-      <td>Telefon</td>
-      <td>{this.user.c_tlf}</td>
+      <td>Utleveringsted</td>
+      <td>{this.order.from_place}</td>
       </tr>
       <tr>
-      <td>Email</td>
-      <td>{this.user.c_email}</td>
-      </tr>
-      <tr>
-      <td>Adresse</td>
-      <td>{this.user.c_address}</td>
+      <td>Innleveringsted</td>
+      <td>{this.order.to_place}</td>
       </tr>
       </tbody>
       </Table>
       </Card>
+      </div>
     );
   }
 
   mounted() {
-    customerService.getCustomer(this.props.match.params.id, result => {
-      this.user.c_id = result.c_id;
-      this.user.c_fname = result.c_fname;
-      this.user.c_lname = result.c_lname;
-      this.user.c_email = result.c_email;
-      this.user.c_tlf = result.c_tlf;
-      this.user.c_address = result.c_address;
+    orderService.getOrder(this.props.match.params.id, result => {
+      this.order.order_nr = result.order_nr;
+      this.order.e_id = result.e_id;
+      this.order.c_id = result.c_id;
+      this.order.from_date = result.from_date.getDate() + '-' + (result.from_date.getMonth() + 1) + '-' + result.from_date.getFullYear();
+      this.order.to_date = result.to_date.getDate() + '-' + (result.to_date.getMonth() + 1) + '-' + result.to_date.getFullYear();
+      this.order.from_place = result.from_place;
+      this.order.to_place = result.to_place;
     });
   }
-} */
+}

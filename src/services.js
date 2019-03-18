@@ -49,7 +49,7 @@ class OrderService {
   }
 
   getOrder(order_nr, success) {
-    connection.query('select * from Customer where order_nr = ?', [order_nr], (error, results) => {
+    connection.query('select * from Orders where order_nr = ?', [order_nr], (error, results) => {
       if (error) return console.error(error);
 
       success(results[0]);
