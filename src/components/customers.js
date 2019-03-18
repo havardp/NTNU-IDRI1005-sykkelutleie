@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
+import SearchField from "react-search-field";
 
 //Bootstrap imports
 import Table from 'react-bootstrap/Table';
@@ -16,6 +17,10 @@ export class Customers extends Component {
   render() {
     return (
       <div className="main">
+      <SearchField
+      placeholder="Søk..."
+      classNames="test-class"
+          />
         <Table striped bordered hover>
           <thead>
             <tr>
