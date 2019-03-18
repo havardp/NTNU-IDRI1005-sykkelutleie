@@ -10,7 +10,7 @@ import { Home } from './components/home.js';
 import { Customers, CustomerDetail } from './components/customers.js';
 import { Employees, EmployeeDetail } from './components/employees.js';
 import { StorageStatus, BikeDetail, EquipmentDetail } from './components/storage.js';
-import { Orders } from './components/orders.js';
+import { Orders, OrderDetail } from './components/orders.js';
 
 //To be able to change path
 import createHashHistory from 'history/createHashHistory';
@@ -29,6 +29,7 @@ ReactDOM.render(
       <Route exact path="/employees/:id" component={EmployeeDetail} />
       <Route exact path="/storagestatus" component={StorageStatus} />
       <Route exact path="/orders" component={Orders} />
+      <Route exact path="/orders/:id" component={OrderDetail} />
       <Route exact path="/bikedetails/:id" component={BikeDetail} />
       <Route exact path="/equipmentdetails/:id" component={EquipmentDetail} />
     </div>
