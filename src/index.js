@@ -63,7 +63,7 @@ class Menu extends Component {
             onClick={() => {
               sessionStorage.clear();
               ipcRenderer.send('minimize');
-              history.push('/home');
+              history.push('/');
             }}
           >
             {' '}
