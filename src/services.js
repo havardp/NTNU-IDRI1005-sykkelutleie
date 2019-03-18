@@ -37,15 +37,38 @@ class CustomerService {
       success(results[0]);
     });
   }
-}
 
-class OrderService {
-  getOrders(success) {
-    connection.query('select order_nr, Customer.c_id, c_lname, c_fname from Orders, Customer where Orders.c_id = Customer.c_id', (error, results) => {
+  addCustomer(user, success) {
+    connection.query(
+      'insert into Customer values (null, ?, ?, ?, ?, ?, ?)',
+      [user.fname, user.lname, user.email, user.tlf, user.address, user.zip],
+      (error, results) => {
+        if (error) return console.error(error);
+
+        success(results);
+      }
+    );
+  }
+
+  deleteCustomers(id, success) {
+    connection.query('delete from Customer where c_id = ?', [id], (error, results) => {
       if (error) return console.error(error);
 
       success(results);
     });
+  }
+}
+
+class OrderService {
+  getOrders(success) {
+    connection.query(
+      'select order_nr, Customer.c_id, c_lname, c_fname from Orders, Customer where Orders.c_id = Customer.c_id',
+      (error, results) => {
+        if (error) return console.error(error);
+
+        success(results);
+      }
+    );
   }
 
   getOrder(order_nr, success) {

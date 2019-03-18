@@ -17,7 +17,7 @@ export class Alert extends Component {
 export class Card extends Component {
   render() {
     return (
-      <div className="card">
+      <div className="card" style={{ marginTop: 10 }}>
         <div className="card-body">
           <h5 className="card-title">{this.props.title}</h5>
           <div className="card-text">{this.props.children}</div>
