@@ -7,6 +7,6 @@ import { CustomerAdd } from './customers.js';
 
 export class NewOrder extends Component {
   render() {
-    return <CustomerAdd />;
+    return null;
   }
 }

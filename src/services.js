@@ -2,7 +2,7 @@ import { connection } from './mysql_connection';
 
 class EmployeeService {
   getEmployee(username, success, failure) {
-    connection.query('select * from Employee where e_id = ?', [username], (error, results) => {
+    connection.query('select password from Employee where e_id = ?', [username], (error, results) => {
       if (error) {
         return console.error(error);
       }
@@ -12,8 +12,23 @@ class EmployeeService {
     });
   }
 
+  getEmployeeDetails(username, success, failure) {
+    connection.query(
+      'select e_id, fname, lname, department, email, tlf, address, DOB  from Employee where e_id = ?',
+      [username],
+      (error, results) => {
+        if (error) {
+          return console.error(error);
+        }
+        if (results.length == 0) return failure();
+
+        success(results[0]);
+      }
+    );
+  }
+
   getEmployees(success) {
-    connection.query('select * from Employee', (error, results) => {
+    connection.query('select e_id, fname, lname from Employee', (error, results) => {
       if (error) return console.error(error);
 
       success(results);
@@ -23,19 +38,26 @@ class EmployeeService {
 
 class CustomerService {
   getCustomers(success) {
-    connection.query('select * from Customer', (error, results) => {
-      if (error) return console.error(error);
+    connection.query(
+      'select Customer.c_id, c_fname, c_lname, count(order_nr) from Customer left  join Orders on Customer.c_id = Orders.c_id group by Customer.c_id',
+      (error, results) => {
+        if (error) return console.error(error);
 
-      success(results);
-    });
+        success(results);
+      }
+    );
   }
 
-  getCustomer(c_id, success) {
-    connection.query('select * from Customer where c_id = ?', [c_id], (error, results) => {
-      if (error) return console.error(error);
+  getCustomerDetails(c_id, success) {
+    connection.query(
+      'select c_id, c_fname, c_lname, c_email, c_tlf, c_address from Customer where c_id = ?',
+      [c_id],
+      (error, results) => {
+        if (error) return console.error(error);
 
-      success(results[0]);
-    });
+        success(results[0]);
+      }
+    );
   }
 
   addCustomer(user, success) {
