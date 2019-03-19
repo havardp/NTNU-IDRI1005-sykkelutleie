@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
+import { Link } from 'react-router-dom';
 
 //Bootstrap imports
 import Navbar from 'react-bootstrap/Navbar';
@@ -11,19 +12,20 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import { history } from '../index.js';
 import { loginHandler } from './login.js';
 
+//<button onClick={() => history.goBack()}>go back </button>  for å gå tilbake et skritt
+
 export class Menu extends Component {
   //"&#128100;" profil ikon
   render() {
-    if (sessionStorage.getItem('userLoggedIn') != 'true') return null;
     return (
-      <Navbar bg="light" variant="light">
+      <Navbar bg="light" variant="light" style={{ marginBottom: 10 }}>
         <Navbar.Brand href="#home">Sykkelutleie AS</Navbar.Brand>
         <Nav className="mr-auto">
-          <Nav.Link href="#neworder">Ny ordre</Nav.Link>
-          <Nav.Link href="#orders">Finn ordre</Nav.Link>
-          <Nav.Link href="#storagestatus">Lager</Nav.Link>
-          <Nav.Link href="#customers">Kunde</Nav.Link>
-          <Nav.Link href="#employees">Ansatte</Nav.Link>
+          <Nav.Link onClick={() => history.push('/neworder')}>Ny ordre</Nav.Link>
+          <Nav.Link onClick={() => history.push('/orders')}>Finn ordre</Nav.Link>
+          <Nav.Link onClick={() => history.push('/storagestatus')}>Lager</Nav.Link>
+          <Nav.Link onClick={() => history.push('/customers')}>Kunde</Nav.Link>
+          <Nav.Link onClick={() => history.push('/employees')}>Ansatte</Nav.Link>
         </Nav>
         <DropdownButton
           id="dropdown-item-button"
@@ -49,7 +51,6 @@ export class Menu extends Component {
 
 export class SideNav extends Component {
   render() {
-    if (sessionStorage.getItem('userLoggedIn') != 'true') return null;
     return (
       <div className="sidenav">
         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
