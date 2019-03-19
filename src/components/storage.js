@@ -2,6 +2,8 @@ import * as React from 'react';
 import { Component } from 'react-simplified';
 
 //Bootstrap imports
+import Modal from 'react-bootstrap/Modal';
+import ModalBody from 'react-bootstrap/ModalBody';
 import Table from 'react-bootstrap/Table';
 import { Card } from '../widgets';
 
@@ -122,7 +124,7 @@ export class BikeDetail extends Component {
               ))}
               <tr>
                 <td>
-                  <button className="btn btn-info btn-lg">&#10010;</button>
+                  <button className="btn btn-info btn-lg" onClick={() => history.push('/bike/add')}>&#10010;</button>
                 </td>
               </tr>
             </tbody>
@@ -138,6 +140,7 @@ export class BikeDetail extends Component {
     });
   }
 }
+
 
 export class EquipmentDetail extends Component {
   name = {
