@@ -8,6 +8,8 @@ import { Card } from '../widgets';
 //reusable components
 import { VerticalTableComponent, HorizontalTableComponent } from '../components/tables.js';
 
+import { AddCustomer } from '../components/adduser.js';
+
 //Imports for sql queries
 import { employeeService } from '../services';
 
@@ -44,11 +46,17 @@ export class EmployeeDetail extends Component {
 export class Employees extends Component {
   employees = null;
   tableHead = ['Ansatt id', 'Fornavn', 'Etternavn', 'X'];
+  modal = false;
+
   render() {
     if (!this.employees) return null;
     return (
       <div className="main">
         <VerticalTableComponent tableBody={this.employees} tableHead={this.tableHead} deleteButton={true} />
+        <button className="btn btn-info btn-lg" onClick={this.toggleModal}>
+          &#10010;
+        </button>
+        {this.modal && <AddCustomer modal={true} toggle={this.toggleModal} />}
       </div>
     );
   }
@@ -56,5 +64,16 @@ export class Employees extends Component {
     employeeService.getEmployees(employees => {
       this.employees = employees;
     });
+  }
+
+  delete(id) {
+    customerService.deleteCustomers(id, () => {
+      this.mounted();
+    });
+  }
+
+  toggleModal() {
+    this.modal ? (this.modal = false) : (this.modal = true);
+    this.mounted();
   }
 }
