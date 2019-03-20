@@ -12,6 +12,9 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 
+//make it not show if loading is fast?
+import ReactLoading from 'react-loading';
+
 //reusable components
 import { VerticalTableComponent, HorizontalTableComponent } from '../components/tables.js';
 
@@ -24,154 +27,91 @@ import { history } from '../index.js';
 export class StorageStatus extends Component {
   bikes = null;
   equipment = null;
-  tableHeadB = ['Modell', 'Beskrivelse', 'Timepris', 'Dagpris', 'Antall'];
-  tableHeadE = ['Modell', 'Beskrivelse', 'Timepris', 'Dagpris', 'Antall'];
-  modal = false
+  tableHead = ['Modell', 'Beskrivelse', 'Timepris', 'Dagpris', 'Antall'];
 
   render() {
-      if (!this.bikes) return null
-      if (!this.equipment) return null
-      return(
-        <div className="main">
+    if (!this.bikes || !this.equipment)
+      return <ReactLoading type="spin" className="main spinner" color="#A9A9A9" height={200} width={200} />;
+    return (
+      <div className="main">
         <VerticalTableComponent
           tableBody={this.bikes}
-          tableHead={this.tableHeadB}
-          deleteButton={true}
+          tableHead={this.tableHead}
+          deleteButton={false}
           delete={this.delete}
+        />
+        <button className="btn btn-info btn-lg" onClick={this.toggleModal}>
+          &#10010;
+        </button>
+        <VerticalTableComponent
+          tableBody={this.equipment}
+          tableHead={this.tableHead}
+          deleteButton={false}
+          delete={this.delete}
+        />
+        <button className="btn btn-info btn-lg" onClick={this.toggleModal}>
+          &#10010;
+        </button>
+      </div>
+    );
+  }
+  mounted() {
+    storageService.getBikeModels(bikes => {
+      this.bikes = bikes;
+    });
+    storageService.getEquipmentModels(equipment => {
+      this.equipment = equipment;
+    });
+  }
+}
+
+export class StorageDetails extends Component {
+  bike = null;
+  equipment = null;
+  tableHeadBike = ['Ramme id', 'Gir', 'Hjulstørrelse', 'Ødelagt', 'Lokasjon', 'Tilholdssted', 'Bagasjerett'];
+  tableHeadEquipment = ['Modell', 'Utstyr id'];
+
+  render() {
+    if (this.bike) {
+      return (
+        <div className="main">
+          <VerticalTableComponent
+            tableBody={this.bike}
+            tableHead={this.tableHeadBike}
+            deleteButton={true}
+            delete={this.delete}
           />
           <button className="btn btn-info btn-lg" onClick={this.toggleModal}>
             &#10010;
           </button>
-          <VerticalTableComponent
-            tableBody={this.equipment}
-            tableHead={this.tableHeadE}
-            deleteButton={true}
-            delete={this.delete}
-            />
-            <button className="btn btn-info btn-lg" onClick={this.toggleModal}>
-              &#10010;
-            </button>
-
         </div>
       );
-      }
-
-    mounted() {
-      storageService.getBikeModels(bikes => {
-        this.bikes = bikes;
-      });
-        storageService.getEquipmentModels(equipment => {
-          this.equipment = equipment;
-        });
     }
 
- }
-
- /*
- export class BikeDetail extends Component {
-   Allbikes = [];
-   render() {
-     return (
-       <div className="main">
-         <Card title={this.props.match.params.id}>
-           <Table striped bordered hover responsive>
-             <thead>
-               <tr>
-                 <td>Chassis id</td>
-                 <td>Gir</td>
-                 <td>Hjulstørrelse</td>
-                 <td>Rep.dato</td>
-                 <td>Ødelagt</td>
-                 <td>Lokasjon</td>
-                 <td>Tilholdssted</td>
-                 <td>Bagasjebrett</td>
-               </tr>
-             </thead>
-             <tbody>
-               {this.Allbikes.map(bike => (
-                 <tr key={bike.chassis_id}>
-                   <td>{bike.chassis_id}</td>
-                   <td>{bike.gear}</td>
-                   <td>{bike.wheel_size}</td>
-                   <td>{bike.rep_date}</td>
-                   <td>{bike.broken}</td>
-                   <td>{bike.location}</td>
-                   <td>{bike.storage}</td>
-                   <td>{bike.luggage}</td>
-                   <td>
-                     <button>&#9881;</button>
-                   </td>
-                   <td>
-                     <button>&#10004;</button>
-                   </td>
-                 </tr>
-               ))}
-               <tr>
-                 <td>
-                   <button className="btn btn-info btn-lg" onClick={() => history.push('/bike/add')}>&#10010;</button>
-                 </td>
-               </tr>
-             </tbody>
-           </Table>
-         </Card>
-       </div>
-     );
-   }
-
-   mounted() {
-     storageService.getBike(this.props.match.params.id, result => {
-       this.Allbikes = result;
-     });
-   }
- }
-
-
- export class EquipmentDetail extends Component {
-   name = {
-     eq_id: ' ',
-     model: ' '
-   };
-   Allequipment = [];
-   render() {
-     return (
-       <div className="main">
-         <Card title={this.props.match.params.id}>
-           <Table striped bordered hover responsive>
-             <thead>
-               <tr>
-                 <td>Utstyrs-id</td>
-                 <td>Modell</td>
-               </tr>
-             </thead>
-             <tbody>
-               {this.Allequipment.map(equipment => (
-                 <tr key={equipment.eq_id}>
-                   <td>{equipment.eq_id}</td>
-                   <td>{equipment.model}</td>
-                   <td>
-                     <button>&#9881;</button>
-                   </td>
-                   <td>
-                     <button>&#10004;</button>
-                   </td>
-                 </tr>
-               ))}
-               <tr>
-                 <td>
-                   <button className="btn btn-info btn-lg">&#10010;</button>
-                 </td>
-               </tr>
-             </tbody>
-           </Table>
-         </Card>
-       </div>
-     );
-   }
-
-   mounted() {
-     storageService.getEquipment(this.props.match.params.id, result => {
-       this.Allequipment = result;
-     });
-   }
- }
-*/
+    if (this.equipment) {
+      return (
+        <div className="main">
+          <VerticalTableComponent
+            tableBody={this.equipment}
+            tableHead={this.tableHeadEquipment}
+            deleteButton={true}
+            delete={this.delete}
+          />
+          <button className="btn btn-info btn-lg" onClick={this.toggleModal}>
+            &#10010;
+          </button>
+        </div>
+      );
+    }
+    return <ReactLoading type="spin" className="main spinner" color="#A9A9A9" height={200} width={200} />;
+  }
+  mounted() {
+    storageService.getBike(this.props.match.params.id, result => {
+      this.bike = result;
+    });
+    storageService.getEquipment(this.props.match.params.id, result => {
+      this.equipment = result;
+      console.log(this.equipment);
+    });
+  }
+}

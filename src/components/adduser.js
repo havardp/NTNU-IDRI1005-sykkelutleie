@@ -168,11 +168,22 @@ export class AddEmployee extends Component {
 
   add() {
     if (!this.user.role) this.user.role = 'Admin';
-    this.user.password = bcrypt.hashSync(this.user.password, 10);
-    console.log(this.user);
-    //add form validation, if (!this.user.fname) etc
-    employeeService.addEmployee(this.user, () => {
-      this.props.toggle();
-    });
+    if (
+      this.user.fname &&
+      this.user.lname &&
+      this.user.address &&
+      this.user.tlf &&
+      this.user.email &&
+      this.user.zip &&
+      this.user.DOB &&
+      this.user.password
+    ) {
+      this.user.password = bcrypt.hashSync(this.user.password, 10);
+      employeeService.addEmployee(this.user, () => {
+        this.props.toggle();
+      });
+    } else {
+      alert('Du må fylle inn alle feltene');
+    }
   }
 }

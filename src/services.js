@@ -135,16 +135,22 @@ class StorageService {
       }
     );
   }
-  getBike(id, success) {
-    connection.query('select * from Bike where model = ?', [id], (error, results) => {
-      if (error) return console.error(error);
+  getBike(id, success, failure) {
+    connection.query(
+      'select chassis_id, gear, wheel_size, broken, location, storage, luggage from Bike where Bike.model = ?',
+      [id],
+      (error, results) => {
+        if (error) return console.error(error);
+        if (results.length == 0) return;
 
-      success(results);
-    });
+        success(results);
+      }
+    );
   }
   getEquipment(id, success) {
-    connection.query('select * from Equipment where model = ?', [id], (error, results) => {
+    connection.query(' select * from Equipment where Equipment.model = ?;', [id], (error, results) => {
       if (error) return console.error(error);
+      if (results.length == 0) return;
 
       success(results);
     });

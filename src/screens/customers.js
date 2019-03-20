@@ -8,7 +8,7 @@ import ReactLoading from 'react-loading';
 //Bootstrap imports
 import Table from 'react-bootstrap/Table';
 import Card from 'react-bootstrap/Card';
-import CardDeck from 'react-bootstrap/CardDeck'
+import CardDeck from 'react-bootstrap/CardDeck';
 import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
 import Col from 'react-bootstrap/Col';
@@ -72,34 +72,31 @@ export class CustomerDetail extends Component {
   render() {
     if (!this.customer) return null;
     let customerDetailsStyle = {
-      padding: "50px",
-      paddingTop: "25px"
-
-    }
+      padding: '50px',
+      paddingTop: '25px'
+    };
     return (
       <div className="main">
-        <Card style={customerDetailsStyle} >
-        <Card.Title>Kundedetaljer</Card.Title>
+        <Card style={customerDetailsStyle}>
+          <Card.Title>Kundedetaljer</Card.Title>
           <HorizontalTableComponent tableBody={this.customer} tableHead={this.tableHead} />
-          <td>
-            <button>&#9881;</button>
-            <button>&#10004;</button>
-          </td>
-          <h4 style={{paddingTop: "20px"}}>Ordrehistorikk:</h4>
+
+          <button>&#9881;</button>
+          <button>&#10004;</button>
+
+          <h4 style={{ paddingTop: '20px' }}>Ordrehistorikk:</h4>
         </Card>
         <CardDeck>
-  <Card>
-    <Card.Body>
-      <Card.Title>Ordrenr:</Card.Title>
-      <Card.Text>
-        1x terrengsykkel
-      </Card.Text>
-    </Card.Body>
-    <Card.Footer>
-        <Button variant="primary">Se detaljer</Button>
-    </Card.Footer>
-  </Card>
-</CardDeck>
+          <Card>
+            <Card.Body>
+              <Card.Title>Ordrenr:</Card.Title>
+              <Card.Text>1x terrengsykkel</Card.Text>
+            </Card.Body>
+            <Card.Footer>
+              <Button variant="primary">Se detaljer</Button>
+            </Card.Footer>
+          </Card>
+        </CardDeck>
       </div>
     );
   }
