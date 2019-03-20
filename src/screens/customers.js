@@ -32,7 +32,7 @@ export class Customers extends Component {
 
   render() {
     if (!this.customers)
-      return <ReactLoading type="spin" className="main spinner" color="#A9A9A9" height={200} width={200} />;
+      return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     return (
       <div className="main">
         <VerticalTableComponent
@@ -53,6 +53,7 @@ export class Customers extends Component {
       this.customers = customers;
     });
   }
+
   delete(id) {
     customerService.deleteCustomers(id, () => {
       this.mounted();
@@ -70,7 +71,8 @@ export class CustomerDetail extends Component {
   tableHead = ['Kunde id', 'Fornavn', 'Etternavn', 'Telefon', 'Email', 'Adresse'];
   orderHistory = [];
   render() {
-    if (!this.customer) return null;
+    if (!this.customer)
+      return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     let customerDetailsStyle = {
       padding: '50px',
       paddingTop: '25px'

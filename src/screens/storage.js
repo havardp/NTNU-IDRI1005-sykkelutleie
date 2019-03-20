@@ -31,7 +31,7 @@ export class StorageStatus extends Component {
 
   render() {
     if (!this.bikes || !this.equipment)
-      return <ReactLoading type="spin" className="main spinner" color="#A9A9A9" height={200} width={200} />;
+      return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     return (
       <div className="main">
         <VerticalTableComponent
@@ -103,7 +103,7 @@ export class StorageDetails extends Component {
         </div>
       );
     }
-    return <ReactLoading type="spin" className="main spinner" color="#A9A9A9" height={200} width={200} />;
+    return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
   }
   mounted() {
     storageService.getBike(this.props.match.params.id, result => {

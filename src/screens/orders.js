@@ -5,6 +5,9 @@ import { Component } from 'react-simplified';
 import Table from 'react-bootstrap/Table';
 import { Card } from '../widgets';
 
+//make it not show if loading is fast?
+import ReactLoading from 'react-loading';
+
 //Imports for sql queries
 import { orderService } from '../services';
 
@@ -12,8 +15,10 @@ import { orderService } from '../services';
 import { history } from '../index.js';
 
 export class Orders extends Component {
-  orders = [];
+  orders = null;
   render() {
+    if (!this.orders)
+      return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     return (
       <div className="main">
         <Table striped bordered hover>
@@ -44,46 +49,45 @@ export class Orders extends Component {
   }
 }
 
-
- export class OrderDetail extends Component {
+export class OrderDetail extends Component {
   order = { order_nr: ' ', e_id: ' ', c_id: ' ', from_date: ' ', to_date: ' ', from_place: ' ', to_place: ' ' };
   render() {
     return (
       <div className="main">
-      <Card title="Ordredetaljer">
-      <Table striped bordered hover>
-      <tbody>
-      <tr>
-      <td>Ordrenummer</td>
-      <td>{this.order.order_nr}</td>
-      </tr>
-      <tr>
-      <td>Ansatt id</td>
-      <td>{this.order.e_id}</td>
-      </tr>
-      <tr>
-      <td>Kunde id</td>
-      <td>{this.order.c_id}</td>
-      </tr>
-      <tr>
-      <td>Fra-dato</td>
-      <td>{this.order.from_date}</td>
-      </tr>
-      <tr>
-      <td>Til-dato</td>
-      <td>{this.order.to_date}</td>
-      </tr>
-      <tr>
-      <td>Utleveringsted</td>
-      <td>{this.order.from_place}</td>
-      </tr>
-      <tr>
-      <td>Innleveringsted</td>
-      <td>{this.order.to_place}</td>
-      </tr>
-      </tbody>
-      </Table>
-      </Card>
+        <Card title="Ordredetaljer">
+          <Table striped bordered hover>
+            <tbody>
+              <tr>
+                <td>Ordrenummer</td>
+                <td>{this.order.order_nr}</td>
+              </tr>
+              <tr>
+                <td>Ansatt id</td>
+                <td>{this.order.e_id}</td>
+              </tr>
+              <tr>
+                <td>Kunde id</td>
+                <td>{this.order.c_id}</td>
+              </tr>
+              <tr>
+                <td>Fra-dato</td>
+                <td>{this.order.from_date}</td>
+              </tr>
+              <tr>
+                <td>Til-dato</td>
+                <td>{this.order.to_date}</td>
+              </tr>
+              <tr>
+                <td>Utleveringsted</td>
+                <td>{this.order.from_place}</td>
+              </tr>
+              <tr>
+                <td>Innleveringsted</td>
+                <td>{this.order.to_place}</td>
+              </tr>
+            </tbody>
+          </Table>
+        </Card>
       </div>
     );
   }
@@ -93,8 +97,10 @@ export class Orders extends Component {
       this.order.order_nr = result.order_nr;
       this.order.e_id = result.e_id;
       this.order.c_id = result.c_id;
-      this.order.from_date = result.from_date.getDate() + '-' + (result.from_date.getMonth() + 1) + '-' + result.from_date.getFullYear();
-      this.order.to_date = result.to_date.getDate() + '-' + (result.to_date.getMonth() + 1) + '-' + result.to_date.getFullYear();
+      this.order.from_date =
+        result.from_date.getDate() + '-' + (result.from_date.getMonth() + 1) + '-' + result.from_date.getFullYear();
+      this.order.to_date =
+        result.to_date.getDate() + '-' + (result.to_date.getMonth() + 1) + '-' + result.to_date.getFullYear();
       this.order.from_place = result.from_place;
       this.order.to_place = result.to_place;
     });

@@ -7,8 +7,10 @@ import { Card } from '../widgets';
 
 //reusable components
 import { VerticalTableComponent, HorizontalTableComponent } from '../components/tables.js';
-
 import { AddEmployee } from '../components/adduser.js';
+
+//make it not show if loading is fast?
+import ReactLoading from 'react-loading';
 
 //Imports for sql queries
 import { employeeService } from '../services';
@@ -21,7 +23,8 @@ export class EmployeeDetail extends Component {
   tableHead = ['Ansatt id', 'Fornavn', 'Etternavn', 'Avdeling', 'Email', 'Telefon', 'Adresse', 'Fødselsdato'];
 
   render() {
-    if (!this.user) return null;
+    if (!this.user)
+      return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     return (
       <div className="main">
         <Card title="Personalia">
@@ -49,7 +52,8 @@ export class Employees extends Component {
   modal = false;
 
   render() {
-    if (!this.employees) return null;
+    if (!this.employees)
+      return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     return (
       <div className="main">
         <VerticalTableComponent tableBody={this.employees} tableHead={this.tableHead} deleteButton={true} />

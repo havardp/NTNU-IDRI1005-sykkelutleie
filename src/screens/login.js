@@ -8,6 +8,9 @@ import Collapse from 'react-bootstrap/Collapse';
 import Alert from 'react-bootstrap/Alert';
 import Fade from 'react-bootstrap/Fade';
 
+//make it not show if loading is fast?
+import ReactLoading from 'react-loading';
+
 //Imports for sql queries
 import { employeeService } from '../services';
 
@@ -23,6 +26,7 @@ export class Login extends Component {
   user = [];
   collapseShow = false;
   modalShow = false;
+  loggingIn = false;
 
   modalClose() {
     this.modalShow = false;
@@ -37,6 +41,8 @@ export class Login extends Component {
   }
 
   render() {
+    if (this.loggingIn)
+      return <ReactLoading type="spin" className="logging" color="#A9A9A9" height={200} width={200} />;
     return (
       <div>
         <div className="container">
@@ -94,6 +100,7 @@ export class Login extends Component {
   }
 
   login() {
+    this.loggingIn = true;
     if (this.user.name && this.user.password) {
       employeeService.getEmployee(
         this.user.name,
@@ -105,14 +112,17 @@ export class Login extends Component {
             ipcRenderer.send('maximize');
           } else {
             this.collapseShow = true;
+            this.loggingIn = false;
           }
         },
         () => {
           this.collapseShow = true;
+          this.loggingIn = false;
         }
       );
     } else {
       this.collapseShow = true;
+      this.loggingIn = false;
     }
   }
 
