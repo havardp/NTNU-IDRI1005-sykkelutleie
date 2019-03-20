@@ -18,7 +18,7 @@ export class Menu extends Component {
   //"&#128100;" profil ikon
   render() {
     return (
-      <Navbar bg="light" variant="light" style={{ marginBottom: 10 }}>
+      <Navbar bg="light" variant="light">
         <Navbar.Brand href="#home">Sykkelutleie AS</Navbar.Brand>
         <Nav className="mr-auto">
           <Nav.Link onClick={() => history.push('/neworder')}>Ny ordre</Nav.Link>

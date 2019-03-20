@@ -34,7 +34,7 @@ export class Customers extends Component {
     if (!this.customers)
       return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     return (
-      <div className="main">
+      <>
         <VerticalTableComponent
           tableBody={this.customers}
           tableHead={this.tableHead}
@@ -45,7 +45,7 @@ export class Customers extends Component {
           &#10010;
         </button>
         {this.modal && <AddCustomer modal={true} toggle={this.toggleModal} />}
-      </div>
+      </>
     );
   }
   mounted() {
@@ -78,7 +78,7 @@ export class CustomerDetail extends Component {
       paddingTop: '25px'
     };
     return (
-      <div className="main">
+      <>
         <Card style={customerDetailsStyle}>
           <Card.Title>Kundedetaljer</Card.Title>
           <HorizontalTableComponent tableBody={this.customer} tableHead={this.tableHead} />
@@ -99,7 +99,7 @@ export class CustomerDetail extends Component {
             </Card.Footer>
           </Card>
         </CardDeck>
-      </div>
+      </>
     );
   }
 

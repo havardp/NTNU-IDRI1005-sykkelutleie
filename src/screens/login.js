@@ -42,9 +42,9 @@ export class Login extends Component {
 
   render() {
     if (this.loggingIn)
-      return <ReactLoading type="spin" className="logging" color="#A9A9A9" height={200} width={200} />;
+      return <ReactLoading type="spin" className="logging fade-in" color="#A9A9A9" height={200} width={200} />;
     return (
-      <div>
+      <>
         <div className="container">
           <div className="row">
             <div className="col-lg-5 mx-auto">
@@ -95,7 +95,7 @@ export class Login extends Component {
         <Modal show={this.modalShow} onHide={this.modalClose} centered>
           <Modal.Body>Hvis du er usikker på passord eller brukernavn, kontakt en administrator</Modal.Body>
         </Modal>
-      </div>
+      </>
     );
   }
 

@@ -6,6 +6,6 @@ import { history } from '../index.js';
 
 export class Home extends Component {
   render() {
-    return <div className="main">HOME</div>;
+    return <div>HOME</div>;
   }
 }

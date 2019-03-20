@@ -5,8 +5,11 @@ import { Component } from 'react-simplified';
 import { history } from '../index.js';
 import { CustomerAdd } from './customers.js';
 
+//make it not show if loading is fast?
+import ReactLoading from 'react-loading';
+
 export class NewOrder extends Component {
   render() {
-    return null;
+    return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
   }
 }

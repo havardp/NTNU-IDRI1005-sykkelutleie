@@ -33,7 +33,7 @@ export class StorageStatus extends Component {
     if (!this.bikes || !this.equipment)
       return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     return (
-      <div className="main">
+      <>
         <VerticalTableComponent
           tableBody={this.bikes}
           tableHead={this.tableHead}
@@ -52,7 +52,7 @@ export class StorageStatus extends Component {
         <button className="btn btn-info btn-lg" onClick={this.toggleModal}>
           &#10010;
         </button>
-      </div>
+      </>
     );
   }
   mounted() {
@@ -74,7 +74,7 @@ export class StorageDetails extends Component {
   render() {
     if (this.bike) {
       return (
-        <div className="main">
+        <>
           <VerticalTableComponent
             tableBody={this.bike}
             tableHead={this.tableHeadBike}
@@ -84,13 +84,13 @@ export class StorageDetails extends Component {
           <button className="btn btn-info btn-lg" onClick={this.toggleModal}>
             &#10010;
           </button>
-        </div>
+        </>
       );
     }
 
     if (this.equipment) {
       return (
-        <div className="main">
+        <>
           <VerticalTableComponent
             tableBody={this.equipment}
             tableHead={this.tableHeadEquipment}
@@ -100,7 +100,7 @@ export class StorageDetails extends Component {
           <button className="btn btn-info btn-lg" onClick={this.toggleModal}>
             &#10010;
           </button>
-        </div>
+        </>
       );
     }
     return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;

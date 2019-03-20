@@ -96,7 +96,7 @@ class CustomerService {
 class OrderService {
   getOrders(success) {
     connection.query(
-      'select order_nr, Customer.c_id, c_lname, c_fname from Orders, Customer where Orders.c_id = Customer.c_id',
+      'select order_nr, Customer.c_id, concat(c_fname, " ", c_lname) as "fullname" from Orders, Customer where Orders.c_id = Customer.c_id',
       (error, results) => {
         if (error) return console.error(error);
 

@@ -7,6 +7,9 @@ import Table from 'react-bootstrap/Table';
 //Import the hashistory from index.js to be able to change path
 import { history } from '../index.js';
 
+//make it not show if loading is fast?
+import ReactLoading from 'react-loading';
+
 //Reusable table component, which takes in an array for the table head, and an array of objects for the table body.
 export class VerticalTableComponent extends Component {
   constructor(props) {
@@ -69,7 +72,12 @@ export class HorizontalTableComponent extends Component {
 
   render() {
     //Won't render anything until the date of birth from the sql query has been changed from a date object to a string of numbers, to avoid errors.
-    if (typeof this.props.tableBody.DOB === 'object') return null;
+    if (
+      typeof this.props.tableBody.DOB === 'object' ||
+      typeof this.props.tableBody.from_date === 'object' ||
+      typeof this.props.tableBody.to_date === 'object'
+    )
+      return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     return (
       <>
         <Table striped bordered hover>
