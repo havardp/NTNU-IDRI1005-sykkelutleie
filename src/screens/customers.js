@@ -2,6 +2,9 @@ import * as React from 'react';
 import { Component } from 'react-simplified';
 import SearchField from 'react-search-field';
 
+//make it not show if loading is fast?
+import ReactLoading from 'react-loading';
+
 //Bootstrap imports
 import Table from 'react-bootstrap/Table';
 import Card from 'react-bootstrap/Card';
@@ -28,7 +31,8 @@ export class Customers extends Component {
   modal = false;
 
   render() {
-    if (!this.customers) return null;
+    if (!this.customers)
+      return <ReactLoading type="spin" className="main spinner" color="#A9A9A9" height={200} width={200} />;
     return (
       <div className="main">
         <VerticalTableComponent
@@ -36,7 +40,6 @@ export class Customers extends Component {
           tableHead={this.tableHead}
           deleteButton={true}
           delete={this.delete}
-          addCustomerButton={true}
         />
         <button className="btn btn-info btn-lg" onClick={this.toggleModal}>
           &#10010;
