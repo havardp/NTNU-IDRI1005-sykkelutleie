@@ -168,7 +168,6 @@ export class AddEmployee extends Component {
 
   add() {
     if (!this.user.role) this.user.role = 'Admin';
-    console.log(this.user);
     if (
       this.user.fname &&
       this.user.lname &&

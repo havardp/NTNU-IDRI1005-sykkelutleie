@@ -66,7 +66,7 @@ export class Customers extends Component {
 
 export class CustomerDetail extends Component {
   customer = null;
-  tableHead = ['Kunde id', 'Fornavn', 'Etternavn', 'Telefon', 'Email', 'Adresse'];
+  tableHead = ['Kunde id', 'Fornavn', 'Etternavn', 'Email', 'Telefon', 'Adresse'];
   render() {
     if (!this.customer) return null;
     return (

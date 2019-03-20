@@ -18,7 +18,7 @@ import { history } from '../index.js';
 
 export class EmployeeDetail extends Component {
   user = null;
-  tableHead = ['Ansatt id', 'Fornavn', 'Etternavn', 'Avdeling', 'Telefon', 'Email', 'Adresse', 'Fødselsdato'];
+  tableHead = ['Ansatt id', 'Fornavn', 'Etternavn', 'Avdeling', 'Email', 'Telefon', 'Adresse', 'Fødselsdato'];
 
   render() {
     if (!this.user) return null;
