@@ -76,11 +76,9 @@ export class StorageStatus extends Component {
       this.bikestatus = bikestatus;
     });
 
-    {
-      storageService.getEquipmentModels(equipmentstatus => {
-        this.equipmentstatus = equipmentstatus;
-      });
-    }
+    storageService.getEquipmentModels(equipmentstatus => {
+      this.equipmentstatus = equipmentstatus;
+    });
   }
 }
 
@@ -124,7 +122,9 @@ export class BikeDetail extends Component {
               ))}
               <tr>
                 <td>
-                  <button className="btn btn-info btn-lg" onClick={() => history.push('/bike/add')}>&#10010;</button>
+                  <button className="btn btn-info btn-lg" onClick={() => history.push('/bike/add')}>
+                    &#10010;
+                  </button>
                 </td>
               </tr>
             </tbody>
@@ -140,7 +140,6 @@ export class BikeDetail extends Component {
     });
   }
 }
-
 
 export class EquipmentDetail extends Component {
   name = {
