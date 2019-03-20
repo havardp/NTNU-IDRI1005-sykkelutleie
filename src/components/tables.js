@@ -7,7 +7,7 @@ import Table from 'react-bootstrap/Table';
 //Import the hashistory from index.js to be able to change path
 import { history } from '../index.js';
 
-//reusable table class with tablehead, tablebody, deletebutton props
+//Reusable table component, which takes in an array for the table head, and an array of objects for the table body.
 export class VerticalTableComponent extends Component {
   constructor(props) {
     super(props);
@@ -18,6 +18,7 @@ export class VerticalTableComponent extends Component {
       <>
         <Table striped bordered hover>
           <thead>
+            {/*Loops through the head part of the table which is sent in as an array of text strings from parent component*/}
             <tr>
               {this.props.tableHead.map(tableHead => (
                 <td key={tableHead}>{tableHead}</td>
@@ -25,6 +26,8 @@ export class VerticalTableComponent extends Component {
             </tr>
           </thead>
           <tbody>
+            {/*Loops through an array of objects from the sql queries, the array length will be the number of rows.*/}
+            {/*The onclick on the row will send you to the current location plus the id of the row etc("/customers/400100")*/}
             {this.props.tableBody.map(row => (
               <tr
                 key={Object.values(row)[0]}
@@ -32,9 +35,11 @@ export class VerticalTableComponent extends Component {
                   history.push(history.location.pathname + '/' + Object.values(row)[0]);
                 }}
               >
-                {Object.keys(row).map(column => (
-                  <td key={row[column]}>{row[column]}</td>
+                {/*Loops through the values in the object*/}
+                {Object.values(row).map(data => (
+                  <td key={data}>{data}</td>
                 ))}
+                {/*Add a delete button at the end of the row if its sent in as true from parent component*/}
                 {this.props.deleteButton && (
                   <td>
                     <button
@@ -56,14 +61,15 @@ export class VerticalTableComponent extends Component {
   }
 }
 
+//Reusable table component, which takes in an array with descriptive strings, and the corresponding object from the sql query.
 export class HorizontalTableComponent extends Component {
   constructor(props) {
     super(props);
   }
 
   render() {
+    //Won't render anything until the date of birth from the sql query has been changed from a date object to a string of numbers, to avoid errors.
     if (typeof this.props.tableBody.DOB === 'object') return null;
-    //<td>{this.props.tableBody[column]}</td>
     return (
       <>
         <Table striped bordered hover>

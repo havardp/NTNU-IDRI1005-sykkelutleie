@@ -34,6 +34,18 @@ class EmployeeService {
       success(results);
     });
   }
+
+  addEmployee(user, success) {
+    connection.query(
+      'insert into Employee values (null, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      [user.fname, user.lname, user.email, user.tlf, user.address, user.zip, user.password, user.DOB, user.role],
+      (error, results) => {
+        if (error) return console.error(error);
+
+        success(results);
+      }
+    );
+  }
 }
 
 class CustomerService {

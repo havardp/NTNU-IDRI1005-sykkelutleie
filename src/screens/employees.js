@@ -8,7 +8,7 @@ import { Card } from '../widgets';
 //reusable components
 import { VerticalTableComponent, HorizontalTableComponent } from '../components/tables.js';
 
-import { AddCustomer } from '../components/adduser.js';
+import { AddEmployee } from '../components/adduser.js';
 
 //Imports for sql queries
 import { employeeService } from '../services';
@@ -56,7 +56,7 @@ export class Employees extends Component {
         <button className="btn btn-info btn-lg" onClick={this.toggleModal}>
           &#10010;
         </button>
-        {this.modal && <AddCustomer modal={true} toggle={this.toggleModal} />}
+        {this.modal && <AddEmployee modal={true} toggle={this.toggleModal} />}
       </div>
     );
   }
