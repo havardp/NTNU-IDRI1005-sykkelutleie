@@ -49,6 +49,12 @@ export class Employees extends Component {
     return (
       <div className="main">
         <VerticalTableComponent tableBody={this.employees} tableHead={this.tableHead} deleteButton={true} />
+        <td>
+          <button>&#9881;</button>
+        </td>
+        <td>
+          <button>&#10004;</button>
+        </td>
       </div>
     );
   }

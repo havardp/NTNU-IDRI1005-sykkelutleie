@@ -4,7 +4,8 @@ import SearchField from 'react-search-field';
 
 //Bootstrap imports
 import Table from 'react-bootstrap/Table';
-import { Card } from '../widgets';
+import Card from 'react-bootstrap/Card';
+import CardDeck from 'react-bootstrap/CardDeck'
 import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
 import Col from 'react-bootstrap/Col';
@@ -64,13 +65,38 @@ export class Customers extends Component {
 export class CustomerDetail extends Component {
   customer = null;
   tableHead = ['Kunde id', 'Fornavn', 'Etternavn', 'Telefon', 'Email', 'Adresse'];
+  orderHistory = [];
   render() {
     if (!this.customer) return null;
+    let customerDetailsStyle = {
+      padding: "50px",
+      paddingTop: "25px"
+
+    }
     return (
       <div className="main">
-        <Card title="Personalia">
+        <Card style={customerDetailsStyle} >
+        <Card.Title>Kundedetaljer</Card.Title>
           <HorizontalTableComponent tableBody={this.customer} tableHead={this.tableHead} />
+          <td>
+            <button>&#9881;</button>
+            <button>&#10004;</button>
+          </td>
+          <h4 style={{paddingTop: "20px"}}>Ordrehistorikk:</h4>
         </Card>
+        <CardDeck>
+  <Card>
+    <Card.Body>
+      <Card.Title>Ordrenr:</Card.Title>
+      <Card.Text>
+        1x terrengsykkel
+      </Card.Text>
+    </Card.Body>
+    <Card.Footer>
+        <Button variant="primary">Se detaljer</Button>
+    </Card.Footer>
+  </Card>
+</CardDeck>
       </div>
     );
   }
