@@ -27,6 +27,8 @@ export class Orders extends Component {
               <td>Ordrenummer</td>
               <td>Kundenummer</td>
               <td>Kundenavn</td>
+              <td>Antall sykler</td>
+              <td>Antall utstyr</td>
             </tr>
           </thead>
           <tbody>
