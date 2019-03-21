@@ -71,7 +71,7 @@ export class HorizontalTableComponent extends Component {
   }
 
   render() {
-    //Won't render anything until the date of birth from the sql query has been changed from a date object to a string of numbers, to avoid errors.
+    //Won't render anything until the date object from the sql query has been changed to a string of numbers, to avoid errors.
     if (
       typeof this.props.tableBody.DOB === 'object' ||
       typeof this.props.tableBody.from_date === 'object' ||

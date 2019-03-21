@@ -1,17 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
 
-//Bootstrap imports
-import Modal from 'react-bootstrap/Modal';
-import ModalBody from 'react-bootstrap/ModalBody';
-import Table from 'react-bootstrap/Table';
-import { Card } from '../widgets';
-import Form from 'react-bootstrap/Form';
-import FormControl from 'react-bootstrap/FormControl';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
-import Button from 'react-bootstrap/Button';
-
 //make it not show if loading is fast?
 import ReactLoading from 'react-loading';
 

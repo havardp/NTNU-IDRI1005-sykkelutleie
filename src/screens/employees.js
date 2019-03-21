@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Component } from 'react-simplified';
 
 //Bootstrap imports
-import Table from 'react-bootstrap/Table';
 import { Card } from '../widgets';
 
 //reusable components

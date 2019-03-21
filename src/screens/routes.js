@@ -30,12 +30,17 @@ export class Routes extends Component {
             </div>
           </div>
           <div className="row" style={{ height: '100%' }}>
-            <div className="col-3" style={{ margin: 0, paddingRight: 15 }}>
+            <div className="col-2" style={{ margin: 0, padding: 0 }}>
               <SideNav />
             </div>
             <div
-              className="col-9"
-              style={{ margin: 0, overflowY: 'scroll', padding: 0, paddingTop: 15, paddingRight: 15 }}
+              className="col-10"
+              style={{
+                margin: 0,
+                overflowY: 'scroll',
+                padding: '15px',
+                borderTop: '1px solid #d3d3d3'
+              }}
             >
               <Switch>
                 <Route exact path="/home" component={Home} />

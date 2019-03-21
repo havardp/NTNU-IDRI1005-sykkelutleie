@@ -4,7 +4,6 @@ import { Component } from 'react-simplified';
 //Bootstrap imports
 import Modal from 'react-bootstrap/Modal';
 import ModalBody from 'react-bootstrap/ModalBody';
-import Collapse from 'react-bootstrap/Collapse';
 import Alert from 'react-bootstrap/Alert';
 import Fade from 'react-bootstrap/Fade';
 

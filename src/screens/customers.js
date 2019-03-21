@@ -1,18 +1,12 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import SearchField from 'react-search-field';
 
 //make it not show if loading is fast?
 import ReactLoading from 'react-loading';
 
 //Bootstrap imports
-import Table from 'react-bootstrap/Table';
 import Card from 'react-bootstrap/Card';
 import CardDeck from 'react-bootstrap/CardDeck';
-import Form from 'react-bootstrap/Form';
-import FormControl from 'react-bootstrap/FormControl';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 
 //reusable components
