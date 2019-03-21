@@ -91,6 +91,17 @@ class CustomerService {
       success(results);
     });
   }
+
+  getCustomerSearch(success) {
+    connection.query(
+      'select Customer.c_id, concat(c_fname, " ",c_lname, " - ",c_tlf," - ",c_email) as "fullname" from Customer',
+      (error, results) => {
+        if (error) return console.error(error);
+
+        success(results);
+      }
+    );
+  }
 }
 
 class OrderService {

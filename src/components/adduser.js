@@ -10,6 +10,9 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import ModalBody from 'react-bootstrap/ModalBody';
 
+//make it not show if loading is fast?
+import ReactLoading from 'react-loading';
+
 import { Customers, Employees } from '../components/adduser.js';
 
 //Imports for sql queries
@@ -19,8 +22,17 @@ const bcrypt = require('bcryptjs');
 
 export class AddCustomer extends Component {
   user = [];
+  submitting = false;
 
   render() {
+    if (this.submitting)
+      return (
+        <Modal show={this.props.modal} onHide={this.props.toggle} centered>
+          <Modal.Body>
+            <ReactLoading type="spin" className="logging fade-in" color="#A9A9A9" height={200} width={200} />
+          </Modal.Body>
+        </Modal>
+      );
     return (
       <Modal show={this.props.modal} onHide={this.props.toggle} centered>
         <Modal.Body>
@@ -77,16 +89,32 @@ export class AddCustomer extends Component {
   }
 
   add() {
-    customerService.addCustomer(this.user, () => {
-      this.props.toggle();
-    });
+    if (this.user.fname && this.user.lname && this.user.address && this.user.tlf && this.user.email && this.user.zip) {
+      this.submitting = true;
+      customerService.addCustomer(this.user, () => {
+        this.submitting = false;
+        this.props.toggle();
+      });
+    } else {
+      alert('Du må fylle inn alle feltene');
+    }
   }
 }
 
 export class AddEmployee extends Component {
   user = [];
   role = ['Admin', 'Salg', 'Lager', 'Sekretær'];
+  submitting = false;
   render() {
+    if (this.submitting)
+      return (
+        <Modal show={this.props.modal} onHide={this.props.toggle} centered>
+          <Modal.Body>
+            <ReactLoading type="spin" className="logging fade-in" color="#A9A9A9" height={200} width={200} />
+          </Modal.Body>
+        </Modal>
+      );
+
     return (
       <Modal show={this.props.modal} onHide={this.props.toggle} centered>
         <Modal.Body>
@@ -178,8 +206,10 @@ export class AddEmployee extends Component {
       this.user.DOB &&
       this.user.password
     ) {
+      this.submitting = true;
       this.user.password = bcrypt.hashSync(this.user.password, 10);
       employeeService.addEmployee(this.user, () => {
+        this.submitting = false;
         this.props.toggle();
       });
     } else {

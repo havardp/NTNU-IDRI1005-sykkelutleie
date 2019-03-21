@@ -25,6 +25,7 @@
     "react-loading": "^2.0.3",
     "react-router-dom": "^4.3.1",
     "react-search-field": "^1.0.0",
+    "react-select": "^2.4.2",
     "react-sidebar": "^3.0.2",
     "react-simplified": "^1.5.2"
   }
