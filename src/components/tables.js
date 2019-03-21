@@ -39,8 +39,8 @@ export class VerticalTableComponent extends Component {
                 }}
               >
                 {/*Loops through the values in the object*/}
-                {Object.values(row).map(data => (
-                  <td key={data}>{data}</td>
+                {Object.values(row).map((data, index) => (
+                  <td key={data + row + index}>{data}</td>
                 ))}
                 {/*Add a delete button at the end of the row if its sent in as true from parent component*/}
                 {this.props.deleteButton && (
