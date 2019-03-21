@@ -155,6 +155,21 @@ class StorageService {
       success(results);
     });
   }
+
+  getDistinctBikeModel(success) {
+    connection.query('SELECT distinct model from Bike', (error, results) => {
+      if (error) return console.error(error);
+
+      success(results);
+    });
+  }
+  getDistinctEquipmentModel(success) {
+    connection.query('SELECT distinct model from Equipment', (error, results) => {
+      if (error) return console.error(error);
+
+      success(results);
+    });
+  }
 }
 
 export let employeeService = new EmployeeService();
