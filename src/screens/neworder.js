@@ -7,6 +7,7 @@ import { history } from '../index.js';
 //Bootstrap imports
 import { Card } from '../widgets';
 import Button from 'react-bootstrap/Button';
+import Table from 'react-bootstrap/Table';
 
 //Imports for sql queries
 import { storageService, orderService, customerService } from '../services';
@@ -63,28 +64,48 @@ class MakeOrder extends Component {
           <Card title="Sykkel og utstyr">
             <div className="row" hidden={this.props.hide}>
               <div className="col-6">
-                {this.distinctBikeModels.map(model => (
-                  <div key={model.model}>
-                    {Object.values(model).map((data, index) => (
-                      <div key={data + model + index}>
-                        {data}{' '}
-                        <input type="number" defaultValue="0" onChange={e => (this.bike[data] = e.target.value)} />
-                      </div>
+                <Table striped bordered hover>
+                  <tbody>
+                    {this.distinctBikeModels.map(model => (
+                      <tr key={model.model}>
+                        {Object.values(model).map((data, index) => (
+                          <React.Fragment key={data + model + index + 'fragment'}>
+                            <td key={data + model + index}>{data}</td>
+                            <td key={data + model + index + 'input'}>
+                              <input
+                                type="number"
+                                defaultValue="0"
+                                onChange={e => (this.bike[data] = e.target.value)}
+                              />
+                            </td>
+                          </React.Fragment>
+                        ))}
+                      </tr>
                     ))}
-                  </div>
-                ))}
+                  </tbody>
+                </Table>
               </div>
               <div className="col-6">
-                {this.distinctEquipmentModels.map(model => (
-                  <div key={model.model}>
-                    {Object.values(model).map((data, index) => (
-                      <div key={data + index + model}>
-                        {data}{' '}
-                        <input type="number" defaultValue="0" onChange={e => (this.equipment[data] = e.target.value)} />
-                      </div>
+                <Table striped bordered hover>
+                  <tbody>
+                    {this.distinctEquipmentModels.map(model => (
+                      <tr key={model.model}>
+                        {Object.values(model).map((data, index) => (
+                          <React.Fragment key={data + model + index + 'fragment'}>
+                            <td key={data + index + model}>{data}</td>
+                            <td key={data + model + index + 'input'}>
+                              <input
+                                type="number"
+                                defaultValue="0"
+                                onChange={e => (this.equipment[data] = e.target.value)}
+                              />
+                            </td>
+                          </React.Fragment>
+                        ))}
+                      </tr>
                     ))}
-                  </div>
-                ))}
+                  </tbody>
+                </Table>
               </div>
             </div>
           </Card>
