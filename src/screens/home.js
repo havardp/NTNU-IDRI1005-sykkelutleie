@@ -6,6 +6,9 @@ import { history } from '../index.js';
 
 export class Home extends Component {
   render() {
-    return <div>HOME</div>;
+    return (
+        <div>HJEM
+        </div>
+    );
   }
 }

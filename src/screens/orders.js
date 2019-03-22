@@ -44,6 +44,8 @@ export class OrderDetail extends Component {
       <>
         <Card title="Ordredetaljer">
           <HorizontalTableComponent tableBody={this.order} tableHead={this.tableHead} />
+          <button>&#9881;</button>
+          <button>&#10004;</button>
         </Card>
       </>
     );
