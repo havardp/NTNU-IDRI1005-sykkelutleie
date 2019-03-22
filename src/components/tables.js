@@ -75,9 +75,10 @@ export class HorizontalTableComponent extends Component {
   render() {
     //Won't render anything until the date object from the sql query has been changed to a string of numbers, to avoid errors.
     if (
-      typeof this.props.tableBody.DOB === 'object' ||
-      typeof this.props.tableBody.from_date === 'object' ||
-      typeof this.props.tableBody.to_date === 'object'
+      this.props.checkDate &&
+      (typeof this.props.tableBody.DOB === 'object' ||
+        typeof this.props.tableBody.from_date === 'object' ||
+        typeof this.props.tableBody.to_date === 'object')
     )
       return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     return (

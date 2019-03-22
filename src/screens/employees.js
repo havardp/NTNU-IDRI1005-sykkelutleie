@@ -27,7 +27,7 @@ export class EmployeeDetail extends Component {
     return (
       <>
         <Card title="Personalia">
-          <HorizontalTableComponent tableBody={this.user} tableHead={this.tableHead} />
+          <HorizontalTableComponent tableBody={this.user} tableHead={this.tableHead} checkDate={true} />
         </Card>
       </>
     );

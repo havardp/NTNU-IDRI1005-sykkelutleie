@@ -75,7 +75,7 @@ export class CustomerDetail extends Component {
       <>
         <Card style={customerDetailsStyle}>
           <Card.Title>Kundedetaljer</Card.Title>
-          <HorizontalTableComponent tableBody={this.customer} tableHead={this.tableHead} />
+          <HorizontalTableComponent tableBody={this.customer} tableHead={this.tableHead} checkDate={true} />
 
           <button>&#9881;</button>
           <button>&#10004;</button>
