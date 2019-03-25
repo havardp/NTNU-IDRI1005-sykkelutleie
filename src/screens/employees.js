@@ -25,11 +25,9 @@ export class EmployeeDetail extends Component {
     if (!this.user)
       return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     return (
-      <>
-        <Card title="Personalia">
-          <HorizontalTableComponent tableBody={this.user} tableHead={this.tableHead} checkDate={true} />
-        </Card>
-      </>
+      <Card title="Personalia">
+        <HorizontalTableComponent tableBody={this.user} tableHead={this.tableHead} checkDate={true} />
+      </Card>
     );
   }
 

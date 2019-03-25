@@ -168,18 +168,41 @@ class StorageService {
   }
 
   getDistinctBikeModel(success) {
-    connection.query('SELECT distinct model from Bike', (error, results) => {
+    connection.query('SELECT model, count(*) as "max" from Bike group by model', (error, results) => {
       if (error) return console.error(error);
 
       success(results);
     });
   }
   getDistinctEquipmentModel(success) {
-    connection.query('SELECT distinct model from Equipment', (error, results) => {
+    connection.query('SELECT model, count(*) as "max" from Equipment group by model', (error, results) => {
       if (error) return console.error(error);
 
       success(results);
     });
+  }
+
+  getCountBikeModel(from, to, success) {
+    connection.query(
+      'Select B.model, count(B.chassis_id) as "max" from Bike B where B.chassis_id not in  (SELECT B.chassis_id from Bike B left outer join Bike_Order BO on B.chassis_id=BO.chassis_id left outer join Orders O on BO.order_nr = O.order_nr WHERE (? >= O.from_date and ? <= O.to_date) OR (? <= O.from_date and ? <= O.to_date and ? >= O.from_date) OR (? >= O.from_date and ? >= O.to_date and ? <= O.to_date) OR (? <= O.from_date and ? >= O.to_date)) group by B.model',
+      [from, to, from, to, to, from, to, from, from, to],
+      (error, results) => {
+        if (error) return console.error(error);
+
+        success(results);
+      }
+    );
+  }
+  getCountEquipmentModel(from, to, success) {
+    connection.query(
+      'Select E.model, count(E.eq_id) as "max" from Equipment E where E.eq_id not in  (SELECT E.eq_id from Equipment E left outer join Equipment_Order EO on E.eq_id=EO.eq_id left outer join Orders O on EO.order_nr = O.order_nr WHERE (? > O.from_date and ? < O.to_date) OR (? < O.from_date and ? < O.to_date and ? > O.from_date) OR (? > O.from_date and ? > O.to_date and ? < O.to_date) OR (? < O.from_date and ? > O.to_date)) group by E.model',
+      [from, to, from, to, to, from, to, from, from, to],
+      (error, results) => {
+        if (error) return console.error(error);
+
+        success(results);
+      }
+    );
   }
 }
 

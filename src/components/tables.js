@@ -14,6 +14,10 @@ import ReactLoading from 'react-loading';
 
 //Reusable table component, which takes in an array for the table head, and an array of objects for the table body.
 export class VerticalTableComponent extends Component {
+  //props:
+  //deleteButton: whether to display a functional delete button at the end of each row in the table.
+  //delete: callback to parent function with id's as an argument to be able to delete the row wwith an sql query
+  //tableBody/tableHead : arrays/objects with the information to be displayed in the table
   constructor(props) {
     super(props);
   }
@@ -68,6 +72,9 @@ export class VerticalTableComponent extends Component {
 
 //Reusable table component, which takes in an array with descriptive strings, and the corresponding object from the sql query.
 export class HorizontalTableComponent extends Component {
+  //props:
+  //checkDate(Doesn't render until the date object from the database has been changed to a string),
+  //tableBody/tableHead : arrays/objects with the information to be displayed in the table
   constructor(props) {
     super(props);
   }

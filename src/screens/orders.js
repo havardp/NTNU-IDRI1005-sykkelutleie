@@ -22,11 +22,7 @@ export class Orders extends Component {
   render() {
     if (!this.orders)
       return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
-    return (
-      <>
-        <VerticalTableComponent tableBody={this.orders} tableHead={this.tableHead} deleteButton={false} />
-      </>
-    );
+    return <VerticalTableComponent tableBody={this.orders} tableHead={this.tableHead} deleteButton={false} />;
   }
   mounted() {
     orderService.getOrders(orders => {
@@ -41,13 +37,11 @@ export class OrderDetail extends Component {
   render() {
     if (!this.order) return null;
     return (
-      <>
-        <Card title="Ordredetaljer">
-          <HorizontalTableComponent tableBody={this.order} tableHead={this.tableHead} checkDate={true} />
-          <button>&#9881;</button>
-          <button>&#10004;</button>
-        </Card>
-      </>
+      <Card title="Ordredetaljer">
+        <HorizontalTableComponent tableBody={this.order} tableHead={this.tableHead} checkDate={true} />
+        <button>&#9881;</button>
+        <button>&#10004;</button>
+      </Card>
     );
   }
 

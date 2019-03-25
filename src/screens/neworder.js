@@ -21,6 +21,7 @@ import ReactLoading from 'react-loading';
 import Select from 'react-select';
 
 //using hacky solution hidden on makeorder render when on confirmationpage to not have to rerender and lose states
+//Class for handling all the inputs in making the order.
 class MakeOrder extends Component {
   //view variables
   distinctBikeModels = null;
@@ -34,6 +35,7 @@ class MakeOrder extends Component {
   activeCustomer = null;
   bike = [];
   equipment = [];
+  orderInformation = [];
   order = [];
 
   render() {
@@ -68,18 +70,20 @@ class MakeOrder extends Component {
                   <tbody>
                     {this.distinctBikeModels.map(model => (
                       <tr key={model.model}>
-                        {Object.values(model).map((data, index) => (
-                          <React.Fragment key={data + model + index + 'fragment'}>
-                            <td key={data + model + index}>{data}</td>
-                            <td key={data + model + index + 'input'}>
-                              <input
-                                type="number"
-                                defaultValue="0"
-                                onChange={e => (this.bike[data] = e.target.value)}
-                              />
-                            </td>
-                          </React.Fragment>
-                        ))}
+                        <td>{model.model}</td>
+                        <td>
+                          <input
+                            type="number"
+                            placeholder={'Tilgjengelige: ' + model.max}
+                            onChange={e => {
+                              if (e.target.value > model.max) {
+                                alert('Maks tilgjengelig antall er: ' + model.max);
+                                e.target.value = model.max;
+                              }
+                              this.bike[model.model] = e.target.value;
+                            }}
+                          />
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -90,18 +94,20 @@ class MakeOrder extends Component {
                   <tbody>
                     {this.distinctEquipmentModels.map(model => (
                       <tr key={model.model}>
-                        {Object.values(model).map((data, index) => (
-                          <React.Fragment key={data + model + index + 'fragment'}>
-                            <td key={data + index + model}>{data}</td>
-                            <td key={data + model + index + 'input'}>
-                              <input
-                                type="number"
-                                defaultValue="0"
-                                onChange={e => (this.equipment[data] = e.target.value)}
-                              />
-                            </td>
-                          </React.Fragment>
-                        ))}
+                        <td>{model.model}</td>
+                        <td>
+                          <input
+                            type="number"
+                            placeholder={'Tilgjengelige: ' + model.max}
+                            onChange={e => {
+                              if (e.target.value > model.max) {
+                                alert('Maks tilgjengelig antall er: ' + model.max);
+                                e.target.value = model.max;
+                              }
+                              this.equipment[model.model] = e.target.value;
+                            }}
+                          />
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -112,24 +118,64 @@ class MakeOrder extends Component {
           <Card title="Annen informasjon">
             <div className="row" hidden={this.props.hide}>
               <div className="col-8">
-                <div>
-                  Fra-dato <input type="date" />
-                </div>
-                <div>
-                  Til-dato <input type="date" />
-                </div>
-                <div>
-                  Hentested <input type="text" />
-                </div>
-                <div>
-                  Avleveringssted <input type="text" />
-                </div>
+                <Table striped bordered hover>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <label>Fra-dato</label>
+                      </td>
+                      <td>
+                        <input
+                          type="date"
+                          onChange={e => {
+                            this.orderInformation['fromDate'] = e.target.value;
+                            this.updateAvailableDate();
+                          }}
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <label>Til-dato</label>
+                      </td>
+                      <td>
+                        <input
+                          type="date"
+                          onChange={e => {
+                            this.orderInformation['toDate'] = e.target.value;
+                            this.updateAvailableDate();
+                          }}
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <label>Hentested</label>
+                      </td>
+                      <td>
+                        <input type="text" onChange={e => (this.orderInformation['pickupLocation'] = e.target.value)} />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <label>Avleveringssted</label>
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          onChange={e => (this.orderInformation['dropoffLocation'] = e.target.value)}
+                        />
+                      </td>
+                    </tr>
+                  </tbody>
+                </Table>
               </div>
               <div className="col-4">
                 <button
                   onClick={() => {
                     this.order.push(this.bike);
                     this.order.push(this.equipment);
+                    this.order.push(this.orderInformation);
                     this.selectedOption
                       ? this.props.sendStateToParent([this.order, this.selectedOption.value])
                       : alert('fyll ut data');
@@ -163,6 +209,19 @@ class MakeOrder extends Component {
     });
   }
 
+  updateAvailableDate() {
+    if (typeof this.orderInformation.toDate != 'undefined' && typeof this.orderInformation.fromDate != 'undefined') {
+      storageService.getCountBikeModel(this.orderInformation.fromDate, this.orderInformation.toDate, result => {
+        this.distinctBikeModels = result;
+      });
+      storageService.getCountEquipmentModel(this.orderInformation.fromDate, this.orderInformation.toDate, result => {
+        console.log(result);
+        this.distinctEquipmentModels = result;
+      });
+    } else {
+      console.log('trenger begge dato');
+    }
+  }
   //updates the search list if a customer has been added, aswell as handles the modal toggle
   toggleModal() {
     if (this.modal == true) {
@@ -178,6 +237,7 @@ class MakeOrder extends Component {
   }
 }
 
+//Parent component which handles state transfers between making the order and displaying it in the confirmation page
 export class NewOrder extends Component {
   confirmationPage = false;
   orderState = null;
@@ -217,13 +277,19 @@ export class NewOrder extends Component {
   }
 }
 
+//Class that shows the information about the order on the confirmation page.
 class ConfirmOrder extends Component {
+  //customer id, used in sql query to output information about the selected user
   customer = this.props.recieveStateFromParent[1];
+  //all the other information, array of array
   orderDetails = this.props.recieveStateFromParent[0];
+  //the arrays inside the orderdetails array.
   bikeDetails = this.orderDetails[0];
   equipmentDetails = this.orderDetails[1];
+  additionalDetails = this.orderDetails[2];
+  //tableBody and tableHead for displaying the customer details
   customerDetails = null;
-  tableHead = ['Kunde id', 'Fornavn', 'Etternavn', 'Telefon', 'Email', 'Adresse'];
+  tableHead = ['Kunde id', 'Fornavn', 'Etternavn', 'Email', 'Telefon', 'Adresse'];
 
   render() {
     //render this page with the recieveStateFromParent prop which contains all info from the previous page
@@ -231,39 +297,47 @@ class ConfirmOrder extends Component {
       return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     }
     return (
-      <>
-        <Card>
-          <div className="row">
-            <div className="col-6">
-              <Card title="Kunde id">
-                <HorizontalTableComponent
-                  tableBody={this.customerDetails}
-                  tableHead={this.tableHead}
-                  checkDate={false}
-                />
-              </Card>
-            </div>
-            <div className="col-3">
-              <Card title="Bikes">
-                {Object.keys(this.bikeDetails).map(data => (
-                  <div key={data}>
-                    {data} -{this.bikeDetails[data]}
-                  </div>
-                ))}
-              </Card>
-            </div>
-            <div className="col-3">
-              <Card title="Equipment">
-                {Object.keys(this.equipmentDetails).map(data => (
-                  <div key={data}>
-                    {data} -{this.equipmentDetails[data]}
-                  </div>
-                ))}
-              </Card>
-            </div>
+      <Card>
+        <div className="row">
+          <div className="col-6">
+            <Card title="Kunde id">
+              <HorizontalTableComponent tableBody={this.customerDetails} tableHead={this.tableHead} />
+            </Card>
           </div>
-        </Card>
-      </>
+          <div className="col-3">
+            <Card title="Bikes">
+              {Object.keys(this.bikeDetails).map(data => (
+                <div key={data}>
+                  {data} -{this.bikeDetails[data]}
+                </div>
+              ))}
+            </Card>
+          </div>
+          <div className="col-3">
+            <Card title="Equipment">
+              {Object.keys(this.equipmentDetails).map(data => (
+                <div key={data}>
+                  {data} -{this.equipmentDetails[data]}
+                </div>
+              ))}
+            </Card>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-6">
+            <Card title="Tillegs Info">
+              {Object.keys(this.additionalDetails).map(data => (
+                <div key={data}>
+                  {data} -{this.additionalDetails[data]}
+                </div>
+              ))}
+            </Card>
+          </div>
+          <div className="col-6">
+            <Card title="Tillegs Info">test</Card>
+          </div>
+        </div>
+      </Card>
     );
   }
 
