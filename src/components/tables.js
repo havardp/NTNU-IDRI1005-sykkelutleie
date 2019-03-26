@@ -18,9 +18,6 @@ export class VerticalTableComponent extends Component {
   //deleteButton: whether to display a functional delete button at the end of each row in the table.
   //delete: callback to parent function with id's as an argument to be able to delete the row wwith an sql query
   //tableBody/tableHead : arrays/objects with the information to be displayed in the table
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     return (
@@ -75,9 +72,6 @@ export class HorizontalTableComponent extends Component {
   //props:
   //checkDate(Doesn't render until the date object from the database has been changed to a string),
   //tableBody/tableHead : arrays/objects with the information to be displayed in the table
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     //Won't render anything until the date object from the sql query has been changed to a string of numbers, to avoid errors.

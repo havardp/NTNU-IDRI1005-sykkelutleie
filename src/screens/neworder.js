@@ -15,7 +15,12 @@ import { storageService, orderService, customerService } from '../services';
 //reusable components
 import { VerticalTableComponent, HorizontalTableComponent } from '../components/tables.js';
 import { AddCustomer } from '../components/adduser.js';
-import { CustomerOrderComponent, MakeOrderProductTable, AdditionalDetailsTable } from '../components/makeorder.js';
+import {
+  CustomerOrderComponent,
+  MakeOrderProductTable,
+  AdditionalDetailsTable,
+  ProductOrderTable
+} from '../components/makeorder.js';
 
 //make it not show if loading is fast?
 import ReactLoading from 'react-loading';
@@ -39,7 +44,10 @@ class MakeOrder extends Component {
     return (
       <div hidden={this.props.hide}>
         <Card>
-          <CustomerOrderComponent sendStateToParent={this.handleActiveCustomerChange} />
+          <CustomerOrderComponent
+            sendStateToParent={this.handleActiveCustomerChange}
+            makeNewCustomer={this.toggleModal}
+          />
           <Card title="Sykkel og utstyr">
             <div className="row">
               <div className="col-6">
@@ -55,21 +63,14 @@ class MakeOrder extends Component {
           </Card>
           <Card title="Annen informasjon">
             <div className="row">
-              <div className="col-8">
-                <AdditionalDetailsTable sendStateToParent={this.handleOrderInformationChange} />
-              </div>
-              <div className="col-4">
-                <button
-                  onClick={() => {
-                    this.order = [];
-                    this.order.push(this.bike, this.equipment, this.orderInformation);
-                    this.activeCustomer
-                      ? this.props.sendStateToParent([this.order, this.activeCustomer])
-                      : alert('fyll ut data');
-                  }}
-                >
+              <AdditionalDetailsTable sendStateToParent={this.handleOrderInformationChange} />
+            </div>
+            <div className="row">
+              <div className="col-9" />
+              <div className="col-3">
+                <Button variant="secondary" style={{ width: '100%' }} onClick={this.goToConfirmationPage}>
                   videre
-                </button>
+                </Button>
               </div>
             </div>
           </Card>
@@ -101,6 +102,13 @@ class MakeOrder extends Component {
   handleOrderInformationChange(orderInformation) {
     this.orderInformation = orderInformation;
     this.updateAvailableDate();
+  }
+
+  //handles sending the right states to the parent component, and calling the function in the parent component which sends to next page
+  goToConfirmationPage() {
+    this.order = [];
+    this.order.push(this.bike, this.equipment, this.orderInformation);
+    this.activeCustomer ? this.props.sendStateToParent([this.order, this.activeCustomer]) : alert('fyll ut data');
   }
 
   //Checks to see how many of each bike and equipment are available between the selected from and to date
@@ -184,7 +192,14 @@ class ConfirmOrder extends Component {
   additionalDetails = this.orderDetails[2];
   //tableBody and tableHead for displaying the customer details
   customerDetails = null;
-  tableHead = ['Kunde id', 'Fornavn', 'Etternavn', 'Email', 'Telefon', 'Adresse'];
+  tableHeadCustomer = ['Kunde id', 'Fornavn', 'Etternavn', 'Email', 'Telefon', 'Adresse'];
+  tableHeadProduct = ['Modell', 'Antall', 'Pris'];
+  tableHeadAdditional = {
+    pickupLocation: 'Hentested',
+    dropoffLocation: 'Avleveringssted',
+    fromDate: 'Fra-dato',
+    toDate: 'Til-dato'
+  };
 
   render() {
     //render this page with the recieveStateFromParent prop which contains all info from the previous page
@@ -196,42 +211,37 @@ class ConfirmOrder extends Component {
         <div className="row">
           <div className="col-6">
             <Card title="Kunde id">
-              <HorizontalTableComponent tableBody={this.customerDetails} tableHead={this.tableHead} />
+              <HorizontalTableComponent tableBody={this.customerDetails} tableHead={this.tableHeadCustomer} />
             </Card>
           </div>
-          <div className="col-3">
-            <Card title="Bikes">
-              {Object.keys(this.bikeDetails).map(data => (
-                <div key={data}>
-                  {data} -{this.bikeDetails[data]}
-                </div>
-              ))}
-            </Card>
-          </div>
-          <div className="col-3">
-            <Card title="Equipment">
-              {Object.keys(this.equipmentDetails).map(data => (
-                <div key={data}>
-                  {data} -{this.equipmentDetails[data]}
-                </div>
-              ))}
+          <div className="col-6">
+            <Card title="Tillegs Info">
+              <Table striped bordered hover>
+                <tbody>
+                  {Object.keys(this.tableHeadAdditional).map(data => (
+                    <tr key={data}>
+                      <td>{this.additionalDetails[data]}</td>
+                      <td>{this.tableHeadAdditional[data]}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
             </Card>
           </div>
         </div>
         <div className="row">
           <div className="col-6">
-            <Card title="Tillegs Info">
-              {Object.keys(this.additionalDetails).map(data => (
-                <div key={data}>
-                  {data} -{this.additionalDetails[data]}
-                </div>
-              ))}
+            <Card title="Bikes">
+              <ProductOrderTable tableBody={this.bikeDetails} tableHead={this.tableHeadProduct} />
             </Card>
           </div>
           <div className="col-6">
-            <Card title="Info">test</Card>
+            <Card title="Equipment">
+              <ProductOrderTable tableBody={this.equipmentDetails} tableHead={this.tableHeadProduct} />
+            </Card>
           </div>
         </div>
+        <Card title="Info">fullfør Ordre</Card>
       </Card>
     );
   }
