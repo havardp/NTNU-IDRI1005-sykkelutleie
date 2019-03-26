@@ -43,7 +43,7 @@ export class OrderDetail extends Component {
     return (
       <>
         <Card title="Ordredetaljer">
-          <HorizontalTableComponent tableBody={this.order} tableHead={this.tableHead} checkDate={true} />
+          <HorizontalTableComponent tableBody={this.order} tableHead={this.tableHead} checkDate={true} where={"orders/"}/>
           <button>&#9881;</button>
           <button>&#10004;</button>
         </Card>
