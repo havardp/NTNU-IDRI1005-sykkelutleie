@@ -54,6 +54,7 @@ export class StorageStatus extends Component {
   }
 }
 
+//turn the two returns into one conditional TODO
 export class StorageDetails extends Component {
   bike = null;
   equipment = null;

@@ -15,25 +15,27 @@ import { storageService, orderService, customerService } from '../services';
 //reusable components
 import { VerticalTableComponent, HorizontalTableComponent } from '../components/tables.js';
 import { AddCustomer } from '../components/adduser.js';
+import {
+  CustomerOrderComponent,
+  MakeOrderProductTable,
+  AdditionalDetailsTable,
+  ProductOrderTable
+} from '../components/makeorder.js';
 
 //make it not show if loading is fast?
 import ReactLoading from 'react-loading';
-import Select from 'react-select';
 
-//using hacky solution hidden on makeorder render when on confirmationpage to not have to rerender and lose states
 class MakeOrder extends Component {
   //view variables
   distinctBikeModels = null;
   distinctEquipmentModels = null;
-  selectedOption = null;
-  options = null;
   modal = false;
-  temporaryOptions = [];
 
   //variables to be used in order
   activeCustomer = null;
   bike = [];
   equipment = [];
+  orderInformation = [];
   order = [];
 
   render() {
@@ -42,102 +44,33 @@ class MakeOrder extends Component {
     return (
       <div hidden={this.props.hide}>
         <Card>
-          <Card title="Kunde">
-            <div className="row">
-              <div className="col-10">
-                <Select
-                  value={this.selectedOption}
-                  onChange={e => {
-                    this.selectedOption = e;
-                    this.activeCustomer = e.value;
-                  }}
-                  options={this.options}
-                />
-              </div>
-              <div className="col-2">
-                <button className="btn btn-info btn-lg" onClick={this.toggleModal}>
-                  &#10010;
-                </button>
-              </div>
-            </div>
-          </Card>
+          <CustomerOrderComponent
+            sendStateToParent={this.handleActiveCustomerChange}
+            makeNewCustomer={this.toggleModal}
+          />
           <Card title="Sykkel og utstyr">
-            <div className="row" hidden={this.props.hide}>
+            <div className="row">
               <div className="col-6">
-                <Table striped bordered hover>
-                  <tbody>
-                    {this.distinctBikeModels.map(model => (
-                      <tr key={model.model}>
-                        {Object.values(model).map((data, index) => (
-                          <React.Fragment key={data + model + index + 'fragment'}>
-                            <td key={data + model + index}>{data}</td>
-                            <td key={data + model + index + 'input'}>
-                              <input
-                                type="number"
-                                defaultValue="0"
-                                onChange={e => (this.bike[data] = e.target.value)}
-                              />
-                            </td>
-                          </React.Fragment>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
+                <MakeOrderProductTable tableBody={this.distinctBikeModels} sendStateToParent={this.handleBikeChange} />
               </div>
               <div className="col-6">
-                <Table striped bordered hover>
-                  <tbody>
-                    {this.distinctEquipmentModels.map(model => (
-                      <tr key={model.model}>
-                        {Object.values(model).map((data, index) => (
-                          <React.Fragment key={data + model + index + 'fragment'}>
-                            <td key={data + index + model}>{data}</td>
-                            <td key={data + model + index + 'input'}>
-                              <input
-                                type="number"
-                                defaultValue="0"
-                                onChange={e => (this.equipment[data] = e.target.value)}
-                              />
-                            </td>
-                          </React.Fragment>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
+                <MakeOrderProductTable
+                  tableBody={this.distinctEquipmentModels}
+                  sendStateToParent={this.handleEquipmentChange}
+                />
               </div>
             </div>
           </Card>
           <Card title="Annen informasjon">
-            <div className="row" hidden={this.props.hide}>
-              <div className="col-8">
-                <div>
-                  Fra-dato <input type="date" />
-                </div>
-                <div>
-                  Til-dato <input type="date" />
-                </div>
-                <div>
-                  Hentested <input type="text" />
-                </div>
-                <div>
-                  Avleveringssted <input type="text" />
-                </div>
-              </div>
-              <div className="col-4">
-                <button
-                  onClick={() => {
-                    this.order.push(this.bike);
-                    this.order.push(this.equipment);
-                    this.selectedOption
-                      ? this.props.sendStateToParent([this.order, this.selectedOption.value])
-                      : alert('fyll ut data');
-                  }}
-                >
+            <div className="row">
+              <AdditionalDetailsTable sendStateToParent={this.handleOrderInformationChange} />
+            </div>
+            <div className="row">
+              <div className="col-9" />
+              <div className="col-3">
+                <Button variant="secondary" style={{ width: '100%' }} onClick={this.goToConfirmationPage}>
                   videre
-                </button>
-                {/*send in all the state thats been made on this page here*/}
+                </Button>
               </div>
             </div>
           </Card>
@@ -148,19 +81,48 @@ class MakeOrder extends Component {
   }
 
   mounted() {
-    customerService.getCustomerSearch(result => {
-      this.temporaryOptions = [];
-      result.map(e => {
-        this.temporaryOptions.push({ value: e.c_id, label: e.fullname });
-      });
-      this.options = this.temporaryOptions;
-    });
     storageService.getDistinctBikeModel(result => {
       this.distinctBikeModels = result;
     });
     storageService.getDistinctEquipmentModel(result => {
       this.distinctEquipmentModels = result;
     });
+  }
+
+  //recieve state from children components and save them in this component.
+  handleBikeChange(bike) {
+    this.bike = bike;
+  }
+  handleEquipmentChange(equipment) {
+    this.equipment = equipment;
+  }
+  handleActiveCustomerChange(customer) {
+    this.activeCustomer = customer;
+  }
+  handleOrderInformationChange(orderInformation) {
+    this.orderInformation = orderInformation;
+    this.updateAvailableDate();
+  }
+
+  //handles sending the right states to the parent component, and calling the function in the parent component which sends to next page
+  goToConfirmationPage() {
+    this.order = [];
+    this.order.push(this.bike, this.equipment, this.orderInformation);
+    this.activeCustomer ? this.props.sendStateToParent([this.order, this.activeCustomer]) : alert('fyll ut data');
+  }
+
+  //Checks to see how many of each bike and equipment are available between the selected from and to date
+  updateAvailableDate() {
+    if (typeof this.orderInformation.toDate != 'undefined' && typeof this.orderInformation.fromDate != 'undefined') {
+      storageService.getCountBikeModel(this.orderInformation.fromDate, this.orderInformation.toDate, result => {
+        this.distinctBikeModels = result;
+      });
+      storageService.getCountEquipmentModel(this.orderInformation.fromDate, this.orderInformation.toDate, result => {
+        this.distinctEquipmentModels = result;
+      });
+    } else {
+      console.log('trenger begge dato');
+    }
   }
 
   //updates the search list if a customer has been added, aswell as handles the modal toggle
@@ -178,6 +140,7 @@ class MakeOrder extends Component {
   }
 }
 
+//Parent component which handles state transfers between making the order and displaying it in the confirmation page
 export class NewOrder extends Component {
   confirmationPage = false;
   orderState = null;
@@ -217,13 +180,26 @@ export class NewOrder extends Component {
   }
 }
 
+//Class that shows the information about the order on the confirmation page.
 class ConfirmOrder extends Component {
+  //customer id, used in sql query to output information about the selected user
   customer = this.props.recieveStateFromParent[1];
+  //all the other information, array of array
   orderDetails = this.props.recieveStateFromParent[0];
+  //the arrays inside the orderdetails array.
   bikeDetails = this.orderDetails[0];
   equipmentDetails = this.orderDetails[1];
+  additionalDetails = this.orderDetails[2];
+  //tableBody and tableHead for displaying the customer details
   customerDetails = null;
-  tableHead = ['Kunde id', 'Fornavn', 'Etternavn', 'Telefon', 'Email', 'Adresse'];
+  tableHeadCustomer = ['Kunde id', 'Fornavn', 'Etternavn', 'Email', 'Telefon', 'Adresse'];
+  tableHeadProduct = ['Modell', 'Antall', 'Pris'];
+  tableHeadAdditional = {
+    pickupLocation: 'Hentested',
+    dropoffLocation: 'Avleveringssted',
+    fromDate: 'Fra-dato',
+    toDate: 'Til-dato'
+  };
 
   render() {
     //render this page with the recieveStateFromParent prop which contains all info from the previous page
@@ -231,39 +207,42 @@ class ConfirmOrder extends Component {
       return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     }
     return (
-      <>
-        <Card>
-          <div className="row">
-            <div className="col-6">
-              <Card title="Kunde id">
-                <HorizontalTableComponent
-                  tableBody={this.customerDetails}
-                  tableHead={this.tableHead}
-                  checkDate={false}
-                />
-              </Card>
-            </div>
-            <div className="col-3">
-              <Card title="Bikes">
-                {Object.keys(this.bikeDetails).map(data => (
-                  <div key={data}>
-                    {data} -{this.bikeDetails[data]}
-                  </div>
-                ))}
-              </Card>
-            </div>
-            <div className="col-3">
-              <Card title="Equipment">
-                {Object.keys(this.equipmentDetails).map(data => (
-                  <div key={data}>
-                    {data} -{this.equipmentDetails[data]}
-                  </div>
-                ))}
-              </Card>
-            </div>
+      <Card>
+        <div className="row">
+          <div className="col-6">
+            <Card title="Kunde id">
+              <HorizontalTableComponent tableBody={this.customerDetails} tableHead={this.tableHeadCustomer} />
+            </Card>
           </div>
-        </Card>
-      </>
+          <div className="col-6">
+            <Card title="Tillegs Info">
+              <Table striped bordered hover>
+                <tbody>
+                  {Object.keys(this.tableHeadAdditional).map(data => (
+                    <tr key={data}>
+                      <td>{this.additionalDetails[data]}</td>
+                      <td>{this.tableHeadAdditional[data]}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </Card>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-6">
+            <Card title="Bikes">
+              <ProductOrderTable tableBody={this.bikeDetails} tableHead={this.tableHeadProduct} />
+            </Card>
+          </div>
+          <div className="col-6">
+            <Card title="Equipment">
+              <ProductOrderTable tableBody={this.equipmentDetails} tableHead={this.tableHeadProduct} />
+            </Card>
+          </div>
+        </div>
+        <Card title="Info">fullfør Ordre</Card>
+      </Card>
     );
   }
 
