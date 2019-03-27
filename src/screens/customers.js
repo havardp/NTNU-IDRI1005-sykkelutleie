@@ -66,8 +66,8 @@ export class CustomerDetail extends Component {
   tableHead = ['Kunde id', 'Fornavn', 'Etternavn', 'Telefon', 'Email', 'Adresse'];
   tableHead2 = ['Ordrenummer', 'Kundenummer', 'Kundenavn', 'Antall sykler', 'Antall utstyr'];
   render() {
-
-    if (!this.customer ) return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
+    if (!this.customer)
+      return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     let customerDetailsStyle = {
       padding: '50px',
       paddingTop: '25px'
@@ -78,26 +78,24 @@ export class CustomerDetail extends Component {
           <Card.Title>Kundedetaljer</Card.Title>
           <HorizontalTableComponent tableBody={this.customer} tableHead={this.tableHead} checkDate={true} />
 
-          <button onClick={()=>console.log("test")}>&#9881;</button>
+          <button onClick={() => console.log('test')}>&#9881;</button>
           <button>&#10004;</button>
-
-
         </Card>
 
-          <Card style={customerDetailsStyle}>
+        <Card style={customerDetailsStyle}>
           <Card.Title>Ordrehistorikk:</Card.Title>
-          {this.orderHistory && <VerticalTableComponent
-            tableBody={this.orderHistory}
-            tableHead={this.tableHead2}/>}
-          </Card>
-</>
-);
- }
+          {this.orderHistory && <VerticalTableComponent tableBody={this.orderHistory} tableHead={this.tableHead2} />}
+        </Card>
+      </>
+    );
+  }
   mounted() {
     customerService.getCustomerDetails(this.props.match.params.id, result => {
       this.customer = result;
     });
-    {/* TO DO: Fiks ruten til ordren, slik at du kommer til ordresiden for en mer detaljert oversikt*/}
+    {
+      /* TO DO: Fiks ruten til ordren, slik at du kommer til ordresiden for en mer detaljert oversikt*/
+    }
     customerService.getCustomerOrders(this.props.match.params.id, orders => {
       this.orderHistory = orders;
     });

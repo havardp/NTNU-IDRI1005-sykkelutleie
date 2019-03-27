@@ -45,6 +45,19 @@ export class VerticalTableComponent extends Component {
                 {Object.values(row).map((data, index) => (
                   <td key={data + row + index}>{data}</td>
                 ))}
+                {/*Add a delete button at the end of the row if its sent in as true from parent component*/}
+                {this.props.deleteButton && (
+                  <td>
+                    <button
+                      onClick={e => {
+                        e.stopPropagation();
+                        this.props.delete(Object.values(row)[0]);
+                      }}
+                    >
+                      X
+                    </button>
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>
