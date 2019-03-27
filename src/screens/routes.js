@@ -38,7 +38,8 @@ export class Routes extends Component {
               margin: 0,
               overflowY: 'scroll',
               padding: '15px',
-              borderTop: '1px solid #d3d3d3'
+              borderTop: '1px solid #d3d3d3',
+              paddingBottom: '90px'
             }}
           >
             <Switch>

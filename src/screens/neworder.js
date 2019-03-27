@@ -30,6 +30,8 @@ class MakeOrder extends Component {
   distinctBikeModels = null;
   distinctEquipmentModels = null;
   modal = false;
+  temporaryOptions = [];
+  searchbarOptions = null;
 
   //variables to be used in order
   activeCustomer = null;
@@ -43,37 +45,36 @@ class MakeOrder extends Component {
       return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     return (
       <div hidden={this.props.hide}>
-        <Card>
-          <CustomerOrderComponent
-            sendStateToParent={this.handleActiveCustomerChange}
-            makeNewCustomer={this.toggleModal}
-          />
-          <Card title="Sykkel og utstyr">
-            <div className="row">
-              <div className="col-6">
-                <MakeOrderProductTable tableBody={this.distinctBikeModels} sendStateToParent={this.handleBikeChange} />
-              </div>
-              <div className="col-6">
-                <MakeOrderProductTable
-                  tableBody={this.distinctEquipmentModels}
-                  sendStateToParent={this.handleEquipmentChange}
-                />
+        <CustomerOrderComponent
+          sendStateToParent={this.handleActiveCustomerChange}
+          makeNewCustomer={this.toggleModal}
+          options={this.searchbarOptions}
+        />
+        <Card title="Annen informasjon">
+          <div className="row">
+            <AdditionalDetailsTable sendStateToParent={this.handleOrderInformationChange} />
+          </div>
+        </Card>
+        <Card title="Sykkel og utstyr">
+          <div className="row">
+            <div className="col-6">
+              <MakeOrderProductTable tableBody={this.distinctBikeModels} sendStateToParent={this.handleBikeChange} />
+            </div>
+            <div className="col-6">
+              <MakeOrderProductTable
+                tableBody={this.distinctEquipmentModels}
+                sendStateToParent={this.handleEquipmentChange}
+              />
+              <div className="row">
+                <div className="col-6" />
+                <div className="col-6">
+                  <Button variant="secondary" style={{ width: '100%' }} onClick={this.goToConfirmationPage}>
+                    videre
+                  </Button>
+                </div>
               </div>
             </div>
-          </Card>
-          <Card title="Annen informasjon">
-            <div className="row">
-              <AdditionalDetailsTable sendStateToParent={this.handleOrderInformationChange} />
-            </div>
-            <div className="row">
-              <div className="col-9" />
-              <div className="col-3">
-                <Button variant="secondary" style={{ width: '100%' }} onClick={this.goToConfirmationPage}>
-                  videre
-                </Button>
-              </div>
-            </div>
-          </Card>
+          </div>
         </Card>
         {this.modal && <AddCustomer modal={true} toggle={this.toggleModal} />}
       </div>
@@ -81,6 +82,13 @@ class MakeOrder extends Component {
   }
 
   mounted() {
+    customerService.getCustomerSearch(result => {
+      this.temporaryOptions = [];
+      result.map(e => {
+        this.temporaryOptions.push({ value: e.c_id, label: e.fullname });
+      });
+      this.searchbarOptions = this.temporaryOptions;
+    });
     storageService.getDistinctBikeModel(result => {
       this.distinctBikeModels = result;
     });
@@ -133,7 +141,7 @@ class MakeOrder extends Component {
         result.map(e => {
           this.temporaryOptions.push({ value: e.c_id, label: e.fullname });
         });
-        this.options = this.temporaryOptions;
+        this.searchbarOptions = this.temporaryOptions;
       });
     }
     this.modal ? (this.modal = false) : (this.modal = true);
@@ -198,7 +206,8 @@ class ConfirmOrder extends Component {
     pickupLocation: 'Hentested',
     dropoffLocation: 'Avleveringssted',
     fromDate: 'Fra-dato',
-    toDate: 'Til-dato'
+    toDate: 'Til-dato',
+    totalPrice: 'Total pris'
   };
 
   render() {
@@ -206,49 +215,95 @@ class ConfirmOrder extends Component {
     if (!this.customerDetails) {
       return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     }
+
     return (
-      <Card>
-        <div className="row">
-          <div className="col-6">
-            <Card title="Kunde id">
+      <>
+        <Card title="Kunde og tilleggs info">
+          <div className="row">
+            <div className="col-6">
               <HorizontalTableComponent tableBody={this.customerDetails} tableHead={this.tableHeadCustomer} />
-            </Card>
-          </div>
-          <div className="col-6">
-            <Card title="Tillegs Info">
+            </div>
+            <div className="col-6">
               <Table striped bordered hover>
                 <tbody>
                   {Object.keys(this.tableHeadAdditional).map(data => (
                     <tr key={data}>
-                      <td>{this.additionalDetails[data]}</td>
                       <td>{this.tableHeadAdditional[data]}</td>
+                      <td>{this.additionalDetails[data]}</td>
                     </tr>
                   ))}
                 </tbody>
               </Table>
-            </Card>
+            </div>
           </div>
-        </div>
-        <div className="row">
-          <div className="col-6">
-            <Card title="Bikes">
-              <ProductOrderTable tableBody={this.bikeDetails} tableHead={this.tableHeadProduct} />
-            </Card>
-          </div>
-          <div className="col-6">
-            <Card title="Equipment">
-              <ProductOrderTable tableBody={this.equipmentDetails} tableHead={this.tableHeadProduct} />
-            </Card>
-          </div>
-        </div>
-        <Card title="Info">fullfør Ordre</Card>
-      </Card>
+          <Card title="Sykkel og utstyr">
+            <div className="row">
+              <div className="col-6">
+                <ProductOrderTable tableBody={this.bikeDetails} tableHead={this.tableHeadProduct} />
+              </div>
+              <div className="col-6">
+                <ProductOrderTable tableBody={this.equipmentDetails} tableHead={this.tableHeadProduct} />
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-9" />
+              <div className="col-3">
+                <Button variant="secondary" style={{ width: '100%' }} onClick={this.sendOrder}>
+                  Bekreft ordre
+                </Button>
+              </div>
+            </div>
+          </Card>
+        </Card>
+      </>
     );
   }
 
   mounted() {
+    //finds the totalprice of the order
+    this.additionalDetails.totalPrice = 0;
+    Object.keys(this.bikeDetails).map((data, index) => {
+      this.additionalDetails.totalPrice += this.bikeDetails[data][0] * this.bikeDetails[data][1];
+    });
+    Object.keys(this.equipmentDetails).map((data, index) => {
+      this.additionalDetails.totalPrice += this.equipmentDetails[data][0] * this.equipmentDetails[data][1];
+    });
+
+    //finds the details about the selected customer
     customerService.getCustomerDetails(this.customer, result => {
       this.customerDetails = result;
+    });
+  }
+
+  sendOrder() {
+    //ordre innsettning fullført
+    orderService.makeOrder(sessionStorage.getItem('userName'), this.customer, this.additionalDetails, order_id => {
+      Object.keys(this.bikeDetails).map(data => {
+        storageService.getAvailableChassisId(
+          data,
+          this.additionalDetails.fromDate,
+          this.additionalDetails.toDate,
+          parseInt(this.bikeDetails[data][0]),
+          result => {
+            result.map(bike => {
+              orderService.makeBikeOrder(order_id, bike.chassis_id, () => console.log('bike inserted'));
+            });
+          }
+        );
+      });
+      Object.keys(this.equipmentDetails).map(data => {
+        storageService.getAvailableEqId(
+          data,
+          this.additionalDetails.fromDate,
+          this.additionalDetails.toDate,
+          parseInt(this.equipmentDetails[data][0]),
+          result => {
+            result.map(equipment => {
+              orderService.makeEquipmentOrder(order_id, equipment.eq_id, () => console.log('equipment inserted'));
+            });
+          }
+        );
+      });
     });
   }
 }

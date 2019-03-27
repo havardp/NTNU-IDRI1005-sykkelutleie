@@ -19,7 +19,7 @@ import { Customers, Employees } from '../components/adduser.js';
 import { customerService, employeeService } from '../services';
 
 const bcrypt = require('bcryptjs');
-
+//TODO validering av data og input
 export class AddCustomer extends Component {
   user = [];
   submitting = false;
@@ -76,7 +76,13 @@ export class AddCustomer extends Component {
 
               <Form.Group as={Col} controlId="formGridZip">
                 <Form.Label>Postnummer</Form.Label>
-                <Form.Control type="number" placeholder="1234" onChange={e => (this.user.zip = e.target.value)} />
+                <Form.Control
+                  type="number"
+                  placeholder="1234"
+                  onChange={e => {
+                    this.user.zip = e.target.value;
+                  }}
+                />
               </Form.Group>
             </Form.Row>
             <Button variant="outline-primary" onClick={this.add}>

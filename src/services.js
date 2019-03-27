@@ -123,6 +123,32 @@ class OrderService {
       success(results[0]);
     });
   }
+
+  makeOrder(e_id, c_id, details, success) {
+    connection.query(
+      'insert into Orders values (null, ?, ?, ?, ?, ?, ?)',
+      [e_id, c_id, details.fromDate, details.toDate, details.pickupLocation, details.dropoffLocation],
+      (error, result) => {
+        if (error) return console.error(error);
+
+        success(result.insertId);
+      }
+    );
+  }
+
+  makeBikeOrder(order_id, chassis_id, success) {
+    connection.query('insert into Bike_Order values (?, ?)', [order_id, chassis_id], (error, result) => {
+      if (error) return console.error(error);
+      success();
+    });
+  }
+
+  makeEquipmentOrder(order_id, eq_id, success) {
+    connection.query('insert into Equipment_Order values (?, ?)', [order_id, eq_id], (error, result) => {
+      if (error) return console.error(error);
+      success();
+    });
+  }
 }
 
 class StorageService {
@@ -201,8 +227,32 @@ class StorageService {
   }
   getCountEquipmentModel(from, to, success) {
     connection.query(
-      'Select E.model, count(E.eq_id) as "max", day_price from Equipment E, Product_Type PT where E.eq_id not in  (SELECT E.eq_id from Equipment E left outer join Equipment_Order EO on E.eq_id=EO.eq_id left outer join Orders O on EO.order_nr = O.order_nr WHERE (? > O.from_date and ? < O.to_date) OR (? < O.from_date and ? < O.to_date and ? > O.from_date) OR (? > O.from_date and ? > O.to_date and ? < O.to_date) OR (? < O.from_date and ? > O.to_date)) and E.model = PT.model group by E.model',
+      'Select E.model, count(E.eq_id) as "max", day_price from Equipment E, Product_Type PT where E.eq_id not in  (SELECT E.eq_id from Equipment E left outer join Equipment_Order EO on E.eq_id=EO.eq_id left outer join Orders O on EO.order_nr = O.order_nr WHERE (? >= O.from_date and ? <= O.to_date) OR (? <= O.from_date and ? <= O.to_date and ? >= O.from_date) OR (? >= O.from_date and ? >= O.to_date and ? <= O.to_date) OR (? <= O.from_date and ? >= O.to_date)) and E.model = PT.model group by E.model',
       [from, to, from, to, to, from, to, from, from, to],
+      (error, results) => {
+        if (error) return console.error(error);
+
+        success(results);
+      }
+    );
+  }
+
+  getAvailableChassisId(model, from, to, nrbikes, success) {
+    connection.query(
+      'Select B.chassis_id from Bike B where B.chassis_id not in (SELECT B.chassis_id from Bike B left outer join Bike_Order BO on B.chassis_id=BO.chassis_id left outer join Orders O on BO.order_nr = O.order_nr WHERE (? >= O.from_date and ? <= O.to_date) OR (? <= O.from_date and ? <= O.to_date and ? >= O.from_date) OR (? >= O.from_date and ? >= O.to_date and ? <= O.to_date) OR (? <= O.from_date and ? >= O.to_date)) and B.model=? limit ?',
+      [from, to, from, to, to, from, to, from, from, to, model, nrbikes],
+      (error, results) => {
+        if (error) return console.error(error);
+
+        success(results);
+      }
+    );
+  }
+
+  getAvailableEqId(model, from, to, nreq, success) {
+    connection.query(
+      'Select E.eq_id from Equipment E where E.eq_id not in (SELECT E.eq_id from Equipment E left outer join Equipment_Order EO on E.eq_id=EO.eq_id left outer join Orders O on EO.order_nr = O.order_nr WHERE (? >= O.from_date and ? <= O.to_date) OR (? <= O.from_date and ? <= O.to_date and ? >= O.from_date) OR (? >= O.from_date and ? >= O.to_date and ? <= O.to_date) OR (? <= O.from_date and ? >= O.to_date)) and E.model=? limit ?',
+      [from, to, from, to, to, from, to, from, from, to, model, nreq],
       (error, results) => {
         if (error) return console.error(error);
 

@@ -11,12 +11,10 @@ import Select from 'react-select';
 import { customerService } from '../services';
 
 export class CustomerOrderComponent extends Component {
-  temporaryOptions = [];
-  options = null;
   selectedOption = null;
 
   render() {
-    if (!this.options) return null;
+    if (!this.props.options) return null;
     return (
       <Card title="Kunde">
         <div className="row">
@@ -27,7 +25,7 @@ export class CustomerOrderComponent extends Component {
                 this.selectedOption = e;
                 this.props.sendStateToParent(e.value);
               }}
-              options={this.options}
+              options={this.props.options}
             />
           </div>
           <div className="col-2">
@@ -39,15 +37,6 @@ export class CustomerOrderComponent extends Component {
       </Card>
     );
   }
-  mounted() {
-    customerService.getCustomerSearch(result => {
-      this.temporaryOptions = [];
-      result.map(e => {
-        this.temporaryOptions.push({ value: e.c_id, label: e.fullname });
-      });
-      this.options = this.temporaryOptions;
-    });
-  }
 }
 
 export class MakeOrderProductTable extends Component {
@@ -58,7 +47,7 @@ export class MakeOrderProductTable extends Component {
         <thead>
           <tr>
             <td>Modell</td>
-            <td>Dags pris</td>
+            <td>Dagspris</td>
             <td>Antall(Ledige)</td>
           </tr>
         </thead>
