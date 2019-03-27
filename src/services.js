@@ -103,16 +103,16 @@ class CustomerService {
     );
   }
 
-    getCustomerOrders(id, success) {
-      connection.query(
-        'SELECT O.order_nr, O.c_id, concat(c_fname, " ", c_lname) as "fullname", count(distinct chassis_id) as nrbikes, count(distinct eq_id) as nrequipment FROM Orders O left join Bike_Order BO on O.order_nr = BO.order_nr left join Equipment_Order EO on O.order_nr = EO.order_nr left join Customer C on O.c_id = C.c_id WHERE O.c_id = ? GROUP by O.order_nr',
-        [id], (error, orders) => {
-          if (error) return console.error(error);
-          console.log(orders)
-          success(orders);
-        }
-      );
-    }
+  getCustomerOrders(id, success) {
+    connection.query(
+      'SELECT O.order_nr, O.c_id, concat(c_fname, " ", c_lname) as "fullname", count(distinct chassis_id) as nrbikes, count(distinct eq_id) as nrequipment FROM Orders O left join Bike_Order BO on O.order_nr = BO.order_nr left join Equipment_Order EO on O.order_nr = EO.order_nr left join Customer C on O.c_id = C.c_id WHERE O.c_id = ? GROUP by O.order_nr',
+      [id],
+      (error, orders) => {
+        if (error) return console.error(error);
+        success(orders);
+      }
+    );
+  }
 }
 
 class OrderService {

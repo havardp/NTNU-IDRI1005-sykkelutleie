@@ -53,7 +53,13 @@ export class Employees extends Component {
       return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     return (
       <>
-        <VerticalTableComponent tableBody={this.employees} tableHead={this.tableHead} deleteButton={true} />
+        <VerticalTableComponent
+          tableBody={this.employees}
+          tableHead={this.tableHead}
+          deleteButton={true}
+          delete={this.delete}
+          whereTo={history.location.pathname}
+        />
         <button className="btn btn-info btn-lg" onClick={this.toggleModal}>
           &#10010;
         </button>
@@ -64,12 +70,6 @@ export class Employees extends Component {
   mounted() {
     employeeService.getEmployees(employees => {
       this.employees = employees;
-    });
-  }
-
-  delete(id) {
-    customerService.deleteCustomers(id, () => {
-      this.mounted();
     });
   }
 
