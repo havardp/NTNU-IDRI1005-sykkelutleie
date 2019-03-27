@@ -62,11 +62,12 @@ export class Customers extends Component {
 
 export class CustomerDetail extends Component {
   customer = null;
+  orderHistory = null;
   tableHead = ['Kunde id', 'Fornavn', 'Etternavn', 'Telefon', 'Email', 'Adresse'];
-  orderHistory = [];
+  tableHead2 = ['Ordrenummer', 'Kundenummer', 'Kundenavn', 'Antall sykler', 'Antall utstyr'];
   render() {
-    if (!this.customer)
-      return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
+
+    if (!this.customer ) return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     let customerDetailsStyle = {
       padding: '50px',
       paddingTop: '25px'
@@ -77,29 +78,28 @@ export class CustomerDetail extends Component {
           <Card.Title>Kundedetaljer</Card.Title>
           <HorizontalTableComponent tableBody={this.customer} tableHead={this.tableHead} checkDate={true} />
 
-          <button>&#9881;</button>
+          <button onClick={()=>console.log("test")}>&#9881;</button>
           <button>&#10004;</button>
 
-          <h4 style={{ paddingTop: '20px' }}>Ordrehistorikk:</h4>
-        </Card>
-        <CardDeck>
-          <Card>
-            <Card.Body>
-              <Card.Title>Ordrenr:</Card.Title>
-              <Card.Text>1x terrengsykkel</Card.Text>
-            </Card.Body>
-            <Card.Footer>
-              <Button variant="primary">Se detaljer</Button>
-            </Card.Footer>
-          </Card>
-        </CardDeck>
-      </>
-    );
-  }
 
+        </Card>
+
+          <Card style={customerDetailsStyle}>
+          <Card.Title>Ordrehistorikk:</Card.Title>
+          {this.orderHistory && <VerticalTableComponent
+            tableBody={this.orderHistory}
+            tableHead={this.tableHead2}/>}
+          </Card>
+</>
+);
+ }
   mounted() {
     customerService.getCustomerDetails(this.props.match.params.id, result => {
       this.customer = result;
+    });
+    {/* TO DO: Fiks ruten til ordren, slik at du kommer til ordresiden for en mer detaljert oversikt*/}
+    customerService.getCustomerOrders(this.props.match.params.id, orders => {
+      this.orderHistory = orders;
     });
   }
 }

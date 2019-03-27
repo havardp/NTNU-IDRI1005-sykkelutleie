@@ -10,7 +10,7 @@ import { history } from '../index.js';
 //make it not show if loading is fast?
 import ReactLoading from 'react-loading';
 
-//contenteditable="true" gjør tablen editable
+//contentEditable="true" gjør tablen editable
 
 //Reusable table component, which takes in an array for the table head, and an array of objects for the table body.
 export class VerticalTableComponent extends Component {
@@ -45,19 +45,6 @@ export class VerticalTableComponent extends Component {
                 {Object.values(row).map((data, index) => (
                   <td key={data + row + index}>{data}</td>
                 ))}
-                {/*Add a delete button at the end of the row if its sent in as true from parent component*/}
-                {this.props.deleteButton && (
-                  <td>
-                    <button
-                      onClick={e => {
-                        e.stopPropagation();
-                        this.props.delete(Object.values(row)[0]);
-                      }}
-                    >
-                      X
-                    </button>
-                  </td>
-                )}
               </tr>
             ))}
           </tbody>
