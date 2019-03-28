@@ -34,6 +34,7 @@ export class Customers extends Component {
           tableHead={this.tableHead}
           deleteButton={true}
           delete={this.delete}
+          whereTo={history.location.pathname}
         />
         <button className="btn btn-info btn-lg" onClick={this.toggleModal}>
           &#10010;
@@ -84,7 +85,9 @@ export class CustomerDetail extends Component {
 
         <Card style={customerDetailsStyle}>
           <Card.Title>Ordrehistorikk:</Card.Title>
-          {this.orderHistory && <VerticalTableComponent tableBody={this.orderHistory} tableHead={this.tableHead2} />}
+          {this.orderHistory && (
+            <VerticalTableComponent tableBody={this.orderHistory} tableHead={this.tableHead2} whereTo={'/orders'} />
+          )}
         </Card>
       </>
     );
@@ -93,9 +96,7 @@ export class CustomerDetail extends Component {
     customerService.getCustomerDetails(this.props.match.params.id, result => {
       this.customer = result;
     });
-    {
-      /* TO DO: Fiks ruten til ordren, slik at du kommer til ordresiden for en mer detaljert oversikt*/
-    }
+
     customerService.getCustomerOrders(this.props.match.params.id, orders => {
       this.orderHistory = orders;
     });

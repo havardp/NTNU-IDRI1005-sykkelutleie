@@ -37,9 +37,7 @@ export class VerticalTableComponent extends Component {
             {this.props.tableBody.map(row => (
               <tr
                 key={Object.values(row)[0]}
-                onClick={() => {
-                  history.push(history.location.pathname + '/' + Object.values(row)[0]);
-                }}
+                onClick={() => history.push(this.props.whereTo + '/' + Object.values(row)[0])}
               >
                 {/*Loops through the values in the object*/}
                 {Object.values(row).map((data, index) => (

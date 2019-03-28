@@ -28,6 +28,7 @@ export class StorageStatus extends Component {
           tableHead={this.tableHead}
           deleteButton={false}
           delete={this.delete}
+          whereTo={history.location.pathname}
         />
         <button className="btn btn-info btn-lg" onClick={this.toggleModal}>
           &#10010;
@@ -37,6 +38,7 @@ export class StorageStatus extends Component {
           tableHead={this.tableHead}
           deleteButton={false}
           delete={this.delete}
+          whereTo={history.location.pathname}
         />
         <button className="btn btn-info btn-lg" onClick={this.toggleModal}>
           &#10010;
@@ -59,41 +61,26 @@ export class StorageDetails extends Component {
   bike = null;
   equipment = null;
   tableHeadBike = ['Ramme id', 'Gir', 'Hjulstørrelse', 'Ødelagt', 'Lokasjon', 'Tilholdssted', 'Bagasjerett'];
-  tableHeadEquipment = ['Modell', 'Utstyr id'];
+  tableHeadEquipment = ['Utstyr id', 'Modell'];
 
   render() {
-    if (this.bike) {
-      return (
-        <>
-          <VerticalTableComponent
-            tableBody={this.bike}
-            tableHead={this.tableHeadBike}
-            deleteButton={true}
-            delete={this.delete}
-          />
-          <button className="btn btn-info btn-lg" onClick={this.toggleModal}>
-            &#10010;
-          </button>
-        </>
-      );
-    }
-
-    if (this.equipment) {
-      return (
-        <>
-          <VerticalTableComponent
-            tableBody={this.equipment}
-            tableHead={this.tableHeadEquipment}
-            deleteButton={true}
-            delete={this.delete}
-          />
-          <button className="btn btn-info btn-lg" onClick={this.toggleModal}>
-            &#10010;
-          </button>
-        </>
-      );
-    }
-    return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
+    if (!this.bike && !this.equipment)
+      return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
+    this.tableBody = this.bike ? this.bike : this.equipment;
+    this.tableHead = this.bike ? this.tableHeadBike : this.tableHeadEquipment;
+    return (
+      <>
+        <VerticalTableComponent
+          tableBody={this.tableBody}
+          tableHead={this.tableHead}
+          deleteButton={false}
+          delete={this.delete}
+        />
+        <button className="btn btn-info btn-lg" onClick={this.toggleModal}>
+          &#10010;
+        </button>
+      </>
+    );
   }
   mounted() {
     storageService.getBike(this.props.match.params.id, result => {
@@ -101,7 +88,6 @@ export class StorageDetails extends Component {
     });
     storageService.getEquipment(this.props.match.params.id, result => {
       this.equipment = result;
-      console.log(this.equipment);
     });
   }
 }

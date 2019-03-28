@@ -22,7 +22,14 @@ export class Orders extends Component {
   render() {
     if (!this.orders)
       return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
-    return <VerticalTableComponent tableBody={this.orders} tableHead={this.tableHead} deleteButton={false} />;
+    return (
+      <VerticalTableComponent
+        tableBody={this.orders}
+        tableHead={this.tableHead}
+        deleteButton={false}
+        whereTo={history.location.pathname}
+      />
+    );
   }
   mounted() {
     orderService.getOrders(orders => {
