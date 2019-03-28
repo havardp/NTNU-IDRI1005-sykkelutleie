@@ -273,6 +273,32 @@ class StorageService {
   }
 }
 
+class ReparationService {
+  getReparations(success) {
+    connection.query('select rep_id, chassis_id, r_fdate, r_tdate from Reparations',
+      (error, results) => {
+        if (error) return console.error(error);
+
+        success(results);
+      }
+    );
+  }
+
+  getReparationDetails(r_id, success, failure) {
+    connection.query(
+      'select rep_id, chassic_id, r_fdate, r_tdate, r_expenses, r_description from Reparations where r_id = ?',
+      [r_id],
+      (error, results) => {
+        if (error) {
+          return console.error(error);
+        }
+        success(results[0]);
+      }
+    );
+  }
+}
+
+export let reparationService = new ReparationService();
 export let employeeService = new EmployeeService();
 export let customerService = new CustomerService();
 export let storageService = new StorageService();
