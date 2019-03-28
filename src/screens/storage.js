@@ -60,7 +60,7 @@ export class StorageStatus extends Component {
 export class StorageDetails extends Component {
   bike = null;
   equipment = null;
-  tableHeadBike = ['Ramme id', 'Gir', 'Hjulstørrelse', 'Ødelagt', 'Lokasjon', 'Tilholdssted', 'Bagasjerett'];
+  tableHeadBike = ['Ramme id', 'Gir', 'Hjulstørrelse', 'Ødelagt', 'Tilholdssted', 'Bagasjerett'];
   tableHeadEquipment = ['Utstyr id', 'Modell'];
 
   render() {

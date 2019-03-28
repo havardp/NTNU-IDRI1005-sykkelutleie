@@ -21,7 +21,7 @@ import { history } from '../index.js';
 
 export class Customers extends Component {
   customers = null;
-  tableHead = ['Kunde id', 'Fornavn', 'Etternavn', 'Antall ordre'];
+  tableHead = ['Kunde id', 'Fornavn', 'Etternavn', 'Antall ordre', "x"];
   modal = false;
 
   render() {
