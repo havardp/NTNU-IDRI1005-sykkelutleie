@@ -32,7 +32,7 @@ class MakeOrder extends Component {
   modal = false;
   temporaryOptions = [];
   searchbarOptions = null;
-
+  temporary = null;
   //variables to be used in order
   activeCustomer = null;
   bike = [];
@@ -122,14 +122,14 @@ class MakeOrder extends Component {
   //Checks to see how many of each bike and equipment are available between the selected from and to date
   updateAvailableDate() {
     if (typeof this.orderInformation.toDate != 'undefined' && typeof this.orderInformation.fromDate != 'undefined') {
+      this.temporary = this.distinctBikeModels;
+      console.log(this.temporary == this.distinctBikeModels); //TODO fjern fra hvis dato endres
       storageService.getCountBikeModel(this.orderInformation.fromDate, this.orderInformation.toDate, result => {
         this.distinctBikeModels = result;
       });
       storageService.getCountEquipmentModel(this.orderInformation.fromDate, this.orderInformation.toDate, result => {
         this.distinctEquipmentModels = result;
       });
-    } else {
-      console.log('trenger begge dato');
     }
   }
 
@@ -210,9 +210,15 @@ class ConfirmOrder extends Component {
     totalPrice: 'Total pris'
   };
 
+  countProducts = 0;
+  insertedProducts = 0;
+  makingOrder = false;
+  checkInterval = null;
+  orderId = null;
+
   render() {
     //render this page with the recieveStateFromParent prop which contains all info from the previous page
-    if (!this.customerDetails) {
+    if (!this.customerDetails || this.makingOrder) {
       return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     }
 
@@ -276,8 +282,19 @@ class ConfirmOrder extends Component {
   }
 
   sendOrder() {
-    //ordre innsettning fullført
+    this.makingOrder = true;
+    this.countProducts = 0;
+    Object.keys(this.bikeDetails).map(data => {
+      this.countProducts += parseInt(this.bikeDetails[data][0]);
+      console.log(this.countProducts);
+    });
+    Object.keys(this.equipmentDetails).map(data => {
+      this.countProducts += parseInt(this.equipmentDetails[data][0]);
+      console.log(this.countProducts);
+    });
+
     orderService.makeOrder(sessionStorage.getItem('userName'), this.customer, this.additionalDetails, order_id => {
+      this.orderId = order_id;
       Object.keys(this.bikeDetails).map(data => {
         storageService.getAvailableChassisId(
           data,
@@ -286,7 +303,10 @@ class ConfirmOrder extends Component {
           parseInt(this.bikeDetails[data][0]),
           result => {
             result.map(bike => {
-              orderService.makeBikeOrder(order_id, bike.chassis_id, () => console.log('bike inserted'));
+              orderService.makeBikeOrder(order_id, bike.chassis_id, () => {
+                console.log('bike inserted');
+                this.insertedProducts++;
+              });
             });
           }
         );
@@ -299,11 +319,25 @@ class ConfirmOrder extends Component {
           parseInt(this.equipmentDetails[data][0]),
           result => {
             result.map(equipment => {
-              orderService.makeEquipmentOrder(order_id, equipment.eq_id, () => console.log('equipment inserted'));
+              orderService.makeEquipmentOrder(order_id, equipment.eq_id, () => {
+                console.log('equipment inserted');
+                this.insertedProducts++;
+              });
             });
           }
         );
       });
+      this.checkInterval = setInterval(() => {
+        this.checkOrderDone();
+      }, 4000);
     });
+  }
+
+  checkOrderDone() {
+    if (this.countProducts == this.insertedProducts) {
+      this.makingOrder = false;
+      clearInterval(this.checkInterval);
+      history.push('/orders/' + this.orderId);
+    }
   }
 }
