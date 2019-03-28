@@ -160,6 +160,20 @@ class OrderService {
       success();
     });
   }
+  getBikeOrder(order_id, success) {
+    connection.query('SELECT B.model, B.chassis_id, PT.day_price FROM Product_Type PT, Orders O, Bike B, Bike_Order BO WHERE B.chassis_id = BO.chassis_id AND BO.order_nr = O.order_nr AND B.model = PT.model AND O.order_nr = ?', [order_id], (error, result) => {
+      if (error) return console.error(error);
+      success(result);
+    });
+  }
+  getEquipmentOrder(order_id, success) {
+    connection.query('SELECT E.model, E.eq_id, PT.day_price FROM Product_Type PT, Orders O, Equipment E, Equipment_Order EO WHERE E.eq_id = EO.eq_id AND EO.order_nr = O.order_nr AND E.model = PT.model AND O.order_nr = ?', [order_id], (error, result) => {
+      if (error) return console.error(error);
+      success(result);
+    });
+  }
+
+
 }
 
 class StorageService {
