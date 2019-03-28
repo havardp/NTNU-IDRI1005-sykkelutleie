@@ -185,7 +185,7 @@ class StorageService {
   }
   getBike(id, success, failure) {
     connection.query(
-      'select chassis_id, gear, wheel_size, broken, location, storage, luggage from Bike where Bike.model = ?',
+      'select chassis_id, gear, wheel_size, broken, storage, luggage from Bike where Bike.model = ?',
       [id],
       (error, results) => {
         if (error) return console.error(error);
