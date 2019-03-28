@@ -20,6 +20,10 @@ export class VerticalTableComponent extends Component {
   //tableBody/tableHead : arrays/objects with the information to be displayed in the table
 
   render() {
+    console.log(this.props.tableBody.r_fdate)
+    //Won't render anything until the date object from the sql query has been changed to a string of numbers, to avoid errors.
+    
+
     return (
       <>
         <Table striped bordered hover>

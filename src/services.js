@@ -160,6 +160,20 @@ class OrderService {
       success();
     });
   }
+  getBikeOrder(order_id, success) {
+    connection.query('SELECT B.model, B.chassis_id, PT.day_price FROM Product_Type PT, Orders O, Bike B, Bike_Order BO WHERE B.chassis_id = BO.chassis_id AND BO.order_nr = O.order_nr AND B.model = PT.model AND O.order_nr = ?', [order_id], (error, result) => {
+      if (error) return console.error(error);
+      success(result);
+    });
+  }
+  getEquipmentOrder(order_id, success) {
+    connection.query('SELECT E.model, E.eq_id, PT.day_price FROM Product_Type PT, Orders O, Equipment E, Equipment_Order EO WHERE E.eq_id = EO.eq_id AND EO.order_nr = O.order_nr AND E.model = PT.model AND O.order_nr = ?', [order_id], (error, result) => {
+      if (error) return console.error(error);
+      success(result);
+    });
+  }
+
+
 }
 
 class StorageService {
@@ -185,7 +199,7 @@ class StorageService {
   }
   getBike(id, success, failure) {
     connection.query(
-      'select chassis_id, gear, wheel_size, broken, location, storage, luggage from Bike where Bike.model = ?',
+      'select chassis_id, gear, wheel_size, broken, storage, luggage from Bike where Bike.model = ?',
       [id],
       (error, results) => {
         if (error) return console.error(error);
@@ -273,6 +287,32 @@ class StorageService {
   }
 }
 
+class ReparationService {
+  getReparations(success) {
+    connection.query('select rep_id, chassis_id, r_fdate, r_tdate from Reparations',
+      (error, results) => {
+        if (error) return console.error(error);
+
+        success(results);
+      }
+    );
+  }
+
+  getReparationDetails(r_id, success, failure) {
+    connection.query(
+      'select rep_id, chassic_id, r_fdate, r_tdate, r_expenses, r_description from Reparations where r_id = ?',
+      [r_id],
+      (error, results) => {
+        if (error) {
+          return console.error(error);
+        }
+        success(results[0]);
+      }
+    );
+  }
+}
+
+export let reparationService = new ReparationService();
 export let employeeService = new EmployeeService();
 export let customerService = new CustomerService();
 export let storageService = new StorageService();
