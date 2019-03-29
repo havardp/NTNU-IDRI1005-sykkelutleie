@@ -18,14 +18,14 @@ import { history } from '../index.js';
 
 export class Orders extends Component {
   orders = null;
-  tableHead = ['Ordrenummer', 'Kundenummer', 'Kundenavn', 'Antall sykler', 'Antall utstyr'];
+
   render() {
     if (!this.orders)
       return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     return (
       <VerticalTableComponent
         tableBody={this.orders}
-        tableHead={this.tableHead}
+        tableHead={'order'}
         deleteButton={false}
         whereTo={history.location.pathname}
       />
@@ -42,16 +42,19 @@ export class OrderDetail extends Component {
   order = null;
   orderBikes = null;
   orderEquipment = null;
-  tableHead = ['Ordrenummer', 'Ansatt id', 'Kunde id', 'Fra-dato', 'Til-dato', 'Utleveringsted', 'Innleveringsted'];
-  tableHeadBikes = ['Modell', 'Ramme id', 'Pris'];
-  tableHeadEquipment = ['Modell', 'Utstyrs id', 'Pris'];
   render() {
-    if (!this.order || !this.orderBikes || !this.orderEquipment) return null;
-    console.log(this.order, this.orderBikes);
+    if (
+      !this.order ||
+      !this.orderBikes ||
+      !this.orderEquipment ||
+      typeof this.order.from_date == 'object' ||
+      typeof this.order.to_date == 'object'
+    )
+      return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     return (
       <>
         <Card title="Ordredetaljer">
-          <HorizontalTableComponent tableBody={this.order} tableHead={this.tableHead} checkDate={true} />
+          <HorizontalTableComponent tableBody={this.order} tableHead={'order'} />
           <button>&#9881;</button>
           <button>&#10004;</button>
         </Card>
@@ -60,7 +63,7 @@ export class OrderDetail extends Component {
             <div className="col-6">
               <VerticalTableComponent
                 tableBody={this.orderBikes}
-                tableHead={this.tableHeadBikes}
+                tableHead={'orderBike'}
                 deleteButton={false}
                 whereTo={history.location.pathname}
               />
@@ -68,7 +71,7 @@ export class OrderDetail extends Component {
             <div className="col-6">
               <VerticalTableComponent
                 tableBody={this.orderEquipment}
-                tableHead={this.tableHeadEquipment}
+                tableHead={'orderEquipment'}
                 deleteButton={false}
                 whereTo={history.location.pathname}
               />
@@ -89,11 +92,9 @@ export class OrderDetail extends Component {
     });
     orderService.getBikeOrder(this.props.match.params.id, result => {
       this.orderBikes = result;
-      console.log(this.orderBikes);
     });
     orderService.getEquipmentOrder(this.props.match.params.id, result => {
       this.orderEquipment = result;
-      console.log(this.orderEquipment);
     });
   }
 }

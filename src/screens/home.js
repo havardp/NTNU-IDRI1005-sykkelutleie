@@ -18,29 +18,34 @@ import { history } from '../index.js';
 
 export class Home extends Component {
   render() {
-    return <div><Reparations /></div>
+    return (
+      <div>
+        <Reparations />
+      </div>
+    );
   }
 }
 
 class Reparations extends Component {
   reparations = null;
-  tableHead = ['Reprasjons id', 'Ramme id', 'Fra-dato', 'Til-dato'];
-  ready=false
+  ready = false;
   render() {
 
       console.log(history.location.pathname)
     if (!this.ready)
       return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
-    return (<>
-     <Card title="Oversikt over reparasjoner">
-     <VerticalTableComponent
-        tableBody={this.reparations}
-        tableHead={this.tableHead}
-        checkDate={true}
-        deleteButton={false}
-        whereTo={"reparations"}
-      />
-      </Card></>
+    return (
+      <>
+        <Card title="Oversikt over reparasjoner">
+          <VerticalTableComponent
+            tableBody={this.reparations}
+            tableHead={'reparation'}
+            checkDate={true}
+            deleteButton={false}
+            whereTo={history.location.pathname}
+          />
+        </Card>
+      </>
     );
   }
   mounted() {
@@ -49,12 +54,10 @@ class Reparations extends Component {
       this.reparations.map(rep => {
         rep.r_fdate = rep.r_fdate.getDate() + '-' + (rep.r_fdate.getMonth() + 1) + '-' + rep.r_fdate.getFullYear();
         rep.r_tdate = rep.r_tdate.getDate() + '-' + (rep.r_tdate.getMonth() + 1) + '-' + rep.r_tdate.getFullYear();
-      })
-      this.ready = true
+      });
+      this.ready = true;
     });
-
   }
-
 }
 
 export class ReparationDetails extends Component {

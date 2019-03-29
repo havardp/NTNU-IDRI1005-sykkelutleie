@@ -17,35 +17,8 @@ import { employeeService } from '../services';
 //Import the hashistory from index.js to be able to change path
 import { history } from '../index.js';
 
-export class EmployeeDetail extends Component {
-  user = null;
-  tableHead = ['Ansatt id', 'Fornavn', 'Etternavn', 'Avdeling', 'Email', 'Telefon', 'Adresse', 'Fødselsdato'];
-
-  render() {
-    if (!this.user)
-      return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
-    return (
-      <Card title="Personalia">
-        <HorizontalTableComponent tableBody={this.user} tableHead={this.tableHead} checkDate={true} />
-      </Card>
-    );
-  }
-
-  mounted() {
-    employeeService.getEmployeeDetails(
-      this.props.match.params.id,
-      result => {
-        this.user = result;
-        this.user.DOB = result.DOB.getDate() + '-' + (result.DOB.getMonth() + 1) + '-' + result.DOB.getFullYear();
-      },
-      () => console.log('failure')
-    );
-  }
-}
-
 export class Employees extends Component {
   employees = null;
-  tableHead = ['Ansatt id', 'Fornavn', 'Etternavn', 'X'];
   modal = false;
 
   render() {
@@ -55,7 +28,7 @@ export class Employees extends Component {
       <>
         <VerticalTableComponent
           tableBody={this.employees}
-          tableHead={this.tableHead}
+          tableHead={'employee'}
           deleteButton={true}
           delete={this.delete}
           whereTo={history.location.pathname}
@@ -76,5 +49,34 @@ export class Employees extends Component {
   toggleModal() {
     this.modal ? (this.modal = false) : (this.modal = true);
     this.mounted();
+  }
+
+  delete(id) {
+    employeeService.deleteEmployee(id, () => this.mounted());
+  }
+}
+
+export class EmployeeDetail extends Component {
+  user = null;
+
+  render() {
+    if (!this.user || typeof this.user.DOB == 'object')
+      return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
+    return (
+      <Card title="Personalia">
+        <HorizontalTableComponent tableBody={this.user} tableHead={'employee'} />
+      </Card>
+    );
+  }
+
+  mounted() {
+    employeeService.getEmployeeDetails(
+      this.props.match.params.id,
+      result => {
+        this.user = result;
+        this.user.DOB = result.DOB.getDate() + '-' + (result.DOB.getMonth() + 1) + '-' + result.DOB.getFullYear();
+      },
+      () => console.log('failure')
+    );
   }
 }

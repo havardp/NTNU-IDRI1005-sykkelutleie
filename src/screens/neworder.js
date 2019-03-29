@@ -13,7 +13,7 @@ import Table from 'react-bootstrap/Table';
 import { storageService, orderService, customerService } from '../services';
 
 //reusable components
-import { VerticalTableComponent, HorizontalTableComponent } from '../components/tables.js';
+import { HorizontalTableComponent } from '../components/tables.js';
 import { AddCustomer } from '../components/adduser.js';
 import {
   CustomerOrderComponent,
@@ -200,7 +200,6 @@ class ConfirmOrder extends Component {
   additionalDetails = this.orderDetails[2];
   //tableBody and tableHead for displaying the customer details
   customerDetails = null;
-  tableHeadCustomer = ['Kunde id', 'Fornavn', 'Etternavn', 'Email', 'Telefon', 'Adresse'];
   tableHeadProduct = ['Modell', 'Antall', 'Pris'];
   tableHeadAdditional = {
     pickupLocation: 'Hentested',
@@ -227,7 +226,7 @@ class ConfirmOrder extends Component {
         <Card title="Kunde og tilleggs info">
           <div className="row">
             <div className="col-6">
-              <HorizontalTableComponent tableBody={this.customerDetails} tableHead={this.tableHeadCustomer} />
+              <HorizontalTableComponent tableBody={this.customerDetails} tableHead={'customer'} />
             </div>
             <div className="col-6">
               <Table striped bordered hover>
@@ -282,6 +281,7 @@ class ConfirmOrder extends Component {
   }
 
   sendOrder() {
+    //counting number of bikes and equipment, to do a check to see when the whole order is finished
     this.makingOrder = true;
     this.countProducts = 0;
     Object.keys(this.bikeDetails).map(data => {
@@ -306,6 +306,11 @@ class ConfirmOrder extends Component {
               orderService.makeBikeOrder(order_id, bike.chassis_id, () => {
                 console.log('bike inserted');
                 this.insertedProducts++;
+                if (this.insertedProducts == this.countProducts) {
+                  this.makingOrder = false;
+                  alert('Ordre fullført');
+                  history.push('/orders/' + this.orderId);
+                }
               });
             });
           }
@@ -322,22 +327,16 @@ class ConfirmOrder extends Component {
               orderService.makeEquipmentOrder(order_id, equipment.eq_id, () => {
                 console.log('equipment inserted');
                 this.insertedProducts++;
+                if (this.insertedProducts == this.countProducts) {
+                  this.makingOrder = false;
+                  alert('Ordre fullført');
+                  history.push('/orders/' + this.orderId);
+                }
               });
             });
           }
         );
       });
-      this.checkInterval = setInterval(() => {
-        this.checkOrderDone();
-      }, 4000);
     });
-  }
-
-  checkOrderDone() {
-    if (this.countProducts == this.insertedProducts) {
-      this.makingOrder = false;
-      clearInterval(this.checkInterval);
-      history.push('/orders/' + this.orderId);
-    }
   }
 }

@@ -1,6 +1,9 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
 
+//Bootstrap imports
+import { Card } from '../widgets';
+
 //make it not show if loading is fast?
 import ReactLoading from 'react-loading';
 
@@ -13,29 +16,29 @@ import { storageService } from '../services';
 //Import the hashistory from index.js to be able to change path
 import { history } from '../index.js';
 
+import { AddModel, AddBike } from '../components/adduser.js';
+
 export class StorageStatus extends Component {
   bikes = null;
   equipment = null;
-  tableHead = ['Modell', 'Beskrivelse', 'Timepris', 'Dagpris', 'Antall'];
-
+  modal = false;
   render() {
     if (!this.bikes || !this.equipment)
       return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     return (
       <>
+        <h3 align="center">Sykler</h3>
         <VerticalTableComponent
           tableBody={this.bikes}
-          tableHead={this.tableHead}
+          tableHead={'storage'}
           deleteButton={false}
           delete={this.delete}
           whereTo={history.location.pathname}
         />
-        <button className="btn btn-info btn-lg" onClick={this.toggleModal}>
-          &#10010;
-        </button>
+        <h3 align="center">Utstyr</h3>
         <VerticalTableComponent
           tableBody={this.equipment}
-          tableHead={this.tableHead}
+          tableHead={'storage'}
           deleteButton={false}
           delete={this.delete}
           whereTo={history.location.pathname}
@@ -43,6 +46,7 @@ export class StorageStatus extends Component {
         <button className="btn btn-info btn-lg" onClick={this.toggleModal}>
           &#10010;
         </button>
+        {this.modal && <AddModel modal={true} toggle={this.toggleModal} />}
       </>
     );
   }
@@ -54,20 +58,23 @@ export class StorageStatus extends Component {
       this.equipment = equipment;
     });
   }
+  toggleModal() {
+    this.modal ? (this.modal = false) : (this.modal = true);
+    this.mounted();
+  }
 }
 
 //turn the two returns into one conditional TODO
 export class StorageDetails extends Component {
   bike = null;
   equipment = null;
-  tableHeadBike = ['Ramme id', 'Gir', 'Hjulstørrelse', 'Ødelagt', 'Tilholdssted', 'Bagasjerett'];
-  tableHeadEquipment = ['Utstyr id', 'Modell'];
+  tablehead = '';
 
   render() {
     if (!this.bike && !this.equipment)
       return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     this.tableBody = this.bike ? this.bike : this.equipment;
-    this.tableHead = this.bike ? this.tableHeadBike : this.tableHeadEquipment;
+    this.tableHead = this.bike ? 'bike' : 'equipment';
     return (
       <>
         <VerticalTableComponent
@@ -79,6 +86,7 @@ export class StorageDetails extends Component {
         <button className="btn btn-info btn-lg" onClick={this.toggleModal}>
           &#10010;
         </button>
+        {this.modal && <AddBike modal={true} toggle={this.toggleModal} />}
       </>
     );
   }
@@ -89,5 +97,9 @@ export class StorageDetails extends Component {
     storageService.getEquipment(this.props.match.params.id, result => {
       this.equipment = result;
     });
+  }
+  toggleModal() {
+    this.modal ? (this.modal = false) : (this.modal = true);
+    this.mounted();
   }
 }
