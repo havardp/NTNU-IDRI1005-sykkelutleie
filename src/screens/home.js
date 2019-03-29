@@ -19,9 +19,11 @@ import { history } from '../index.js';
 export class Home extends Component {
   render() {
     return (
+      <Card title="Hjem">
       <div>
         <Reparations />
       </div>
+      </Card>
     );
   }
 }
@@ -42,7 +44,7 @@ class Reparations extends Component {
             tableHead={'reparation'}
             checkDate={true}
             deleteButton={false}
-            whereTo={history.location.pathname}
+            whereTo={'reparations'}
           />
         </Card>
       </>
@@ -63,14 +65,13 @@ class Reparations extends Component {
 export class ReparationDetails extends Component {
 
     reparation = null;
-    tableHead = ['Reparasjons id', 'Ramme id', 'Fra-dato', 'Til-dato', 'Reparasjons kostnad', 'Beskrivelse'];
 
     render() {
-      if (!this.reparation)
+      if (!this.reparation || typeof this.reparation.r_fdate == "object" || typeof this.reparation.r_tdate == "object")
         return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
       return (
         <Card title="Reparasjonsdetaljer">
-          <HorizontalTableComponent tableBody={this.reparation} tableHead={this.tableHead} checkDate={true} />
+          <HorizontalTableComponent tableBody={this.reparation} tableHead={"reparationDetails"} checkDate={true} />
         </Card>
       );
     }

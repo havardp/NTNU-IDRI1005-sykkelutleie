@@ -87,6 +87,7 @@ export class HorizontalTableComponent extends Component {
   tableHead = {
     customer: ['Kunde id', 'Fornavn', 'Etternavn', 'Email', 'Telefon', 'Adresse'],
     employee: ['Ansatt id', 'Fornavn', 'Etternavn', 'Avdeling', 'Email', 'Telefon', 'Adresse', 'Fødselsdato'],
+    reparationDetails : ['Reparasjons id', 'Ramme id', 'Fra-dato', 'Til-dato', 'Reparasjons kostnad', 'Beskrivelse'],
     order: ['Ordrenummer', 'Ansatt id', 'Kunde id', 'Fra-dato', 'Til-dato', 'Utleveringsted', 'Innleveringsted']
   };
 
@@ -95,6 +96,7 @@ export class HorizontalTableComponent extends Component {
       <Table striped bordered hover>
         <tbody>
           {Object.keys(this.props.tableBody).map((column, index) => (
+            console.log(column),
             <tr key={column}>
               <td>{this.tableHead[this.props.tableHead][index]}</td>
               <td>{this.props.tableBody[column]}</td>
