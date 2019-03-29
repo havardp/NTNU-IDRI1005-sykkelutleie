@@ -13,6 +13,7 @@
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.0.0",
+    "@material/radio": "^1.1.0",
     "bcryptjs": "^2.4.3",
     "bootstrap": "^4.3.1",
     "electron": "^4.0.2",
