@@ -10,7 +10,7 @@ import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import ModalBody from 'react-bootstrap/ModalBody';
-import { Radio, ControlLabel } from 'react-bootstrap';
+import { Radio, ControlLabel, ButtonGroup } from 'react-bootstrap';
 
 //make it not show if loading is fast?
 import ReactLoading from 'react-loading';
@@ -350,6 +350,12 @@ export class AddModel extends Component {
         <Modal show={this.props.modal} onHide={this.props.toggle} centered>
           <Modal.Body>
             <Form>
+              <div>
+                <input type="radio" value="Bike" name="modeltype" /> Sykkel
+              </div>
+              <div>
+                <input type="radio" value="Equipment" name="modeltype" /> Utstyr
+              </div>
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridEmail">
                   <Form.Label>Modell</Form.Label>
@@ -395,23 +401,8 @@ export class AddModel extends Component {
   }
 
   add() {
-    if (!this.bikemodel.role) this.user.role = 'Admin';
-    if (
-      this.bikemodel.fname &&
-      this.user.lname &&
-      this.user.address &&
-      this.user.tlf &&
-      this.user.email &&
-      this.user.zip &&
-      this.user.DOB &&
-      this.user.password
-    ) {
+    if (this.model.model && this.model.description && this.model.hour_price && this.model.day_price) {
       this.submitting = true;
-      this.user.password = bcrypt.hashSync(this.user.password, 10);
-      employeeService.addEmployee(this.user, () => {
-        this.submitting = false;
-        this.props.toggle();
-      });
     } else {
       alert('Du må fylle inn alle feltene');
     }
