@@ -8,6 +8,7 @@ import { history } from '../index.js';
 import { Card } from '../widgets';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
+import Form from 'react-bootstrap/Form';
 
 //Imports for sql queries
 import { storageService, orderService, customerService } from '../services';
@@ -19,7 +20,8 @@ import {
   CustomerOrderComponent,
   MakeOrderProductTable,
   AdditionalDetailsTable,
-  ProductOrderTable
+  ProductOrderTable,
+  AdditionalDetailsConfirmTable
 } from '../components/makeorder.js';
 
 //make it not show if loading is fast?
@@ -33,6 +35,7 @@ class MakeOrder extends Component {
   temporaryOptions = [];
   searchbarOptions = null;
   temporary = null;
+
   //variables to be used in order
   activeCustomer = null;
   bike = [];
@@ -50,32 +53,39 @@ class MakeOrder extends Component {
           makeNewCustomer={this.toggleModal}
           options={this.searchbarOptions}
         />
-        <Card title="Annen informasjon">
-          <div className="row">
-            <AdditionalDetailsTable sendStateToParent={this.handleOrderInformationChange} />
-          </div>
-        </Card>
-        <Card title="Sykkel og utstyr">
-          <div className="row">
-            <div className="col-6">
-              <MakeOrderProductTable tableBody={this.distinctBikeModels} sendStateToParent={this.handleBikeChange} />
+        <Form>
+          <Card title="Annen informasjon">
+            <div className="row">
+              <AdditionalDetailsTable sendStateToParent={this.handleOrderInformationChange} />
             </div>
-            <div className="col-6">
-              <MakeOrderProductTable
-                tableBody={this.distinctEquipmentModels}
-                sendStateToParent={this.handleEquipmentChange}
-              />
-              <div className="row">
-                <div className="col-6" />
-                <div className="col-6">
-                  <Button variant="secondary" style={{ width: '100%' }} onClick={this.goToConfirmationPage}>
-                    videre
-                  </Button>
+          </Card>
+          <Card title="Sykkel og utstyr">
+            <div className="row">
+              <div className="col-6">
+                <MakeOrderProductTable tableBody={this.distinctBikeModels} sendStateToParent={this.handleBikeChange} />
+              </div>
+              <div className="col-6">
+                <MakeOrderProductTable
+                  tableBody={this.distinctEquipmentModels}
+                  sendStateToParent={this.handleEquipmentChange}
+                />
+                <div className="row">
+                  <div className="col-6" />
+                  <div className="col-6">
+                    <Button
+                      variant="secondary"
+                      style={{ width: '100%' }}
+                      type="submit"
+                      onClick={this.goToConfirmationPage}
+                    >
+                      videre
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </Card>
+          </Card>
+        </Form>
         {this.modal && <AddCustomer modal={true} toggle={this.toggleModal} />}
       </div>
     );
@@ -114,6 +124,9 @@ class MakeOrder extends Component {
 
   //handles sending the right states to the parent component, and calling the function in the parent component which sends to next page
   goToConfirmationPage() {
+    event.preventDefault();
+    event.stopPropagation();
+    this.validated = true;
     this.order = [];
     this.order.push(this.bike, this.equipment, this.orderInformation);
     this.activeCustomer ? this.props.sendStateToParent([this.order, this.activeCustomer]) : alert('fyll ut data');
@@ -200,19 +213,11 @@ class ConfirmOrder extends Component {
   additionalDetails = this.orderDetails[2];
   //tableBody and tableHead for displaying the customer details
   customerDetails = null;
-  tableHeadProduct = ['Modell', 'Antall', 'Pris'];
-  tableHeadAdditional = {
-    pickupLocation: 'Hentested',
-    dropoffLocation: 'Avleveringssted',
-    fromDate: 'Fra-dato',
-    toDate: 'Til-dato',
-    totalPrice: 'Total pris'
-  };
 
+  //variables used for checking if the order is completed
   countProducts = 0;
   insertedProducts = 0;
   makingOrder = false;
-  checkInterval = null;
   orderId = null;
 
   render() {
@@ -229,25 +234,16 @@ class ConfirmOrder extends Component {
               <HorizontalTableComponent tableBody={this.customerDetails} tableHead={'customer'} />
             </div>
             <div className="col-6">
-              <Table striped bordered hover>
-                <tbody>
-                  {Object.keys(this.tableHeadAdditional).map(data => (
-                    <tr key={data}>
-                      <td>{this.tableHeadAdditional[data]}</td>
-                      <td>{this.additionalDetails[data]}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
+              <AdditionalDetailsConfirmTable tableBody={this.additionalDetails} />
             </div>
           </div>
           <Card title="Sykkel og utstyr">
             <div className="row">
               <div className="col-6">
-                <ProductOrderTable tableBody={this.bikeDetails} tableHead={this.tableHeadProduct} />
+                <ProductOrderTable tableBody={this.bikeDetails} tableHead={'products'} />
               </div>
               <div className="col-6">
-                <ProductOrderTable tableBody={this.equipmentDetails} tableHead={this.tableHeadProduct} />
+                <ProductOrderTable tableBody={this.equipmentDetails} tableHead={'products'} />
               </div>
             </div>
             <div className="row">

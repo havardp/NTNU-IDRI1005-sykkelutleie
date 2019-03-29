@@ -86,8 +86,15 @@ export class MakeOrderProductTable extends Component {
 export class AdditionalDetailsTable extends Component {
   orderInformation = [];
   location = ['Haugastøl', 'Finse'];
+  date = new Date();
+  day = this.date.getDate();
+  month =
+    (this.date.getMonth() + 1).toString().length == 1 ? '0' + (this.date.getMonth() + 1) : this.date.getMonth() + 1;
+  year = this.date.getFullYear();
+  date = this.year + '-' + this.month + '-' + this.day;
 
   render() {
+    console.log(this.date, '2019-03-29');
     return (
       <>
         <div className="col-6">
@@ -100,6 +107,7 @@ export class AdditionalDetailsTable extends Component {
                 <td>
                   <input
                     type="date"
+                    min={this.date}
                     onChange={e => {
                       this.orderInformation['fromDate'] = e.target.value;
                       this.props.sendStateToParent(this.orderInformation);
@@ -114,6 +122,7 @@ export class AdditionalDetailsTable extends Component {
                 <td>
                   <input
                     type="date"
+                    min={this.date}
                     onChange={e => {
                       this.orderInformation['toDate'] = e.target.value;
                       this.props.sendStateToParent(this.orderInformation);
@@ -172,12 +181,14 @@ export class AdditionalDetailsTable extends Component {
 }
 
 export class ProductOrderTable extends Component {
+  tableHead = { products: ['Modell', 'Antall', 'Pris'] };
+
   render() {
     return (
       <Table striped bordered hover>
         <thead>
           <tr>
-            {this.props.tableHead.map(data => (
+            {this.tableHead[this.props.tableHead].map(data => (
               <td key={data}>{data}</td>
             ))}
           </tr>
@@ -188,6 +199,31 @@ export class ProductOrderTable extends Component {
               <td>{data}</td>
               <td>{this.props.tableBody[data][0]}</td>
               <td>{this.props.tableBody[data][1] * this.props.tableBody[data][0]}</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+    );
+  }
+}
+
+export class AdditionalDetailsConfirmTable extends Component {
+  tableHeadAdditional = {
+    pickupLocation: 'Hentested',
+    dropoffLocation: 'Avleveringssted',
+    fromDate: 'Fra-dato',
+    toDate: 'Til-dato',
+    totalPrice: 'Total pris'
+  };
+
+  render() {
+    return (
+      <Table striped bordered hover>
+        <tbody>
+          {Object.keys(this.tableHeadAdditional).map(data => (
+            <tr key={data}>
+              <td>{this.tableHeadAdditional[data]}</td>
+              <td>{this.props.tableBody[data]}</td>
             </tr>
           ))}
         </tbody>

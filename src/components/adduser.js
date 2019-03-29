@@ -90,7 +90,7 @@ export class AddCustomer extends Component {
                   required
                   type="number"
                   placeholder="1234 5678"
-                  isInvalid={this.user.tlf && this.validated ? this.user.tlf.length != 8 : false}
+                  min="10000000"
                   onChange={e => {
                     if (e.target.value > 99999999) e.target.value = e.target.value.slice(0, 8);
                     this.user.tlf = e.target.value;
@@ -119,7 +119,7 @@ export class AddCustomer extends Component {
                   required
                   type="number"
                   placeholder="1234"
-                  isInvalid={this.user.zip && this.validated ? this.user.zip.length != 4 : false}
+                  min="1000"
                   onChange={e => {
                     if (e.target.value > 9999) e.target.value = e.target.value.slice(0, 4);
                     this.user.zip = e.target.value;
@@ -230,7 +230,7 @@ export class AddEmployee extends Component {
                   type="number"
                   required
                   placeholder="1234 5678"
-                  isInvalid={this.user.tlf && this.validated ? this.user.tlf.length != 8 : false}
+                  min="10000000"
                   onChange={e => {
                     if (e.target.value > 99999999) e.target.value = e.target.value.slice(0, 8);
                     this.user.tlf = e.target.value;
@@ -259,7 +259,7 @@ export class AddEmployee extends Component {
                   type="number"
                   required
                   placeholder="1234"
-                  isInvalid={this.user.zip && this.validated ? this.user.zip.length != 4 : false}
+                  min="1000"
                   onChange={e => {
                     if (e.target.value > 9999) e.target.value = e.target.value.slice(0, 4);
                     this.user.zip = e.target.value;
@@ -272,7 +272,7 @@ export class AddEmployee extends Component {
             <Form.Row>
               <Form.Group as={Col} controlId="formGridCity">
                 <Form.Label>Fødselsdato</Form.Label>
-                <Form.Control type="date" required onChange={e => (this.user.DOB = e.target.value)} />
+                <Form.Control type="date" required onChange={e => (this.user.DOB = e.target.value)} max="2002-01-01" />
                 <Form.Control.Feedback type="invalid">Skriv inn fødselsdato.</Form.Control.Feedback>
               </Form.Group>
             </Form.Row>
