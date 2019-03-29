@@ -298,10 +298,10 @@ class ReparationService {
     );
   }
 
-  getReparationDetails(r_id, success, failure) {
+  getReparationDetails(rep_id, success, failure) {
     connection.query(
-      'select rep_id, chassic_id, r_fdate, r_tdate, r_expenses, r_description from Reparations where r_id = ?',
-      [r_id],
+      'select rep_id, chassis_id, r_fdate, r_tdate, r_expenses, r_description from Reparations where rep_id = ?',
+      [rep_id],
       (error, results) => {
         if (error) {
           return console.error(error);

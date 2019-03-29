@@ -5,7 +5,7 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 //Import of all components "login, customer, employee etc."
 import { Login } from './login.js';
 import { Menu, SideNav } from './navbars.js';
-import { Home } from './home.js';
+import { Home, ReparationDetails } from './home.js';
 import { Customers, CustomerDetail, CustomerAdd } from './customers.js';
 import { Employees, EmployeeDetail } from './employees.js';
 import { StorageStatus, StorageDetails } from './storage.js';
@@ -44,7 +44,7 @@ export class Routes extends Component {
           >
             <Switch>
               <Route exact path="/home" component={Home} />
-              <Route exact path="/customers" component={Customers} />
+              <Route exact path="/reparations/:id" component={ReparationDetails} />
               <Route exact path="/customers/:id" component={CustomerDetail} />
               <Route exact path="/employees" component={Employees} />
               <Route exact path="/employees/:id" component={EmployeeDetail} />

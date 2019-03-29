@@ -20,9 +20,8 @@ export class VerticalTableComponent extends Component {
   //tableBody/tableHead : arrays/objects with the information to be displayed in the table
 
   render() {
-    console.log(this.props.tableBody.r_fdate)
     //Won't render anything until the date object from the sql query has been changed to a string of numbers, to avoid errors.
-    
+
 
     return (
       <>
@@ -81,7 +80,9 @@ export class HorizontalTableComponent extends Component {
       this.props.checkDate &&
       (typeof this.props.tableBody.DOB === 'object' ||
         typeof this.props.tableBody.from_date === 'object' ||
-        typeof this.props.tableBody.to_date === 'object')
+        typeof this.props.tableBody.to_date === 'object' ||
+        typeof this.props.tableBody.r_fdate === 'object' ||
+        typeof this.props.tableBody.r_tdate === 'object')
     )
       return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     return (

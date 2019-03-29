@@ -27,6 +27,8 @@ class Reparations extends Component {
   tableHead = ['Reprasjons id', 'Ramme id', 'Fra-dato', 'Til-dato'];
   ready=false
   render() {
+
+      console.log(history.location.pathname)
     if (!this.ready)
       return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     return (<>
@@ -36,7 +38,7 @@ class Reparations extends Component {
         tableHead={this.tableHead}
         checkDate={true}
         deleteButton={false}
-        whereTo={history.location.pathname}
+        whereTo={"reparations"}
       />
       </Card></>
     );
@@ -52,5 +54,35 @@ class Reparations extends Component {
     });
 
   }
+
+}
+
+export class ReparationDetails extends Component {
+
+    reparation = null;
+    tableHead = ['Reparasjons id', 'Ramme id', 'Fra-dato', 'Til-dato', 'Reparasjons kostnad', 'Beskrivelse'];
+
+    render() {
+      if (!this.reparation)
+        return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
+      return (
+        <Card title="Reparasjonsdetaljer">
+          <HorizontalTableComponent tableBody={this.reparation} tableHead={this.tableHead} checkDate={true} />
+        </Card>
+      );
+    }
+
+    mounted() {
+      console.log("repartions")
+      reparationService.getReparationDetails(
+        this.props.match.params.id,
+        result => {
+          this.reparation = result;
+          this.reparation.r_fdate = result.r_fdate.getDate() + '-' + (result.r_fdate.getMonth() + 1) + '-' + result.r_fdate.getFullYear();
+          this.reparation.r_tdate = result.r_tdate.getDate() + '-' + (result.r_tdate.getMonth() + 1) + '-' + result.r_tdate.getFullYear();
+        },
+        () => console.log('failure')
+      );
+    }
 
 }
