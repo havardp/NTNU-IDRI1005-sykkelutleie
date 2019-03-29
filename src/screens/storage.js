@@ -51,7 +51,7 @@ export class StorageStatus extends Component {
     );
   }
   mounted() {
-    storageService.getBikeModels(bikes => {
+    storageService.getModels(bikes => {
       this.bikes = bikes;
     });
     storageService.getEquipmentModels(equipment => {

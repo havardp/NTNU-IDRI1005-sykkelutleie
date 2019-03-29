@@ -191,9 +191,9 @@ class OrderService {
 }
 
 class StorageService {
-  getBikeModels(success) {
+  getModels(success) {
     connection.query(
-      'SELECT Product_Type.model, description, hour_price, day_price, count(*) as "countBikes" FROM `Bike`, Product_Type where Bike.model = Product_Type.model Group by Product_Type.model',
+      'SELECT PT.model, description, hour_price, day_price, count(B.model) as "countBikes" FROM Product_Type PT left join Bike B on B.model = PT.model where PT.bike=1 group by PT.model',
       (error, results) => {
         if (error) return console.error(error);
 
@@ -203,7 +203,7 @@ class StorageService {
   }
   getEquipmentModels(success) {
     connection.query(
-      'SELECT Product_Type.model, description, hour_price, day_price, count(*) as "countEquipment" FROM `Equipment`, Product_Type where Equipment.model = Product_Type.model Group by Product_Type.model',
+      'SELECT PT.model, description, hour_price, day_price, count(E.model) as "countEquipment" FROM Product_Type PT left join Equipment E on E.model = PT.model where PT.bike= 0 Group by PT.model',
       (error, results) => {
         if (error) return console.error(error);
 
@@ -321,10 +321,10 @@ class ReparationService {
     });
   }
 
-  getReparationDetails(r_id, success, failure) {
+  getReparationDetails(rep_id, success, failure) {
     connection.query(
-      'select rep_id, chassic_id, r_fdate, r_tdate, r_expenses, r_description from Reparations where r_id = ?',
-      [r_id],
+      'select rep_id, chassis_id, r_fdate, r_tdate, r_expenses, r_description from Reparations where rep_id = ?',
+      [rep_id],
       (error, results) => {
         if (error) {
           return console.error(error);
