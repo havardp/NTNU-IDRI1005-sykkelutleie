@@ -21,34 +21,28 @@ import { AddModel } from '../components/adduser.js';
 export class StorageStatus extends Component {
   bikes = null;
   equipment = null;
-  tableHead = ['Modell', 'Beskrivelse', 'Timepris', 'Dagpris', 'Antall'];
   modal = false;
-
   render() {
     if (!this.bikes || !this.equipment)
       return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     return (
       <>
-        <div>
-          <h3 align="center">Sykler</h3>
-          <VerticalTableComponent
-            tableBody={this.bikes}
-            tableHead={this.tableHead}
-            deleteButton={false}
-            delete={this.delete}
-            whereTo={history.location.pathname}
-          />
-        </div>
-        <div>
-          <h3 align="center">Utstyr</h3>
-          <VerticalTableComponent
-            tableBody={this.equipment}
-            tableHead={this.tableHead}
-            deleteButton={false}
-            delete={this.delete}
-            whereTo={history.location.pathname}
-          />
-        </div>
+        <h3 align="center">Sykler</h3>
+        <VerticalTableComponent
+          tableBody={this.bikes}
+          tableHead={'storage'}
+          deleteButton={false}
+          delete={this.delete}
+          whereTo={history.location.pathname}
+        />
+        <h3 align="center">Utstyr</h3>
+        <VerticalTableComponent
+          tableBody={this.equipment}
+          tableHead={'storage'}
+          deleteButton={false}
+          delete={this.delete}
+          whereTo={history.location.pathname}
+        />
         <button className="btn btn-info btn-lg" onClick={this.toggleModal}>
           &#10010;
         </button>
@@ -74,14 +68,13 @@ export class StorageStatus extends Component {
 export class StorageDetails extends Component {
   bike = null;
   equipment = null;
-  tableHeadBike = ['Ramme id', 'Gir', 'Hjulstørrelse', 'Ødelagt', 'Tilholdssted', 'Bagasjerett'];
-  tableHeadEquipment = ['Utstyr id', 'Modell'];
+  tablehead = '';
 
   render() {
     if (!this.bike && !this.equipment)
       return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     this.tableBody = this.bike ? this.bike : this.equipment;
-    this.tableHead = this.bike ? this.tableHeadBike : this.tableHeadEquipment;
+    this.tableHead = this.bike ? 'bike' : 'equipment';
     return (
       <>
         <VerticalTableComponent

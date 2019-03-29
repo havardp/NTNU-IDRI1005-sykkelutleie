@@ -4,10 +4,11 @@ import { Component } from 'react-simplified';
 //make it not show if loading is fast?
 import ReactLoading from 'react-loading';
 
-//Bootstrap imports
-import Card from 'react-bootstrap/Card';
-import CardDeck from 'react-bootstrap/CardDeck';
+//Bootstrap imports;
 import Button from 'react-bootstrap/Button';
+
+//Bootstrap imports
+import { Card } from '../widgets';
 
 //reusable components
 import { VerticalTableComponent, HorizontalTableComponent } from '../components/tables.js';
@@ -21,7 +22,6 @@ import { history } from '../index.js';
 
 export class Customers extends Component {
   customers = null;
-  tableHead = ['Kunde id', 'Fornavn', 'Etternavn', 'Antall ordre', "x"];
   modal = false;
 
   render() {
@@ -31,7 +31,7 @@ export class Customers extends Component {
       <>
         <VerticalTableComponent
           tableBody={this.customers}
-          tableHead={this.tableHead}
+          tableHead={'customer'}
           deleteButton={true}
           delete={this.delete}
           whereTo={history.location.pathname}
@@ -64,29 +64,20 @@ export class Customers extends Component {
 export class CustomerDetail extends Component {
   customer = null;
   orderHistory = null;
-  tableHead = ['Kunde id', 'Fornavn', 'Etternavn', 'Telefon', 'Email', 'Adresse'];
-  tableHead2 = ['Ordrenummer', 'Kundenummer', 'Kundenavn', 'Antall sykler', 'Antall utstyr'];
+
   render() {
     if (!this.customer)
       return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
-    let customerDetailsStyle = {
-      padding: '50px',
-      paddingTop: '25px'
-    };
     return (
       <>
-        <Card style={customerDetailsStyle}>
-          <Card.Title>Kundedetaljer</Card.Title>
-          <HorizontalTableComponent tableBody={this.customer} tableHead={this.tableHead} checkDate={true} />
-
+        <Card title="Kundedetaljer">
+          <HorizontalTableComponent tableBody={this.customer} tableHead={'customer'} />
           <button onClick={() => console.log('test')}>&#9881;</button>
           <button>&#10004;</button>
         </Card>
-
-        <Card style={customerDetailsStyle}>
-          <Card.Title>Ordrehistorikk:</Card.Title>
+        <Card title="Ordrehistorikk">
           {this.orderHistory && (
-            <VerticalTableComponent tableBody={this.orderHistory} tableHead={this.tableHead2} whereTo={'/orders'} />
+            <VerticalTableComponent tableBody={this.orderHistory} tableHead={'customersOrder'} whereTo={'/orders'} />
           )}
         </Card>
       </>

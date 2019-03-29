@@ -17,54 +17,62 @@ export class VerticalTableComponent extends Component {
   //props:
   //deleteButton: whether to display a functional delete button at the end of each row in the table.
   //delete: callback to parent function with id's as an argument to be able to delete the row wwith an sql query
-  //tableBody/tableHead : arrays/objects with the information to be displayed in the table
+  //tableBody : arrays/objects with the information to be displayed in the table
+  //tableHead: chooses what to display in the talbhead from the tableHead object in this class
+
+  tableHead = {
+    customer: ['Kunde id', 'Fornavn', 'Etternavn', 'Antall ordre', 'Fjern'],
+    reparation: ['Reprasjons id', 'Ramme id', 'Fra-dato', 'Til-dato'],
+    customersOrder: ['Ordrenummer', 'Kundenummer', 'Kundenavn', 'Antall sykler', 'Antall utstyr'],
+    employee: ['Ansatt id', 'Fornavn', 'Etternavn', 'Fjern'],
+    storage: ['Modell', 'Beskrivelse', 'Timepris', 'Dagpris', 'Antall'],
+    bike: ['Ramme id', 'Gir', 'Hjulstørrelse', 'Ødelagt', 'Tilholdssted', 'Bagasjerett'],
+    equipment: ['Utstyr id', 'Modell'],
+    order: ['Ordrenummer', 'Kundenummer', 'Kundenavn', 'Antall sykler', 'Antall utstyr'],
+    orderEquipment: ['Modell', 'Utstyrs id', 'Pris'],
+    orderBike: ['Modell', 'Ramme id', 'Pris']
+  };
 
   render() {
-    console.log(this.props.tableBody.r_fdate)
-    //Won't render anything until the date object from the sql query has been changed to a string of numbers, to avoid errors.
-    
-
     return (
-      <>
-        <Table striped bordered hover>
-          <thead>
-            {/*Loops through the head part of the table which is sent in as an array of text strings from parent component*/}
-            <tr>
-              {this.props.tableHead.map(tableHead => (
-                <td key={tableHead}>{tableHead}</td>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {/*Loops through an array of objects from the sql queries, the array length will be the number of rows.*/}
-            {/*The onclick on the row will send you to the current location plus the id of the row etc("/customers/400100")*/}
-            {this.props.tableBody.map(row => (
-              <tr
-                key={Object.values(row)[0]}
-                onClick={() => history.push(this.props.whereTo + '/' + Object.values(row)[0])}
-              >
-                {/*Loops through the values in the object*/}
-                {Object.values(row).map((data, index) => (
-                  <td key={data + row + index}>{data}</td>
-                ))}
-                {/*Add a delete button at the end of the row if its sent in as true from parent component*/}
-                {this.props.deleteButton && (
-                  <td>
-                    <button
-                      onClick={e => {
-                        e.stopPropagation();
-                        this.props.delete(Object.values(row)[0]);
-                      }}
-                    >
-                      X
-                    </button>
-                  </td>
-                )}
-              </tr>
+      <Table striped bordered hover>
+        <thead>
+          {/*Loops through the head part of the table which is sent in as an array of text strings from parent component*/}
+          <tr>
+            {this.tableHead[this.props.tableHead].map(tableHead => (
+              <td key={tableHead}>{tableHead}</td>
             ))}
-          </tbody>
-        </Table>
-      </>
+          </tr>
+        </thead>
+        <tbody>
+          {/*Loops through an array of objects from the sql queries, the array length will be the number of rows.*/}
+          {/*The onclick on the row will send you to the current location plus the id of the row etc("/customers/400100")*/}
+          {this.props.tableBody.map(row => (
+            <tr
+              key={Object.values(row)[0] + Object.values(row)[1].toString()}
+              onClick={() => history.push(this.props.whereTo + '/' + Object.values(row)[0])}
+            >
+              {/*Loops through the values in the object*/}
+              {Object.values(row).map((data, index) => (
+                <td key={data + row + index}>{data}</td>
+              ))}
+              {/*Add a delete button at the end of the row if its sent in as true from parent component*/}
+              {this.props.deleteButton && (
+                <td>
+                  <button
+                    onClick={e => {
+                      e.stopPropagation();
+                      this.props.delete(Object.values(row)[0]);
+                    }}
+                  >
+                    X
+                  </button>
+                </td>
+              )}
+            </tr>
+          ))}
+        </tbody>
+      </Table>
     );
   }
 }
@@ -73,30 +81,27 @@ export class VerticalTableComponent extends Component {
 export class HorizontalTableComponent extends Component {
   //props:
   //checkDate(Doesn't render until the date object from the database has been changed to a string),
-  //tableBody/tableHead : arrays/objects with the information to be displayed in the table
+  //tableBody: arrays/objects with the information to be displayed in the table
+  //tableHead: chooses what to display in the talbhead from the tableHead object in this class
+
+  tableHead = {
+    customer: ['Kunde id', 'Fornavn', 'Etternavn', 'Email', 'Telefon', 'Adresse'],
+    employee: ['Ansatt id', 'Fornavn', 'Etternavn', 'Avdeling', 'Email', 'Telefon', 'Adresse', 'Fødselsdato'],
+    order: ['Ordrenummer', 'Ansatt id', 'Kunde id', 'Fra-dato', 'Til-dato', 'Utleveringsted', 'Innleveringsted']
+  };
 
   render() {
-    //Won't render anything until the date object from the sql query has been changed to a string of numbers, to avoid errors.
-    if (
-      this.props.checkDate &&
-      (typeof this.props.tableBody.DOB === 'object' ||
-        typeof this.props.tableBody.from_date === 'object' ||
-        typeof this.props.tableBody.to_date === 'object')
-    )
-      return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     return (
-      <>
-        <Table striped bordered hover>
-          <tbody>
-            {Object.keys(this.props.tableBody).map((column, index) => (
-              <tr key={column}>
-                <td>{this.props.tableHead[index]}</td>
-                <td>{this.props.tableBody[column]}</td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      </>
+      <Table striped bordered hover>
+        <tbody>
+          {Object.keys(this.props.tableBody).map((column, index) => (
+            <tr key={column}>
+              <td>{this.tableHead[this.props.tableHead][index]}</td>
+              <td>{this.props.tableBody[column]}</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
     );
   }
 }
