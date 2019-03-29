@@ -357,13 +357,13 @@ export class AddModel extends Component {
                 <input type="radio" value="Equipment" name="modeltype" /> Utstyr
               </div>
               <Form.Row>
-                <Form.Group as={Col} controlId="formGridEmail">
+                <Form.Group as={Col}>
                   <Form.Label>Modell</Form.Label>
                   <Form.Control type="text" placeholder="Navn" onChange={e => (this.model.model = e.target.value)} />
                 </Form.Group>
               </Form.Row>
               <Form.Row>
-                <Form.Group as={Col} controlId="formGridPassword">
+                <Form.Group as={Col}>
                   <Form.Label>Beskrivelse</Form.Label>
                   <Form.Control
                     type="text"
@@ -373,7 +373,7 @@ export class AddModel extends Component {
                 </Form.Group>
               </Form.Row>
               <Form.Row>
-                <Form.Group as={Col} controlId="formGridEmail">
+                <Form.Group as={Col}>
                   <Form.Label>Timepris</Form.Label>
                   <Form.Control
                     type="number"
@@ -381,7 +381,7 @@ export class AddModel extends Component {
                     onChange={e => (this.model.hour_price = e.target.value)}
                   />
                 </Form.Group>
-                <Form.Group as={Col} controlId="formGridCity">
+                <Form.Group as={Col}>
                   <Form.Label>Dagspris</Form.Label>
                   <Form.Control
                     type="number"
@@ -402,6 +402,66 @@ export class AddModel extends Component {
 
   add() {
     if (this.model.model && this.model.description && this.model.hour_price && this.model.day_price) {
+      this.submitting = true;
+    } else {
+      alert('Du må fylle inn alle feltene');
+    }
+  }
+}
+export class AddBike extends Component {
+  bike = [];
+  submitting = false;
+  render() {
+    if (this.submitting)
+      return (
+        <Modal show={this.props.modal} onHide={this.props.toggle} centered>
+          <Modal.Body>
+            <ReactLoading type="spin" className="logging fade-in" color="#A9A9A9" height={200} width={200} />
+          </Modal.Body>
+        </Modal>
+      );
+
+    return (
+      <div>
+        <Modal show={this.props.modal} onHide={this.props.toggle} centered>
+          <Modal.Body>
+            <Form>
+              <Form.Row>
+                <Form.Group as={Col}>
+                  <Form.Label>Antall gir</Form.Label>
+                  <Form.Control type="number" placeholder="Gir" onChange={e => (this.bike.gear = e.target.value)} />
+                </Form.Group>
+                <Form.Group as={Col}>
+                  <Form.Label>Hjulstørrelse</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Hjul"
+                    onChange={e => (this.bike.wheel_size = e.target.value)}
+                  />
+                </Form.Group>
+              </Form.Row>
+              <Form.Row>
+                <Form.Group as={Col}>
+                  <Form.Label>Lagersted (nedtrekksboks)</Form.Label>
+                  <Form.Control type="text" placeholder="Sted" onChange={e => (this.bike.storage = e.target.value)} />
+                </Form.Group>
+                <Form.Group as={Col}>
+                  <Form.Label>Bagasjebrett: Ja eller nei?</Form.Label>
+                  <Form.Control type="text" placeholder="Brett" onChange={e => (this.bike.luggage = e.target.value)} />
+                </Form.Group>
+              </Form.Row>
+              <Button variant="outline-primary" onClick={this.add}>
+                Legg til
+              </Button>
+            </Form>
+          </Modal.Body>
+        </Modal>
+      </div>
+    );
+  }
+
+  add() {
+    if (this.bike.gear && this.bike.wheel_size && this.bike.storage && this.bike.luggage) {
       this.submitting = true;
     } else {
       alert('Du må fylle inn alle feltene');

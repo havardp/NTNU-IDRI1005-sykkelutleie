@@ -16,7 +16,7 @@ import { storageService } from '../services';
 //Import the hashistory from index.js to be able to change path
 import { history } from '../index.js';
 
-import { AddModel } from '../components/adduser.js';
+import { AddModel, AddBike } from '../components/adduser.js';
 
 export class StorageStatus extends Component {
   bikes = null;
@@ -86,6 +86,7 @@ export class StorageDetails extends Component {
         <button className="btn btn-info btn-lg" onClick={this.toggleModal}>
           &#10010;
         </button>
+        {this.modal && <AddBike modal={true} toggle={this.toggleModal} />}
       </>
     );
   }
@@ -96,5 +97,9 @@ export class StorageDetails extends Component {
     storageService.getEquipment(this.props.match.params.id, result => {
       this.equipment = result;
     });
+  }
+  toggleModal() {
+    this.modal ? (this.modal = false) : (this.modal = true);
+    this.mounted();
   }
 }
