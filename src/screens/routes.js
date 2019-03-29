@@ -45,6 +45,7 @@ export class Routes extends Component {
             <Switch>
               <Route exact path="/home" component={Home} />
               <Route exact path="/reparations/:id" component={ReparationDetails} />
+              <Route exact path="/customers" component={Customers} />
               <Route exact path="/customers/:id" component={CustomerDetail} />
               <Route exact path="/employees" component={Employees} />
               <Route exact path="/employees/:id" component={EmployeeDetail} />
