@@ -9,6 +9,7 @@ import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import ModalBody from 'react-bootstrap/ModalBody';
+import { Radio, ControlLabel } from 'react-bootstrap';
 
 //make it not show if loading is fast?
 import ReactLoading from 'react-loading';
@@ -204,6 +205,91 @@ export class AddEmployee extends Component {
     if (!this.user.role) this.user.role = 'Admin';
     if (
       this.user.fname &&
+      this.user.lname &&
+      this.user.address &&
+      this.user.tlf &&
+      this.user.email &&
+      this.user.zip &&
+      this.user.DOB &&
+      this.user.password
+    ) {
+      this.submitting = true;
+      this.user.password = bcrypt.hashSync(this.user.password, 10);
+      employeeService.addEmployee(this.user, () => {
+        this.submitting = false;
+        this.props.toggle();
+      });
+    } else {
+      alert('Du må fylle inn alle feltene');
+    }
+  }
+}
+export class AddModel extends Component {
+  model = [];
+  submitting = false;
+  render() {
+    if (this.submitting)
+      return (
+        <Modal show={this.props.modal} onHide={this.props.toggle} centered>
+          <Modal.Body>
+            <ReactLoading type="spin" className="logging fade-in" color="#A9A9A9" height={200} width={200} />
+          </Modal.Body>
+        </Modal>
+      );
+
+    return (
+      <div>
+        <Modal show={this.props.modal} onHide={this.props.toggle} centered>
+          <Modal.Body>
+            <Form>
+              <Form.Row>
+                <Form.Group as={Col} controlId="formGridEmail">
+                  <Form.Label>Modell</Form.Label>
+                  <Form.Control type="text" placeholder="Navn" onChange={e => (this.model.model = e.target.value)} />
+                </Form.Group>
+              </Form.Row>
+              <Form.Row>
+                <Form.Group as={Col} controlId="formGridPassword">
+                  <Form.Label>Beskrivelse</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Tekst"
+                    onChange={e => (this.model.description = e.target.value)}
+                  />
+                </Form.Group>
+              </Form.Row>
+              <Form.Row>
+                <Form.Group as={Col} controlId="formGridEmail">
+                  <Form.Label>Timepris</Form.Label>
+                  <Form.Control
+                    type="number"
+                    placeholder="X kr"
+                    onChange={e => (this.model.hour_price = e.target.value)}
+                  />
+                </Form.Group>
+                <Form.Group as={Col} controlId="formGridCity">
+                  <Form.Label>Dagspris</Form.Label>
+                  <Form.Control
+                    type="number"
+                    placeholder="X kr"
+                    onChange={e => (this.model.day_price = e.target.value)}
+                  />
+                </Form.Group>
+              </Form.Row>
+              <Button variant="outline-primary" onClick={this.add}>
+                Legg til
+              </Button>
+            </Form>
+          </Modal.Body>
+        </Modal>
+      </div>
+    );
+  }
+
+  add() {
+    if (!this.bikemodel.role) this.user.role = 'Admin';
+    if (
+      this.bikemodel.fname &&
       this.user.lname &&
       this.user.address &&
       this.user.tlf &&
