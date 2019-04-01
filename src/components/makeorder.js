@@ -45,7 +45,6 @@ export class CustomerOrderComponent extends Component {
 
 export class MakeOrderProductTable extends Component {
   product = [];
-  modelHistory = [];
   render() {
     return (
       <Table striped bordered hover>
@@ -63,6 +62,8 @@ export class MakeOrderProductTable extends Component {
               <td>{model.day_price}kr</td>
               <td>
                 <select
+                  id={model.model}
+                  value={this.props.products[model.model] ? this.props.products[model.model][0] : 0}
                   onChange={e => {
                     this.product[model.model] = [e.target.value, model.day_price];
                     this.props.sendStateToParent(this.product);
@@ -79,16 +80,6 @@ export class MakeOrderProductTable extends Component {
     );
   }
 
-  // test(model) {
-  //   if (this.modelHistory[model.model] != model.max) {
-  //     this.modelHistory[model.model] = model.max;
-  //     console.log('test');
-  //     return '0';
-  //   }
-  //   this.modelHistory[model.model] = model.max;
-  //   return '1';
-  // }
-
   makeSelect(length) {
     let options = [];
     for (let i = 0; i <= length; i++) {
@@ -97,6 +88,8 @@ export class MakeOrderProductTable extends Component {
     return options;
   }
 }
+
+export let makeproducttest = new MakeOrderProductTable();
 
 export class AdditionalDetailsTable extends Component {
   orderInformation = [];

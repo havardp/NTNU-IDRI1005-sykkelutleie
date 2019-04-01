@@ -35,6 +35,7 @@ class MakeOrder extends Component {
   temporaryOptions = [];
   searchbarOptions = null;
   temporary = null;
+  test = [];
 
   //variables to be used in order
   activeCustomer = null;
@@ -42,7 +43,6 @@ class MakeOrder extends Component {
   equipment = [];
   orderInformation = [];
   order = [];
-
   render() {
     if (!this.distinctBikeModels || !this.distinctEquipmentModels)
       return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
@@ -62,12 +62,17 @@ class MakeOrder extends Component {
           <Card title="Sykkel og utstyr">
             <div className="row">
               <div className="col-6">
-                <MakeOrderProductTable tableBody={this.distinctBikeModels} sendStateToParent={this.handleBikeChange} />
+                <MakeOrderProductTable
+                  tableBody={this.distinctBikeModels}
+                  sendStateToParent={this.handleBikeChange}
+                  products={this.bike}
+                />
               </div>
               <div className="col-6">
                 <MakeOrderProductTable
                   tableBody={this.distinctEquipmentModels}
                   sendStateToParent={this.handleEquipmentChange}
+                  products={this.equipment}
                 />
                 <div className="row">
                   <div className="col-6" />
@@ -139,6 +144,7 @@ class MakeOrder extends Component {
 
   //Checks to see how many of each bike and equipment are available between the selected from and to date
   updateAvailableDate() {
+    this.test = ['test'];
     if (typeof this.orderInformation.toDate != 'undefined' && typeof this.orderInformation.fromDate != 'undefined') {
       storageService.getCountBikeModel(this.orderInformation.fromDate, this.orderInformation.toDate, result => {
         this.bike = [];
@@ -266,7 +272,7 @@ class ConfirmOrder extends Component {
   }
 
   mounted() {
-    //finds the totalprice of the order
+    //finds the totalprice of the order and numbre of products to check when the order is finished
     this.additionalDetails.totalPrice = 0;
     Object.keys(this.bikeDetails).map(data => {
       this.additionalDetails.totalPrice +=
@@ -286,7 +292,6 @@ class ConfirmOrder extends Component {
   }
 
   sendOrder() {
-    //counting number of bikes and equipment, to do a check to see when the whole order is finished
     this.makingOrder = true;
 
     orderService.makeOrder(sessionStorage.getItem('userName'), this.customer, this.additionalDetails, order_id => {

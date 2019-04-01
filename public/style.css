@@ -17,6 +17,10 @@
   padding: 1rem;
 }
 
+.clickable {
+  cursor: pointer;
+}
+
 .form-signin .btn {
   font-size: 80%;
   letter-spacing: 0.1rem;

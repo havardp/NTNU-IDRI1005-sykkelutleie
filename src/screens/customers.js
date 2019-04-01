@@ -28,6 +28,7 @@ export class Customers extends Component {
     return (
       <>
         <VerticalTableComponent
+          className={'clickable'}
           tableBody={this.customers}
           tableHead={'customer'}
           deleteButton={true}

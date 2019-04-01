@@ -53,6 +53,7 @@ export class Login extends Component {
                   <div className="form-signin">
                     <div className="form-label-group">
                       <input
+                        autoFocus
                         type="text"
                         id="inputName"
                         className="form-control"
