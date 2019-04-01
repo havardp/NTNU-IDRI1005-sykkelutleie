@@ -89,8 +89,6 @@ export class MakeOrderProductTable extends Component {
   }
 }
 
-export let makeproducttest = new MakeOrderProductTable();
-
 export class AdditionalDetailsTable extends Component {
   orderInformation = [];
   location = ['Haugastøl', 'Finse'];
