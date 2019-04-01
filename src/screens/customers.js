@@ -25,8 +25,6 @@ export class Customers extends Component {
   modal = false;
 
   render() {
-    if (!this.customers)
-      return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     return (
       <>
         <VerticalTableComponent
@@ -66,8 +64,6 @@ export class CustomerDetail extends Component {
   orderHistory = null;
 
   render() {
-    if (!this.customer)
-      return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     return (
       <>
         <Card title="Kundedetaljer">
