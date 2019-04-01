@@ -307,6 +307,17 @@ class StorageService {
       }
     );
   }
+  addProductType(model, bike, success) {
+    connection.query(
+      'INSERT INTO Product_Type VALUES (?, ?, ?, ?, ?)',
+      [model.model, model.description, model.hour_price, model.day_price, bike],
+      (error, results) => {
+        if (error) return console.error(error);
+
+        success();
+      }
+    );
+  }
 }
 
 class ReparationService {

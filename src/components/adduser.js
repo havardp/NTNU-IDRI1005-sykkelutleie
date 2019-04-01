@@ -18,7 +18,7 @@ import ReactLoading from 'react-loading';
 import { Customers, Employees } from '../components/adduser.js';
 
 //Imports for sql queries
-import { customerService, employeeService } from '../services';
+import { customerService, employeeService, storageService } from '../services';
 
 const bcrypt = require('bcryptjs');
 //TODO validering av data og input
@@ -333,9 +333,11 @@ export class AddEmployee extends Component {
   }
 }
 export class AddModel extends Component {
-  model = [];
+  model = {};
   submitting = false;
+  bike = null;
   render() {
+    console.log(this.model);
     if (this.submitting)
       return (
         <Modal show={this.props.modal} onHide={this.props.toggle} centered>
@@ -351,10 +353,10 @@ export class AddModel extends Component {
           <Modal.Body>
             <Form>
               <div>
-                <input type="radio" value="Bike" name="modeltype" /> Sykkel
+                <input type="radio" value="1" name="modeltype" onChange={e => (this.bike = e.target.value)} /> Sykkel
               </div>
               <div>
-                <input type="radio" value="Equipment" name="modeltype" /> Utstyr
+                <input type="radio" value="0" name="modeltype" onChange={e => (this.bike = e.target.value)} /> Utstyr
               </div>
               <Form.Row>
                 <Form.Group as={Col}>
@@ -403,6 +405,7 @@ export class AddModel extends Component {
   add() {
     if (this.model.model && this.model.description && this.model.hour_price && this.model.day_price) {
       this.submitting = true;
+      storageService.addProductType(this.model, this.bike, () => console.log('success'));
     } else {
       alert('Du må fylle inn alle feltene');
     }
