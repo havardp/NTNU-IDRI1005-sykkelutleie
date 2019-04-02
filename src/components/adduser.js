@@ -471,3 +471,68 @@ export class AddBike extends Component {
     }
   }
 }
+
+export class AddReparation extends Component {
+  rep = [];
+  submitting = false;
+  render() {
+    if (this.submitting)
+      return (
+        <Modal show={this.props.modal} onHide={this.props.toggle} centered>
+          <Modal.Body>
+            <ReactLoading type="spin" className="logging fade-in" color="#A9A9A9" height={200} width={200} />
+          </Modal.Body>
+        </Modal>
+      );
+
+    return (
+      <div>
+        <Modal show={this.props.modal} onHide={this.props.toggle} centered>
+          <Modal.Body>
+            <Form>
+              <Form.Row>
+                <Form.Group as={Col}>
+                  <Form.Label>Fra dato</Form.Label>
+                  <Form.Control type="number" placeholder="åååå/mm/dd" onChange={e => (this.rep.r_fdate = e.target.value)} />
+                </Form.Group>
+                  <Form.Group as={Col}>
+                    <Form.Label>Til dato</Form.Label>
+                    <Form.Control type="number" placeholder="åååå/mm/dd" onChange={e => (this.rep.r_tdate = e.target.value)} />
+                  </Form.Group>
+                <Form.Group as={Col}>
+                  <Form.Label>Reperasjonspris</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Hjul"
+                    onChange={e => (this.bike.wheel_size = e.target.value)}
+                  />
+                </Form.Group>
+              </Form.Row>
+              <Form.Row>
+                <Form.Group as={Col}>
+                  <Form.Label>Lagersted (nedtrekksboks)</Form.Label>
+                  <Form.Control type="text" placeholder="Sted" onChange={e => (this.bike.storage = e.target.value)} />
+                </Form.Group>
+                <Form.Group as={Col}>
+                  <Form.Label>Bagasjebrett: Ja eller nei?</Form.Label>
+                  <Form.Control type="text" placeholder="Brett" onChange={e => (this.bike.luggage = e.target.value)} />
+                </Form.Group>
+              </Form.Row>
+              <Button variant="outline-primary" onClick={this.add}>
+                Legg til
+              </Button>
+            </Form>
+          </Modal.Body>
+        </Modal>
+      </div>
+    );
+  }
+
+  add() {
+    if (this.bike.gear && this.bike.wheel_size && this.bike.storage && this.bike.luggage) {
+      this.submitting = true;
+    } else {
+      alert('Du må fylle inn alle feltene');
+    }
+  }
+}
