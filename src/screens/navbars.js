@@ -19,7 +19,7 @@ export class Menu extends Component {
   render() {
     return (
       <Navbar bg="dark" variant="dark">
-        <Navbar.Brand onClick={()=> history.push("/home")}>Sykkelutleie AS</Navbar.Brand>
+        <Navbar.Brand onClick={() => history.push('/home')}>Sykkelutleie AS</Navbar.Brand>
         <Nav className="mr-auto">
           <Nav.Link onClick={() => history.push('/neworder')}>Ny ordre</Nav.Link>
           <Nav.Link onClick={() => history.push('/orders')}>Finn ordre</Nav.Link>

@@ -53,6 +53,7 @@ export class Login extends Component {
                   <div className="form-signin">
                     <div className="form-label-group">
                       <input
+                        autoFocus
                         type="text"
                         id="inputName"
                         className="form-control"
@@ -98,6 +99,16 @@ export class Login extends Component {
     );
   }
 
+  mounted() {
+    document.addEventListener('keydown', this.handleKeyPress);
+  }
+
+  handleKeyPress(e) {
+    if (e.keyCode == 13) {
+      this.login();
+    }
+  }
+
   login() {
     this.loggingIn = true;
     if (this.user.name && this.user.password) {
@@ -109,6 +120,7 @@ export class Login extends Component {
             sessionStorage.setItem('userLoggedIn', true);
             history.push('/home');
             ipcRenderer.send('maximize');
+            document.removeEventListener('keydown', this.handleKeyPress);
           } else {
             this.collapseShow = true;
             this.loggingIn = false;

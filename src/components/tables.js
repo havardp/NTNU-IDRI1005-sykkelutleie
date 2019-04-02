@@ -35,6 +35,8 @@ export class VerticalTableComponent extends Component {
   };
 
   render() {
+    if (!this.props.tableBody)
+      return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     return (
       <Table striped bordered hover>
         <thead>
@@ -52,6 +54,7 @@ export class VerticalTableComponent extends Component {
             <tr
               key={Object.values(row)[0] + Object.values(row)[1].toString()}
               onClick={() => history.push(this.props.whereTo + '/' + Object.values(row)[0])}
+              className={this.props.className}
             >
               {/*Loops through the values in the object*/}
               {Object.values(row).map((data, index) => (
@@ -88,17 +91,27 @@ export class HorizontalTableComponent extends Component {
   tableHead = {
     customer: ['Kunde id', 'Fornavn', 'Etternavn', 'Email', 'Telefon', 'Adresse'],
     employee: ['Ansatt id', 'Fornavn', 'Etternavn', 'Avdeling', 'Email', 'Telefon', 'Adresse', 'Fødselsdato'],
-    bikeDetails: ['Ramme id', 'Modell', 'Gir', 'Hjulstørrelse', 'Ødelagt', 'Tilholdssted', 'Bagasjebrett', 'Beskrivelse', 'Dagpris'],
-    reparationDetails : ['Reparasjons id', 'Ramme id', 'Fra-dato', 'Til-dato', 'Reparasjons kostnad', 'Beskrivelse'],
-    order: ['Ordrenummer', 'Ansatt id', 'Kunde id', 'Fra-dato', 'Til-dato', 'Utleveringsted', 'Innleveringsted']
+    bikeDetails: ['Ramme id','Modell', 'Gir', 'Hjulstørrelse', 'Ødelagt', 'Tilholdssted', 'Bagasjerett', 'Beskrivelse', 'Dagspris'],
+    reparationDetails: ['Reparasjons id', 'Ramme id', 'Fra-dato', 'Til-dato', 'Reparasjons kostnad', 'Beskrivelse'],
+    order: [
+      'Ordrenummer',
+      'Ansatt id',
+      'Kunde id',
+      'Fra-dato',
+      'Til-dato',
+      'Utleveringsted',
+      'Innleveringsted',
+      'Totalpris'
+    ]
   };
 
   render() {
+    if (!this.props.tableBody)
+      return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     return (
       <Table striped bordered hover>
         <tbody>
           {Object.keys(this.props.tableBody).map((column, index) => (
-            console.log(column),
             <tr key={column}>
               <td>{this.tableHead[this.props.tableHead][index]}</td>
               <td>{this.props.tableBody[column]}</td>

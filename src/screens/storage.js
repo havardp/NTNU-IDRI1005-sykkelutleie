@@ -23,8 +23,6 @@ export class StorageStatus extends Component {
   equipment = null;
   modal = false;
   render() {
-    if (!this.bikes || !this.equipment)
-      return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     return (
       <>
         <h3 align="center">Sykler</h3>
@@ -71,8 +69,6 @@ export class StorageDetails extends Component {
   tablehead = '';
 
   render() {
-    if (!this.bike && !this.equipment)
-      return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     this.tableBody = this.bike ? this.bike : this.equipment;
     this.tableHead = this.bike ? 'bike' : 'equipment';
     return (

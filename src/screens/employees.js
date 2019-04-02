@@ -22,8 +22,6 @@ export class Employees extends Component {
   modal = false;
 
   render() {
-    if (!this.employees)
-      return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     return (
       <>
         <VerticalTableComponent

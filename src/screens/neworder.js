@@ -35,6 +35,7 @@ class MakeOrder extends Component {
   temporaryOptions = [];
   searchbarOptions = null;
   temporary = null;
+  test = [];
 
   //variables to be used in order
   activeCustomer = null;
@@ -42,7 +43,6 @@ class MakeOrder extends Component {
   equipment = [];
   orderInformation = [];
   order = [];
-
   render() {
     if (!this.distinctBikeModels || !this.distinctEquipmentModels)
       return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
@@ -62,12 +62,17 @@ class MakeOrder extends Component {
           <Card title="Sykkel og utstyr">
             <div className="row">
               <div className="col-6">
-                <MakeOrderProductTable tableBody={this.distinctBikeModels} sendStateToParent={this.handleBikeChange} />
+                <MakeOrderProductTable
+                  tableBody={this.distinctBikeModels}
+                  sendStateToParent={this.handleBikeChange}
+                  products={this.bike}
+                />
               </div>
               <div className="col-6">
                 <MakeOrderProductTable
                   tableBody={this.distinctEquipmentModels}
                   sendStateToParent={this.handleEquipmentChange}
+                  products={this.equipment}
                 />
                 <div className="row">
                   <div className="col-6" />
@@ -124,23 +129,29 @@ class MakeOrder extends Component {
 
   //handles sending the right states to the parent component, and calling the function in the parent component which sends to next page
   goToConfirmationPage() {
-    event.preventDefault();
-    event.stopPropagation();
-    this.validated = true;
-    this.order = [];
-    this.order.push(this.bike, this.equipment, this.orderInformation);
-    this.activeCustomer ? this.props.sendStateToParent([this.order, this.activeCustomer]) : alert('fyll ut data');
+    if (
+      this.orderInformation.fromDate &&
+      this.orderInformation.toDate &&
+      this.activeCustomer &&
+      this.orderInformation.dropoffLocation &&
+      this.orderInformation.pickupLocation
+    ) {
+      this.order = [];
+      this.order.push(this.bike, this.equipment, this.orderInformation);
+      this.props.sendStateToParent([this.order, this.activeCustomer]);
+    }
   }
 
   //Checks to see how many of each bike and equipment are available between the selected from and to date
   updateAvailableDate() {
+    this.test = ['test'];
     if (typeof this.orderInformation.toDate != 'undefined' && typeof this.orderInformation.fromDate != 'undefined') {
-      this.temporary = this.distinctBikeModels;
-      console.log(this.temporary == this.distinctBikeModels); //TODO fjern fra hvis dato endres
       storageService.getCountBikeModel(this.orderInformation.fromDate, this.orderInformation.toDate, result => {
+        this.bike = [];
         this.distinctBikeModels = result;
       });
       storageService.getCountEquipmentModel(this.orderInformation.fromDate, this.orderInformation.toDate, result => {
+        this.equipment = [];
         this.distinctEquipmentModels = result;
       });
     }
@@ -261,13 +272,17 @@ class ConfirmOrder extends Component {
   }
 
   mounted() {
-    //finds the totalprice of the order
+    //finds the totalprice of the order and numbre of products to check when the order is finished
     this.additionalDetails.totalPrice = 0;
-    Object.keys(this.bikeDetails).map((data, index) => {
-      this.additionalDetails.totalPrice += this.bikeDetails[data][0] * this.bikeDetails[data][1];
+    Object.keys(this.bikeDetails).map(data => {
+      this.additionalDetails.totalPrice +=
+        this.bikeDetails[data][0] * this.bikeDetails[data][1] * this.additionalDetails.nrDays;
+      this.countProducts += parseInt(this.bikeDetails[data][0]);
     });
-    Object.keys(this.equipmentDetails).map((data, index) => {
-      this.additionalDetails.totalPrice += this.equipmentDetails[data][0] * this.equipmentDetails[data][1];
+    Object.keys(this.equipmentDetails).map(data => {
+      this.additionalDetails.totalPrice +=
+        this.equipmentDetails[data][0] * this.equipmentDetails[data][1] * this.additionalDetails.nrDays;
+      this.countProducts += parseInt(this.equipmentDetails[data][0]);
     });
 
     //finds the details about the selected customer
@@ -277,17 +292,7 @@ class ConfirmOrder extends Component {
   }
 
   sendOrder() {
-    //counting number of bikes and equipment, to do a check to see when the whole order is finished
     this.makingOrder = true;
-    this.countProducts = 0;
-    Object.keys(this.bikeDetails).map(data => {
-      this.countProducts += parseInt(this.bikeDetails[data][0]);
-      console.log(this.countProducts);
-    });
-    Object.keys(this.equipmentDetails).map(data => {
-      this.countProducts += parseInt(this.equipmentDetails[data][0]);
-      console.log(this.countProducts);
-    });
 
     orderService.makeOrder(sessionStorage.getItem('userName'), this.customer, this.additionalDetails, order_id => {
       this.orderId = order_id;

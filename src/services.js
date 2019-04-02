@@ -145,8 +145,16 @@ class OrderService {
 
   makeOrder(e_id, c_id, details, success) {
     connection.query(
-      'insert into Orders values (null, ?, ?, ?, ?, ?, ?)',
-      [e_id, c_id, details.fromDate, details.toDate, details.pickupLocation, details.dropoffLocation],
+      'insert into Orders values (null, ?, ?, ?, ?, ?, ?, ?)',
+      [
+        e_id,
+        c_id,
+        details.fromDate,
+        details.toDate,
+        details.pickupLocation,
+        details.dropoffLocation,
+        details.totalPrice
+      ],
       (error, result) => {
         if (error) return console.error(error);
 

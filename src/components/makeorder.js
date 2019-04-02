@@ -4,6 +4,9 @@ import { Component } from 'react-simplified';
 //Bootstrap imports
 import { Card } from '../widgets';
 import Table from 'react-bootstrap/Table';
+import Form from 'react-bootstrap/Form';
+import FormControl from 'react-bootstrap/FormControl';
+import FormCheck from 'react-bootstrap/FormCheck';
 
 import Select from 'react-select';
 
@@ -21,6 +24,7 @@ export class CustomerOrderComponent extends Component {
           <div className="col-10">
             <Select
               value={this.selectedOption}
+              placeholder="Velg kunde..."
               onChange={e => {
                 this.selectedOption = e;
                 this.props.sendStateToParent(e.value);
@@ -58,6 +62,8 @@ export class MakeOrderProductTable extends Component {
               <td>{model.day_price}kr</td>
               <td>
                 <select
+                  id={model.model}
+                  value={this.props.products[model.model] ? this.props.products[model.model][0] : 0}
                   onChange={e => {
                     this.product[model.model] = [e.target.value, model.day_price];
                     this.props.sendStateToParent(this.product);
@@ -86,15 +92,18 @@ export class MakeOrderProductTable extends Component {
 export class AdditionalDetailsTable extends Component {
   orderInformation = [];
   location = ['Haugastøl', 'Finse'];
+
+  //Variables used to set the minimum date to the current date
   date = new Date();
-  day = this.date.getDate();
+  day = this.date.getDate().toString().length == 1 ? '0' + this.date.getDate() : this.date.getDate();
   month =
     (this.date.getMonth() + 1).toString().length == 1 ? '0' + (this.date.getMonth() + 1) : this.date.getMonth() + 1;
   year = this.date.getFullYear();
   date = this.year + '-' + this.month + '-' + this.day;
+  fromDate = '';
+  toDate = '';
 
   render() {
-    console.log(this.date, '2019-03-29');
     return (
       <>
         <div className="col-6">
@@ -106,10 +115,16 @@ export class AdditionalDetailsTable extends Component {
                 </td>
                 <td>
                   <input
+                    required
                     type="date"
                     min={this.date}
                     onChange={e => {
                       this.orderInformation['fromDate'] = e.target.value;
+                      this.fromDate = new Date(this.orderInformation['fromDate']);
+                      this.toDate = new Date(this.orderInformation['toDate']);
+                      this.orderInformation['nrDays'] = Math.ceil(
+                        Math.abs(this.toDate.getTime() - this.fromDate.getTime() + 1) / (1000 * 3600 * 24)
+                      );
                       this.props.sendStateToParent(this.orderInformation);
                     }}
                   />
@@ -121,10 +136,16 @@ export class AdditionalDetailsTable extends Component {
                 </td>
                 <td>
                   <input
+                    required
                     type="date"
-                    min={this.date}
+                    min={this.orderInformation['fromDate']}
                     onChange={e => {
                       this.orderInformation['toDate'] = e.target.value;
+                      this.fromDate = new Date(this.orderInformation['fromDate']);
+                      this.toDate = new Date(this.orderInformation['toDate']);
+                      this.orderInformation['nrDays'] = Math.ceil(
+                        Math.abs(this.toDate.getTime() - this.fromDate.getTime() + 1) / (1000 * 3600 * 24)
+                      );
                       this.props.sendStateToParent(this.orderInformation);
                     }}
                   />
@@ -142,12 +163,16 @@ export class AdditionalDetailsTable extends Component {
                 </td>
                 <td>
                   <select
+                    required
+                    value={this.orderInformation['pickupLocation'] || ''}
                     onChange={e => {
                       this.orderInformation['pickupLocation'] = e.target.value;
                       this.props.sendStateToParent(this.orderInformation);
                     }}
                   >
-                    <option hidden>Velg sted...</option>
+                    <option value="" hidden>
+                      Velg sted...
+                    </option>
                     {this.location.map(location => (
                       <option key={location}>{location}</option>
                     ))}
@@ -160,12 +185,16 @@ export class AdditionalDetailsTable extends Component {
                 </td>
                 <td>
                   <select
+                    required
+                    value={this.orderInformation['dropoffLocation'] || ''}
                     onChange={e => {
-                      this.orderInformation['dropoffLocation'] = e.target.value;
+                      this.orderInformation['dropoffLocation'] = e.target.value || null;
                       this.props.sendStateToParent(this.orderInformation);
                     }}
                   >
-                    <option hidden>Velg sted...</option>
+                    <option value="" hidden>
+                      Velg sted...
+                    </option>
                     {this.location.map(location => (
                       <option key={location}>{location}</option>
                     ))}
@@ -213,6 +242,7 @@ export class AdditionalDetailsConfirmTable extends Component {
     dropoffLocation: 'Avleveringssted',
     fromDate: 'Fra-dato',
     toDate: 'Til-dato',
+    nrDays: 'Antall dager',
     totalPrice: 'Total pris'
   };
 
