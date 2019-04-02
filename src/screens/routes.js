@@ -8,7 +8,7 @@ import { Menu, SideNav } from './navbars.js';
 import { Home, ReparationDetails } from './home.js';
 import { Customers, CustomerDetail, CustomerAdd } from './customers.js';
 import { Employees, EmployeeDetail } from './employees.js';
-import { StorageStatus, StorageDetails } from './storage.js';
+import { StorageStatus, StorageDetails, BikeDetails } from './storage.js';
 import { Orders, OrderDetail } from './orders.js';
 import { NewOrder } from './neworder.js';
 
@@ -51,6 +51,7 @@ export class Routes extends Component {
               <Route exact path="/employees/:id" component={EmployeeDetail} />
               <Route exact path="/storagestatus" component={StorageStatus} />
               <Route exact path="/storagestatus/:id" component={StorageDetails} />
+              <Route exact path="/bikedetails/:id" component={BikeDetails} />
               <Route exact path="/orders" component={Orders} />
               <Route exact path="/orders/:id" component={OrderDetail} />
               <Route exact path="/neworder" component={NewOrder} />

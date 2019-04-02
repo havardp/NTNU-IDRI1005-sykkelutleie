@@ -76,6 +76,7 @@ export class StorageDetails extends Component {
           tableHead={this.tableHead}
           deleteButton={false}
           delete={this.delete}
+          whereTo={'/bikedetails'}
         />
         <button className="btn btn-info btn-lg" onClick={this.toggleModal}>
           &#10010;
@@ -95,5 +96,29 @@ export class StorageDetails extends Component {
   toggleModal() {
     this.modal ? (this.modal = false) : (this.modal = true);
     this.mounted();
+  }
+}
+
+export class BikeDetails extends Component {
+  bike = null;
+
+
+  render() {
+    if (!this.bike)
+      return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
+    return (
+      <>
+        <Card title="Sykkelinformasjon">
+          <HorizontalTableComponent tableBody={this.bike} tableHead={'bikeDetails'} />
+          <button onClick={() => console.log('test')}>&#9881;</button>
+          <button>&#10004;</button>
+        </Card>
+      </>
+    );
+  }
+  mounted() {
+    storageService.getBikeDetails(this.props.match.params.id, result => {
+      this.bike = result;
+    });
   }
 }

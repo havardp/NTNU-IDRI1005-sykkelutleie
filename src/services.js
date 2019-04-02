@@ -240,6 +240,19 @@ class StorageService {
       }
     );
   }
+
+  getBikeDetails(id, success) {
+    connection.query(
+      'select chassis_id, B.model, gear, wheel_size, broken, storage, luggage, description, day_price from Bike B, Product_Type PT where B.model = PT.model and chassis_id = ?',
+      [id],
+      (error, results) => {
+        if (error) return console.error(error);
+
+        success(results[0]);
+      }
+    );
+  }
+
   getEquipment(id, success) {
     connection.query(' select * from Equipment where Equipment.model = ?;', [id], (error, results) => {
       if (error) return console.error(error);
@@ -326,6 +339,18 @@ class ReparationService {
           return console.error(error);
         }
         success(results[0]);
+      }
+    );
+  }
+
+  addReparation(rep, bike, success) {
+    connection.query(
+      'INSERT INTO Reparations VALUES (null, ?, ?, ?, ?)',
+      [rep.chassis_id, rep.r_fdate, rep.tdate, rep.expenses, rep.r_description],
+      (error, results) => {
+        if (error) return console.error(error);
+
+        success();
       }
     );
   }

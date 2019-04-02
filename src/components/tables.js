@@ -99,6 +99,17 @@ export class HorizontalTableComponent extends Component {
   tableHead = {
     customer: ['Kunde id', 'Fornavn', 'Etternavn', 'Email', 'Telefon', 'Adresse'],
     employee: ['Ansatt id', 'Fornavn', 'Etternavn', 'Avdeling', 'Email', 'Telefon', 'Adresse', 'Fødselsdato'],
+    bikeDetails: [
+      'Ramme id',
+      'Modell',
+      'Gir',
+      'Hjulstørrelse',
+      'Ødelagt',
+      'Tilholdssted',
+      'Bagasjerett',
+      'Beskrivelse',
+      'Dagspris'
+    ],
     reparationDetails: ['Reparasjons id', 'Ramme id', 'Fra-dato', 'Til-dato', 'Reparasjons kostnad', 'Beskrivelse'],
     order: [
       'Ordrenummer',
