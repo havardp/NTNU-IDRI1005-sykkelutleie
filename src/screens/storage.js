@@ -16,7 +16,7 @@ import { storageService } from '../services';
 //Import the hashistory from index.js to be able to change path
 import { history } from '../index.js';
 
-import { AddModel, AddBike } from '../components/adduser.js';
+import { AddModel, AddBike, AddReparation } from '../components/adduser.js';
 
 export class StorageStatus extends Component {
   bikes = null;
