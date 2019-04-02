@@ -101,7 +101,7 @@ export class StorageDetails extends Component {
 
 export class BikeDetails extends Component {
   bike = null;
-
+  modal = false;
 
   render() {
     if (!this.bike)
@@ -111,7 +111,10 @@ export class BikeDetails extends Component {
         <Card title="Sykkelinformasjon">
           <HorizontalTableComponent tableBody={this.bike} tableHead={'bikeDetails'} />
           <button onClick={() => console.log('test')}>&#9881;</button>
-          <button>&#10004;</button>
+          <button className="btn btn-info btn-lg" onClick={this.toggleModal}>
+            &#10010;
+          </button>
+          {this.modal && <AddReparation modal={true} toggle={this.toggleModal} />}
         </Card>
       </>
     );
@@ -120,5 +123,10 @@ export class BikeDetails extends Component {
     storageService.getBikeDetails(this.props.match.params.id, result => {
       this.bike = result;
     });
+  }
+
+  toggleModal() {
+    this.modal ? (this.modal = false) : (this.modal = true);
+    this.mounted();
   }
 }

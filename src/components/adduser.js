@@ -525,7 +525,7 @@ export class AddReparation extends Component {
   }
 
   add() {
-    if (this.bike.gear && this.bike.wheel_size && this.bike.storage && this.bike.luggage) {
+    if (this.rep.r_fdate && this.rep.r_tdate &&  this.rep.expenses && this.rep.r_description) {
       this.submitting = true;
     } else {
       alert('Du må fylle inn alle feltene');
