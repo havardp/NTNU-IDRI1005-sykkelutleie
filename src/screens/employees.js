@@ -10,7 +10,7 @@ import { AddEmployee } from '../components/adduser.js';
 
 //make it not show if loading is fast?
 import ReactLoading from 'react-loading';
-
+import Select from 'react-select';
 //Imports for sql queries
 import { employeeService } from '../services';
 
@@ -21,9 +21,35 @@ export class Employees extends Component {
   employees = null;
   modal = false;
 
+  //variables for the select searchbar
+  selectedOption = null;
+  temporaryOptions = [];
+  searchbarOptions = null;
+  temporary = null;
+
   render() {
     return (
       <>
+        {this.searchbarOptions && (
+          <div className="row">
+            <div className="col-10">
+              <Select
+                value={this.selectedOption}
+                placeholder="Søk ansatt..."
+                onChange={e => {
+                  this.selectedOption = e;
+                  history.push('/employees/' + e.value);
+                }}
+                options={this.searchbarOptions}
+              />
+            </div>
+            <div className="col-2">
+              <button className="btn btn-info btn-lg" onClick={this.toggleModal}>
+                &#10010;
+              </button>
+            </div>
+          </div>
+        )}
         <VerticalTableComponent
           tableBody={this.employees}
           tableHead={'employee'}
@@ -31,9 +57,6 @@ export class Employees extends Component {
           delete={this.delete}
           whereTo={history.location.pathname}
         />
-        <button className="btn btn-info btn-lg" onClick={this.toggleModal}>
-          &#10010;
-        </button>
         {this.modal && <AddEmployee modal={true} toggle={this.toggleModal} />}
       </>
     );
@@ -41,6 +64,13 @@ export class Employees extends Component {
   mounted() {
     employeeService.getEmployees(employees => {
       this.employees = employees;
+    });
+    employeeService.getEmployeeSearch(result => {
+      this.temporaryOptions = [];
+      result.map(e => {
+        this.temporaryOptions.push({ value: e.e_id, label: e.fullname });
+      });
+      this.searchbarOptions = this.temporaryOptions;
     });
   }
 

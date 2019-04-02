@@ -35,7 +35,6 @@ class MakeOrder extends Component {
   temporaryOptions = [];
   searchbarOptions = null;
   temporary = null;
-  test = [];
 
   //variables to be used in order
   activeCustomer = null;
@@ -104,11 +103,9 @@ class MakeOrder extends Component {
       });
       this.searchbarOptions = this.temporaryOptions;
     });
-    storageService.getDistinctBikeModel(result => {
-      this.distinctBikeModels = result;
-    });
-    storageService.getDistinctEquipmentModel(result => {
-      this.distinctEquipmentModels = result;
+    storageService.getDistinctModel(result => {
+      this.distinctBikeModels = result[0];
+      this.distinctEquipmentModels = result[1];
     });
   }
 
@@ -146,13 +143,11 @@ class MakeOrder extends Component {
   updateAvailableDate() {
     this.test = ['test'];
     if (typeof this.orderInformation.toDate != 'undefined' && typeof this.orderInformation.fromDate != 'undefined') {
-      storageService.getCountBikeModel(this.orderInformation.fromDate, this.orderInformation.toDate, result => {
+      storageService.getCountModel(this.orderInformation.fromDate, this.orderInformation.toDate, result => {
         this.bike = [];
-        this.distinctBikeModels = result;
-      });
-      storageService.getCountEquipmentModel(this.orderInformation.fromDate, this.orderInformation.toDate, result => {
         this.equipment = [];
-        this.distinctEquipmentModels = result;
+        this.distinctBikeModels = result[0];
+        this.distinctEquipmentModels = result[1];
       });
     }
   }

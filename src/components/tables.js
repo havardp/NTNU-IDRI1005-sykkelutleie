@@ -26,9 +26,18 @@ export class VerticalTableComponent extends Component {
     customersOrder: ['Ordrenummer', 'Kundenummer', 'Kundenavn', 'Antall sykler', 'Antall utstyr'],
     employee: ['Ansatt id', 'Fornavn', 'Etternavn', 'Fjern'],
     storage: ['Modell', 'Beskrivelse', 'Timepris', 'Dagpris', 'Antall'],
-    bike: ['Ramme id', 'Gir', 'Hjulstørrelse', 'Ødelagt', 'Tilholdssted', 'Bagasjerett'],
+    bike: ['Ramme id', 'Gir', 'Hjulstørrelse', 'Ødelagt', 'Tilholdssted'],
     equipment: ['Utstyr id', 'Modell'],
-    order: ['Ordrenummer', 'Kundenummer', 'Kundenavn', 'Antall sykler', 'Antall utstyr'],
+    order: [
+      'Ordrenummer',
+      'Kundenummer',
+      'Kundenavn',
+      'Antall sykler',
+      'Antall utstyr',
+      'Fra-dato',
+      'Til-dato',
+      'Fjern'
+    ],
     orderEquipment: ['Modell', 'Utstyrs id', 'Pris'],
     orderBike: ['Modell', 'Ramme id', 'Pris']
   };
