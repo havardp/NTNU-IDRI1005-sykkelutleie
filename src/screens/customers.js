@@ -14,6 +14,8 @@ import { Card } from '../widgets';
 import { VerticalTableComponent, HorizontalTableComponent } from '../components/tables.js';
 import { AddCustomer } from '../components/adduser.js';
 
+import Select from 'react-select';
+
 //Imports for sql queries
 import { customerService } from '../services';
 
@@ -24,9 +26,35 @@ export class Customers extends Component {
   customers = null;
   modal = false;
 
+  //variables for the select searchbar
+  selectedOption = null;
+  temporaryOptions = [];
+  searchbarOptions = null;
+  temporary = null;
+
   render() {
     return (
       <>
+        {this.searchbarOptions && (
+          <div className="row">
+            <div className="col-10">
+              <Select
+                value={this.selectedOption}
+                placeholder="Søk kunde..."
+                onChange={e => {
+                  this.selectedOption = e;
+                  history.push('/customers/' + e.value);
+                }}
+                options={this.searchbarOptions}
+              />
+            </div>
+            <div className="col-2">
+              <button className="btn btn-info btn-lg" onClick={this.toggleModal}>
+                &#10010;
+              </button>
+            </div>
+          </div>
+        )}
         <VerticalTableComponent
           className={'clickable'}
           tableBody={this.customers}
@@ -35,9 +63,6 @@ export class Customers extends Component {
           delete={this.delete}
           whereTo={history.location.pathname}
         />
-        <button className="btn btn-info btn-lg" onClick={this.toggleModal}>
-          &#10010;
-        </button>
         {this.modal && <AddCustomer modal={true} toggle={this.toggleModal} />}
       </>
     );
@@ -46,17 +71,23 @@ export class Customers extends Component {
     customerService.getCustomers(customers => {
       this.customers = customers;
     });
-  }
 
-  delete(id) {
-    customerService.deleteCustomers(id, () => {
-      this.mounted();
+    customerService.getCustomerSearch(result => {
+      this.temporaryOptions = [];
+      result.map(e => {
+        this.temporaryOptions.push({ value: e.c_id, label: e.fullname });
+      });
+      this.searchbarOptions = this.temporaryOptions;
     });
   }
 
+  delete(id) {
+    customerService.deleteCustomers(id, () => this.mounted());
+  }
+
   toggleModal() {
+    if (this.modal == true) this.mounted();
     this.modal ? (this.modal = false) : (this.modal = true);
-    this.mounted();
   }
 }
 

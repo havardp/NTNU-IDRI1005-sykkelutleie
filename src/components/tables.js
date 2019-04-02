@@ -26,10 +26,18 @@ export class VerticalTableComponent extends Component {
     customersOrder: ['Ordrenummer', 'Kundenummer', 'Kundenavn', 'Antall sykler', 'Antall utstyr'],
     employee: ['Ansatt id', 'Fornavn', 'Etternavn', 'Fjern'],
     storage: ['Modell', 'Beskrivelse', 'Timepris', 'Dagpris', 'Antall'],
-    bike: ['Ramme id', 'Gir', 'Hjulstørrelse', 'Ødelagt', 'Tilholdssted', 'Bagasjerett'],
-
+    bike: ['Ramme id', 'Gir', 'Hjulstørrelse', 'Ødelagt', 'Tilholdssted'],
     equipment: ['Utstyr id', 'Modell'],
-    order: ['Ordrenummer', 'Kundenummer', 'Kundenavn', 'Antall sykler', 'Antall utstyr'],
+    order: [
+      'Ordrenummer',
+      'Kundenummer',
+      'Kundenavn',
+      'Antall sykler',
+      'Antall utstyr',
+      'Fra-dato',
+      'Til-dato',
+      'Fjern'
+    ],
     orderEquipment: ['Modell', 'Utstyrs id', 'Pris'],
     orderBike: ['Modell', 'Ramme id', 'Pris']
   };
@@ -91,7 +99,17 @@ export class HorizontalTableComponent extends Component {
   tableHead = {
     customer: ['Kunde id', 'Fornavn', 'Etternavn', 'Email', 'Telefon', 'Adresse'],
     employee: ['Ansatt id', 'Fornavn', 'Etternavn', 'Avdeling', 'Email', 'Telefon', 'Adresse', 'Fødselsdato'],
-    bikeDetails: ['Ramme id','Modell', 'Gir', 'Hjulstørrelse', 'Ødelagt', 'Tilholdssted', 'Bagasjerett', 'Beskrivelse', 'Dagspris'],
+    bikeDetails: [
+      'Ramme id',
+      'Modell',
+      'Gir',
+      'Hjulstørrelse',
+      'Ødelagt',
+      'Tilholdssted',
+      'Bagasjerett',
+      'Beskrivelse',
+      'Dagspris'
+    ],
     reparationDetails: ['Reparasjons id', 'Ramme id', 'Fra-dato', 'Til-dato', 'Reparasjons kostnad', 'Beskrivelse'],
     order: [
       'Ordrenummer',

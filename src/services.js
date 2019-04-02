@@ -27,6 +27,17 @@ class EmployeeService {
     );
   }
 
+  getEmployeeSearch(success) {
+    connection.query(
+      'select e_id, concat(e_id, " - ", fname, " ",lname) as "fullname" from Employee',
+      (error, results) => {
+        if (error) return console.error(error);
+
+        success(results);
+      }
+    );
+  }
+
   getEmployees(success) {
     connection.query('select e_id, fname, lname from Employee', (error, results) => {
       if (error) return console.error(error);
@@ -126,7 +137,7 @@ class CustomerService {
 class OrderService {
   getOrders(success) {
     connection.query(
-      'SELECT O.order_nr, O.c_id, concat(c_fname, " ", c_lname) as "fullname", count(distinct chassis_id) as nrbikes, count(distinct eq_id) as nrequipment FROM Orders O left join Bike_Order BO on O.order_nr = BO.order_nr left join Equipment_Order EO on O.order_nr = EO.order_nr left join Customer C on O.c_id = C.c_id GROUP by O.order_nr',
+      'SELECT O.order_nr, O.c_id, concat(c_fname, " ", c_lname) as "fullname", count(distinct chassis_id) as nrbikes, count(distinct eq_id) as nrequipment, from_date, to_date FROM Orders O left join Bike_Order BO on O.order_nr = BO.order_nr left join Equipment_Order EO on O.order_nr = EO.order_nr left join Customer C on O.c_id = C.c_id GROUP by O.order_nr',
       (error, results) => {
         if (error) return console.error(error);
 
@@ -135,12 +146,27 @@ class OrderService {
     );
   }
 
-  getOrder(order_nr, success) {
-    connection.query('select * from Orders where order_nr = ?', [order_nr], (error, results) => {
-      if (error) return console.error(error);
+  getOrderDetails(order_nr, success) {
+    connection.query(
+      'select * from Orders where order_nr = ?; SELECT B.model, B.chassis_id, PT.day_price FROM Product_Type PT, Orders O, Bike B, Bike_Order BO WHERE B.chassis_id = BO.chassis_id AND BO.order_nr = O.order_nr AND B.model = PT.model AND O.order_nr = ?; SELECT E.model, E.eq_id, PT.day_price FROM Product_Type PT, Orders O, Equipment E, Equipment_Order EO WHERE E.eq_id = EO.eq_id AND EO.order_nr = O.order_nr AND E.model = PT.model AND O.order_nr = ?',
+      [order_nr, order_nr, order_nr],
+      (error, results) => {
+        if (error) return console.error(error);
 
-      success(results[0]);
-    });
+        success(results);
+      }
+    );
+  }
+
+  getOrderSearch(success) {
+    connection.query(
+      'select O.order_nr, concat(O.order_nr, " - ", c_fname, " " ,c_lname," - ", from_date, "/", to_date) as "fullname" from Orders O, Customer C where O.c_id = C.c_id',
+      (error, results) => {
+        if (error) return console.error(error);
+
+        success(results);
+      }
+    );
   }
 
   makeOrder(e_id, c_id, details, success) {
@@ -176,23 +202,15 @@ class OrderService {
       success();
     });
   }
-  getBikeOrder(order_id, success) {
+
+  deleteOrder(id, success) {
     connection.query(
-      'SELECT B.model, B.chassis_id, PT.day_price FROM Product_Type PT, Orders O, Bike B, Bike_Order BO WHERE B.chassis_id = BO.chassis_id AND BO.order_nr = O.order_nr AND B.model = PT.model AND O.order_nr = ?',
-      [order_id],
-      (error, result) => {
+      'delete from Bike_Order where order_nr = ?; delete from Equipment_Order where order_nr = ?; delete from Orders where order_nr = ?',
+      [id, id, id],
+      (error, results) => {
         if (error) return console.error(error);
-        success(result);
-      }
-    );
-  }
-  getEquipmentOrder(order_id, success) {
-    connection.query(
-      'SELECT E.model, E.eq_id, PT.day_price FROM Product_Type PT, Orders O, Equipment E, Equipment_Order EO WHERE E.eq_id = EO.eq_id AND EO.order_nr = O.order_nr AND E.model = PT.model AND O.order_nr = ?',
-      [order_id],
-      (error, result) => {
-        if (error) return console.error(error);
-        success(result);
+
+        success(results);
       }
     );
   }
@@ -201,7 +219,7 @@ class OrderService {
 class StorageService {
   getModels(success) {
     connection.query(
-      'SELECT PT.model, description, hour_price, day_price, count(B.model) as "countBikes" FROM Product_Type PT left join Bike B on B.model = PT.model where PT.bike=1 group by PT.model',
+      'SELECT PT.model, description, hour_price, day_price, count(B.model) as "countBikes" FROM Product_Type PT left join Bike B on B.model = PT.model where PT.bike=1 group by PT.model; SELECT PT.model, description, hour_price, day_price, count(E.model) as "countEquipment" FROM Product_Type PT left join Equipment E on E.model = PT.model where PT.bike= 0 Group by PT.model',
       (error, results) => {
         if (error) return console.error(error);
 
@@ -209,19 +227,10 @@ class StorageService {
       }
     );
   }
-  getEquipmentModels(success) {
-    connection.query(
-      'SELECT PT.model, description, hour_price, day_price, count(E.model) as "countEquipment" FROM Product_Type PT left join Equipment E on E.model = PT.model where PT.bike= 0 Group by PT.model',
-      (error, results) => {
-        if (error) return console.error(error);
 
-        success(results);
-      }
-    );
-  }
   getBike(id, success, failure) {
     connection.query(
-      'select chassis_id, gear, wheel_size, broken, storage, luggage from Bike where Bike.model = ?',
+      'select chassis_id, gear, wheel_size, broken, storage from Bike where Bike.model = ?',
       [id],
       (error, results) => {
         if (error) return console.error(error);
@@ -253,19 +262,9 @@ class StorageService {
     });
   }
 
-  getDistinctBikeModel(success) {
+  getDistinctModel(success) {
     connection.query(
-      'SELECT B.model, count(*) as "max",day_price from Bike B, Product_Type PT where B.model=PT.model group by B.model',
-      (error, results) => {
-        if (error) return console.error(error);
-
-        success(results);
-      }
-    );
-  }
-  getDistinctEquipmentModel(success) {
-    connection.query(
-      'SELECT E.model, count(*) as "max", day_price from Equipment E, Product_Type PT where E.model=PT.model group by model',
+      'SELECT B.model, count(*) as "max",day_price from Bike B, Product_Type PT where B.model=PT.model group by B.model; SELECT E.model, count(*) as "max", day_price from Equipment E, Product_Type PT where E.model=PT.model group by model',
       (error, results) => {
         if (error) return console.error(error);
 
@@ -274,21 +273,10 @@ class StorageService {
     );
   }
 
-  getCountBikeModel(from, to, success) {
+  getCountModel(from, to, success) {
     connection.query(
-      'Select B.model, count(B.chassis_id) as "max", day_price from Bike B, Product_Type PT where B.chassis_id not in  (SELECT B.chassis_id from Bike B left outer join Bike_Order BO on B.chassis_id=BO.chassis_id left outer join Orders O on BO.order_nr = O.order_nr WHERE (? >= O.from_date and ? <= O.to_date) OR (? <= O.from_date and ? <= O.to_date and ? >= O.from_date) OR (? >= O.from_date and ? >= O.to_date and ? <= O.to_date) OR (? <= O.from_date and ? >= O.to_date)) and B.model = PT.model group by B.model',
-      [from, to, from, to, to, from, to, from, from, to],
-      (error, results) => {
-        if (error) return console.error(error);
-
-        success(results);
-      }
-    );
-  }
-  getCountEquipmentModel(from, to, success) {
-    connection.query(
-      'Select E.model, count(E.eq_id) as "max", day_price from Equipment E, Product_Type PT where E.eq_id not in  (SELECT E.eq_id from Equipment E left outer join Equipment_Order EO on E.eq_id=EO.eq_id left outer join Orders O on EO.order_nr = O.order_nr WHERE (? >= O.from_date and ? <= O.to_date) OR (? <= O.from_date and ? <= O.to_date and ? >= O.from_date) OR (? >= O.from_date and ? >= O.to_date and ? <= O.to_date) OR (? <= O.from_date and ? >= O.to_date)) and E.model = PT.model group by E.model',
-      [from, to, from, to, to, from, to, from, from, to],
+      'Select B.model, count(B.chassis_id) as "max", day_price from Bike B, Product_Type PT where B.chassis_id not in  (SELECT B.chassis_id from Bike B left outer join Bike_Order BO on B.chassis_id=BO.chassis_id left outer join Orders O on BO.order_nr = O.order_nr WHERE (? >= O.from_date and ? <= O.to_date) OR (? <= O.from_date and ? <= O.to_date and ? >= O.from_date) OR (? >= O.from_date and ? >= O.to_date and ? <= O.to_date) OR (? <= O.from_date and ? >= O.to_date)) and B.model = PT.model group by B.model; Select E.model, count(E.eq_id) as "max", day_price from Equipment E, Product_Type PT where E.eq_id not in  (SELECT E.eq_id from Equipment E left outer join Equipment_Order EO on E.eq_id=EO.eq_id left outer join Orders O on EO.order_nr = O.order_nr WHERE (? >= O.from_date and ? <= O.to_date) OR (? <= O.from_date and ? <= O.to_date and ? >= O.from_date) OR (? >= O.from_date and ? >= O.to_date and ? <= O.to_date) OR (? <= O.from_date and ? >= O.to_date)) and E.model = PT.model group by E.model',
+      [from, to, from, to, to, from, to, from, from, to, from, to, from, to, to, from, to, from, from, to],
       (error, results) => {
         if (error) return console.error(error);
 

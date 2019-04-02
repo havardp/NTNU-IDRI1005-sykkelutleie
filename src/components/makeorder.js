@@ -16,6 +16,10 @@ import { customerService } from '../services';
 export class CustomerOrderComponent extends Component {
   selectedOption = null;
 
+  temporaryOptions = [];
+  searchbarOptions = null;
+  temporary = null;
+
   render() {
     if (!this.props.options) return null;
     return (
