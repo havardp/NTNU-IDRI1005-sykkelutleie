@@ -510,20 +510,16 @@ export class AddReparation extends Component {
                 <Form.Group as={Col}>
                   <Form.Label>Reperasjonspris</Form.Label>
                   <Form.Control
-                    type="text"
-                    placeholder="Hjul"
-                    onChange={e => (this.bike.wheel_size = e.target.value)}
+                    type="number"
+                    placeholder="Reperasjonspris"
+                    onChange={e => (this.rep.expenses = e.target.value)}
                   />
                 </Form.Group>
               </Form.Row>
               <Form.Row>
                 <Form.Group as={Col}>
-                  <Form.Label>Lagersted (nedtrekksboks)</Form.Label>
-                  <Form.Control type="text" placeholder="Sted" onChange={e => (this.bike.storage = e.target.value)} />
-                </Form.Group>
-                <Form.Group as={Col}>
-                  <Form.Label>Bagasjebrett: Ja eller nei?</Form.Label>
-                  <Form.Control type="text" placeholder="Brett" onChange={e => (this.bike.luggage = e.target.value)} />
+                  <Form.Label>Beskrivelse</Form.Label>
+                  <Form.Control type="text" placeholder="Beskrivelse av reperasjonen" onChange={e => (this.rep.description = e.target.value)} />
                 </Form.Group>
               </Form.Row>
               <Button variant="outline-primary" onClick={this.add}>
@@ -537,7 +533,7 @@ export class AddReparation extends Component {
   }
 
   add() {
-    if (this.bike.gear && this.bike.wheel_size && this.bike.storage && this.bike.luggage) {
+    if (this.rep.r_fdate && this.rep.r_tdate &&  this.rep.expenses && this.rep.r_description) {
       this.submitting = true;
     } else {
       alert('Du må fylle inn alle feltene');
