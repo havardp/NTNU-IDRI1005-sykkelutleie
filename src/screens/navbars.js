@@ -22,9 +22,9 @@ export class Menu extends Component {
           Sykkelutleie AS
         </Navbar.Brand>
         <Nav className="mr-auto">
-          <Nav.Link onClick={() => history.push('/neworder')}>Ny ordre</Nav.Link>
+
           <Nav.Link onClick={() => history.push('/orders')}>Finn ordre</Nav.Link>
-          <Nav.Link onClick={() => history.push('/storagestatus')}>Lager</Nav.Link>
+
           <Nav.Link onClick={() => history.push('/customers')}>Kunde</Nav.Link>
           <Nav.Link onClick={() => history.push('/employees')}>Ansatte</Nav.Link>
         </Nav>
@@ -35,14 +35,14 @@ export class Menu extends Component {
           variant="outline-secondary"
         >
           <Dropdown.Item onClick={() => history.push('/employees/' + sessionStorage.getItem('userName'))}>
-            Min side
+            &#57560; Min side
           </Dropdown.Item>
           <Dropdown.Item
             onClick={() => {
               loginHandler.logout();
             }}
           >
-            Logg ut
+            &#57605; Logg ut
           </Dropdown.Item>
         </DropdownButton>
       </Navbar>
@@ -55,8 +55,10 @@ export class SideNav extends Component {
     return (
       <div className="sidenav">
         <p>
-          <Nav.Link className="sidenavpart"onClick={() => history.push('/reparations')}>&#128736; Reperasjoner</Nav.Link>
-          <Nav.Link className="sidenavpart">&#128666;Transportering</Nav.Link>
+          <Nav.Link className="sidenavpart"onClick={() => history.push('/neworder')}>&#57642; Ny ordre</Nav.Link>
+          <Nav.Link  className="sidenavpart" onClick={() => history.push('/storagestatus')}>&#57709; Lager</Nav.Link>
+          <Nav.Link className="sidenavpart"onClick={() => history.push('/reparations')}>&#57694; Reperasjoner</Nav.Link>
+          <Nav.Link className="sidenavpart">&#57660; Transportering</Nav.Link>
         </p>
       </div>
     );
