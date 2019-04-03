@@ -4,7 +4,7 @@ import { Component } from 'react-simplified';
 //Bootstrap imports
 import { Card } from '../widgets';
 
-//make it not show if loading is fast?
+//node modules
 import ReactLoading from 'react-loading';
 import arraySort from 'array-sort';
 
@@ -16,7 +16,6 @@ import { reparationService } from '../services';
 
 //Import the hashistory from index.js to be able to change path
 import { history } from '../index.js';
-
 
 export class Reparations extends Component {
   reparations = null;

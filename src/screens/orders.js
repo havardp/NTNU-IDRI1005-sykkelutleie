@@ -4,7 +4,7 @@ import { Component } from 'react-simplified';
 //Bootstrap imports
 import { Card } from '../widgets';
 
-//make it not show if loading is fast?
+//node modules
 import ReactLoading from 'react-loading';
 import arraySort from 'array-sort';
 import Select from 'react-select';

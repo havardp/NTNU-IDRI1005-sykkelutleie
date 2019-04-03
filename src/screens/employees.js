@@ -8,10 +8,11 @@ import { Card } from '../widgets';
 import { VerticalTableComponent, HorizontalTableComponent } from '../components/tables.js';
 import { AddEmployee } from '../components/adduser.js';
 
-//make it not show if loading is fast?
+//node modules
 import ReactLoading from 'react-loading';
 import Select from 'react-select';
 import arraySort from 'array-sort';
+
 //Imports for sql queries
 import { employeeService } from '../services';
 

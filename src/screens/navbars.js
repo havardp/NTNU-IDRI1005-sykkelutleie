@@ -10,12 +10,11 @@ import Dropdown from 'react-bootstrap/Dropdown';
 
 //Import the hashistory from index.js to be able to change path
 import { history } from '../index.js';
+
+//import the logout method from login.js
 import { loginHandler } from './login.js';
 
-//<button onClick={() => history.goBack()}>go back </button>  for å gå tilbake et skritt
-
 export class Menu extends Component {
-  //"&#128100;" profil ikon
   render() {
     return (
       <Navbar bg="dark" variant="dark">
@@ -56,7 +55,9 @@ export class SideNav extends Component {
     return (
       <div className="sidenav">
         <p>
-          <Nav.Link className="sidenavpart"onClick={() => history.push('/reparations')}>Reperasjoner</Nav.Link>
+          <Nav.Link className="sidenavpart" onClick={() => history.push('/reparations')}>
+            Reperasjoner
+          </Nav.Link>
         </p>
       </div>
     );
