@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 //Bootstrap imports
 import Navbar from 'react-bootstrap/Navbar';
@@ -22,7 +22,16 @@ export class Menu extends Component {
           Sykkelutleie AS
         </Navbar.Brand>
         <Nav className="mr-auto">
-          <Nav.Link onClick={() => history.push('/neworder')}>Ny ordre</Nav.Link>
+          <NavLink
+            to="/neworder"
+            activeStyle={{
+              paddingTop: '6px',
+              fontWeight: 'bold',
+              color: 'red'
+            }}
+          >
+            Ny ordre
+          </NavLink>
           <Nav.Link onClick={() => history.push('/orders')}>Finn ordre</Nav.Link>
           <Nav.Link onClick={() => history.push('/storagestatus')}>Lager</Nav.Link>
           <Nav.Link onClick={() => history.push('/customers')}>Kunde</Nav.Link>

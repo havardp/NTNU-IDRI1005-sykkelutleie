@@ -132,6 +132,13 @@ class CustomerService {
       }
     );
   }
+
+  updateCustomer(key, value, id, success) {
+    connection.query('update Customer set ??=? where c_id=?', [key, value, id], (error, result) => {
+      if (error) return console.error(error);
+      success();
+    });
+  }
 }
 
 class OrderService {
@@ -356,15 +363,11 @@ class ReparationService {
   }
 
   changeBrokenstatus(id, success) {
-    connection.query(
-      'UPDATE Bike SET Broken = 0 WHERE chassis_id = ?',
-      [id],
-      (error, results) => {
-        if (error) return console.error(error);
+    connection.query('UPDATE Bike SET Broken = 0 WHERE chassis_id = ?', [id], (error, results) => {
+      if (error) return console.error(error);
 
-        success();
-      }
-    );
+      success();
+    });
   }
 }
 

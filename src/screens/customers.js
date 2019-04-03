@@ -100,14 +100,19 @@ export class Customers extends Component {
 export class CustomerDetail extends Component {
   customer = null;
   orderHistory = null;
+  editable = false;
 
   render() {
     return (
       <>
         <Card title="Kundedetaljer">
-          <HorizontalTableComponent tableBody={this.customer} tableHead={'customer'} />
-          <button onClick={() => console.log('test')}>&#9881;</button>
-          <button>&#10004;</button>
+          <HorizontalTableComponent
+            tableBody={this.customer}
+            tableHead={'customer'}
+            editable={this.editable}
+            sendStateToParent={this.updateCustomer}
+          />
+          <button onClick={() => (this.editable ? (this.editable = false) : (this.editable = true))}>&#9881;</button>
         </Card>
         <Card title="Ordrehistorikk">
           {this.orderHistory && (
@@ -134,5 +139,9 @@ export class CustomerDetail extends Component {
 
   sort(sort) {
     arraySort(this.orderHistory, sort);
+  }
+
+  updateCustomer(value, key) {
+    customerService.updateCustomer(key, value, this.props.match.params.id, () => console.log('kunde endret'));
   }
 }

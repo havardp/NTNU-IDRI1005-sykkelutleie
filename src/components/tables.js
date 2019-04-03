@@ -138,7 +138,7 @@ export class HorizontalTableComponent extends Component {
   //checkDate(Doesn't render until the date object from the database has been changed to a string),
   //tableBody: arrays/objects with the information to be displayed in the table
   //tableHead: chooses what to display in the talbhead from the tableHead object in this class
-
+  temporaryEdit = {};
   tableHead = {
     customer: ['Kunde id', 'Fornavn', 'Etternavn', 'Email', 'Telefon', 'Adresse'],
     employee: ['Ansatt id', 'Fornavn', 'Etternavn', 'Avdeling', 'Email', 'Telefon', 'Adresse', 'Fødselsdato'],
@@ -175,7 +175,30 @@ export class HorizontalTableComponent extends Component {
           {Object.keys(this.props.tableBody).map((column, index) => (
             <tr key={column}>
               <td>{this.tableHead[this.props.tableHead][index]}</td>
-              <td>{this.props.tableBody[column]}</td>
+              <td
+                contentEditable={this.props.editable}
+                suppressContentEditableWarning={true}
+                onInput={e => {
+                  this.temporaryEdit[Object.keys(this.props.tableBody)[index]] = this.editableValue =
+                    e.target.textContent;
+                }}
+              >
+                {this.props.tableBody[column]}
+              </td>
+              {this.props.editable && (
+                <td>
+                  <button
+                    onClick={() =>
+                      this.props.sendStateToParent(
+                        this.temporaryEdit[Object.keys(this.props.tableBody)[index]],
+                        Object.keys(this.props.tableBody)[index]
+                      )
+                    }
+                  >
+                    save
+                  </button>
+                </td>
+              )}
             </tr>
           ))}
         </tbody>
