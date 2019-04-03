@@ -22,21 +22,15 @@ export class Menu extends Component {
           Sykkelutleie AS
         </Navbar.Brand>
         <Nav className="mr-auto">
-          <NavLink
-            to="/neworder"
-            className="test"
-            activeStyle={{
-              paddingTop: '6px',
-              fontWeight: 'bold',
-              color: 'red'
-            }}
-          >
-            Ny ordre
+          <NavLink className="navlinkStyle" to="/orders">
+            Finn ordre
           </NavLink>
-          <Nav.Link onClick={() => history.push('/orders')}>Finn ordre</Nav.Link>
-          <Nav.Link onClick={() => history.push('/storagestatus')}>Lager</Nav.Link>
-          <Nav.Link onClick={() => history.push('/customers')}>Kunde</Nav.Link>
-          <Nav.Link onClick={() => history.push('/employees')}>Ansatte</Nav.Link>
+          <NavLink className="navlinkStyle" activeStyle={{ color: 'red' }} to="/customers">
+            Kunde
+          </NavLink>
+          <NavLink className="navlinkStyle" to="/employees">
+            Ansatte
+          </NavLink>
         </Nav>
         <DropdownButton
           id="dropdown-item-button"

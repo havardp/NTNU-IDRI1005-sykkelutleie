@@ -102,9 +102,7 @@
   padding: 6px 8px 6px 10px;
   text-decoration: none;
   margin-left: 5px;
-
 }
-
 
 .sidenavpart {
   padding-top: 16px;
@@ -114,7 +112,6 @@
   display: block;
   border-bottom: 0.5px solid darkgrey;
   margin-left: 5px;
-
 }
 
 /* When you mouse over the navigation links, change their color */
@@ -163,4 +160,10 @@
 
 .writable {
   cursor: text;
+}
+
+.navlinkStyle {
+  margin-left: 10px;
+  margin-right: 10px;
+  color: white;
 }
