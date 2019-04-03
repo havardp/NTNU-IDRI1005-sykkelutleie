@@ -17,10 +17,6 @@
   padding: 1rem;
 }
 
-.clickable {
-  cursor: pointer;
-}
-
 .form-signin .btn {
   font-size: 80%;
   letter-spacing: 0.1rem;
@@ -149,4 +145,16 @@
   100% {
     opacity: 1;
   }
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.sortable {
+  cursor: cell;
+}
+
+.writable {
+  cursor: text;
 }
