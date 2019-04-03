@@ -7,6 +7,7 @@ import { history } from '../index.js';
 //Bootstrap imports
 import { Card } from '../widgets';
 import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 
 //Imports for sql queries
 import { storageService, orderService, customerService } from '../services';
