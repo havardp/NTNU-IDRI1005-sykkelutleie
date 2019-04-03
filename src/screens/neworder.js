@@ -7,7 +7,6 @@ import { history } from '../index.js';
 //Bootstrap imports
 import { Card } from '../widgets';
 import Button from 'react-bootstrap/Button';
-import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
 
 //Imports for sql queries
@@ -19,7 +18,7 @@ import { AddCustomer } from '../components/adduser.js';
 import { NewOrderCustomer, NewOrderProductSelection, NewOrderAdditionalDetails } from '../components/makeorder.js';
 import { ConfirmOrderProducts, ConfirmOrderAdditionalDetails } from '../components/confirmorder.js';
 
-//make it not show if loading is fast?
+//node modules
 import ReactLoading from 'react-loading';
 
 class MakeOrder extends Component {

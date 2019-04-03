@@ -6,21 +6,14 @@ import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
 import FormCheck from 'react-bootstrap/FormCheck';
 import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import ModalBody from 'react-bootstrap/ModalBody';
-import DropdownButton from 'react-bootstrap/DropdownButton';
-import Dropdown from 'react-bootstrap/Dropdown';
-import { Radio, ControlLabel, ButtonGroup } from 'react-bootstrap';
 
 //make it not show if loading is fast?
 import ReactLoading from 'react-loading';
 
-import { Customers, Employees } from '../components/adduser.js';
-
 //Imports for sql queries
-import { customerService, employeeService, storageService, reparationService } from '../services';
+import { customerService, employeeService } from '../services';
 
 const bcrypt = require('bcryptjs');
 //TODO validering av data og input

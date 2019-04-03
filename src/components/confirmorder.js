@@ -4,9 +4,6 @@ import { Component } from 'react-simplified';
 //Bootstrap imports
 import { Card } from '../widgets';
 import Table from 'react-bootstrap/Table';
-import Form from 'react-bootstrap/Form';
-import FormControl from 'react-bootstrap/FormControl';
-import FormCheck from 'react-bootstrap/FormCheck';
 
 export class ConfirmOrderProducts extends Component {
   tableHead = { products: ['Modell', 'Antall', 'Pris'] };

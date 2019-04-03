@@ -7,8 +7,9 @@ import ModalBody from 'react-bootstrap/ModalBody';
 import Alert from 'react-bootstrap/Alert';
 import Fade from 'react-bootstrap/Fade';
 
-//make it not show if loading is fast?
+//node modules
 import ReactLoading from 'react-loading';
+import bcrypt from 'bcryptjs';
 
 //Imports for sql queries
 import { employeeService } from '../services';
@@ -19,7 +20,6 @@ let { ipcRenderer } = electron;
 
 //Import the hashistory from index.js to be able to change path
 import { history } from '../index.js';
-const bcrypt = require('bcryptjs');
 
 export class Login extends Component {
   user = [];

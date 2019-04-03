@@ -4,9 +4,6 @@ import { Component } from 'react-simplified';
 //make it not show if loading is fast?
 import ReactLoading from 'react-loading';
 
-//Bootstrap imports;
-import Button from 'react-bootstrap/Button';
-
 //Bootstrap imports
 import { Card } from '../widgets';
 
@@ -14,8 +11,10 @@ import { Card } from '../widgets';
 import { VerticalTableComponent, HorizontalTableComponent } from '../components/tables.js';
 import { AddCustomer } from '../components/adduser.js';
 
+//node modules
 import Select from 'react-select';
 import arraySort from 'array-sort';
+
 //Imports for sql queries
 import { customerService } from '../services';
 
