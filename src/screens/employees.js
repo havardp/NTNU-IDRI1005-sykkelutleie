@@ -58,7 +58,7 @@ export class Employees extends Component {
           tableHead={'employee'}
           deleteButton={true}
           delete={this.delete}
-          whereTo={history.location.pathname}
+          whereTo={this.props.match.path}
           sort={this.sort}
         />
         {this.modal && <AddEmployee modal={true} toggle={this.toggleModal} />}

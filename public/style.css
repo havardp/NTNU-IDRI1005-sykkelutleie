@@ -104,16 +104,6 @@
   margin-left: 5px;
 }
 
-.sidenavpart {
-  padding-top: 16px;
-  text-decoration: none;
-  color: #000;
-  font-size: 17px;
-  display: block;
-  border-bottom: 0.5px solid darkgrey;
-  margin-left: 5px;
-}
-
 /* When you mouse over the navigation links, change their color */
 .sidenav a:hover {
   color: #c1c1c1;
@@ -162,8 +152,22 @@
   cursor: text;
 }
 
-.navlinkStyle {
+.navbarlink {
   margin-left: 10px;
   margin-right: 10px;
   color: white;
+}
+
+.sidebarlink {
+  padding-top: 16px;
+  text-decoration: none;
+  color: #000;
+  font-size: 17px;
+  display: block;
+  border-bottom: 0.5px solid darkgrey;
+  margin-left: 5px;
+}
+
+.active {
+  color: red;
 }

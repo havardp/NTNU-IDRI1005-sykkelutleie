@@ -61,7 +61,7 @@ export class Customers extends Component {
           tableHead={'customer'}
           deleteButton={true}
           delete={this.delete}
-          whereTo={history.location.pathname}
+          whereTo={this.props.match.path}
           sort={this.sort}
         />
         {this.modal && <AddCustomer modal={true} toggle={this.toggleModal} />}

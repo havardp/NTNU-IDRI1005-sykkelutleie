@@ -32,7 +32,7 @@ export class StorageStatus extends Component {
           tableHead={'storage'}
           deleteButton={false}
           delete={this.delete}
-          whereTo={history.location.pathname}
+          whereTo={this.props.match.path}
           sort={this.sortBike}
           className={'clickable'}
         />
@@ -42,7 +42,7 @@ export class StorageStatus extends Component {
           tableHead={'storage'}
           deleteButton={false}
           delete={this.delete}
-          whereTo={history.location.pathname}
+          whereTo={this.props.match.path}
           sort={this.sortEquipment}
           className={'clickable'}
         />

@@ -58,7 +58,7 @@ export class Orders extends Component {
           tableHead={'order'}
           deleteButton={true}
           delete={this.delete}
-          whereTo={history.location.pathname}
+          whereTo={this.props.match.path}
           sort={this.sort}
           className={'clickable'}
         />
@@ -115,7 +115,7 @@ export class OrderDetail extends Component {
                 tableBody={this.orderBikes}
                 tableHead={'orderBike'}
                 deleteButton={false}
-                whereTo={history.location.pathname}
+                whereTo={this.props.match.path}
                 sort={this.sortBike}
                 className={'clickable'}
               />
@@ -125,7 +125,7 @@ export class OrderDetail extends Component {
                 tableBody={this.orderEquipment}
                 tableHead={'orderEquipment'}
                 deleteButton={false}
-                whereTo={history.location.pathname}
+                whereTo={this.props.match.path}
                 sort={this.sortEquipment}
                 className={'clickable'}
               />

@@ -31,7 +31,7 @@ export class Reparations extends Component {
             tableHead={'reparation'}
             checkDate={true}
             deleteButton={false}
-            whereTo={'reparations'}
+            whereTo={this.props.match.path}
             sort={this.sort}
           />
         </Card>

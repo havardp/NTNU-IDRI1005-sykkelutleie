@@ -22,13 +22,13 @@ export class Menu extends Component {
           Sykkelutleie AS
         </Navbar.Brand>
         <Nav className="mr-auto">
-          <NavLink className="navlinkStyle" to="/orders">
+          <NavLink className="navbarlink" to="/orders">
             Finn ordre
           </NavLink>
-          <NavLink className="navlinkStyle" activeStyle={{ color: 'red' }} to="/customers">
+          <NavLink className="navbarlink" to="/customers">
             Kunde
           </NavLink>
-          <NavLink className="navlinkStyle" to="/employees">
+          <NavLink className="navbarlink" to="/employees">
             Ansatte
           </NavLink>
         </Nav>
@@ -58,11 +58,18 @@ export class SideNav extends Component {
   render() {
     return (
       <div className="sidenav">
-        <p>
-          <Nav.Link className="sidenavpart" onClick={() => history.push('/reparations')}>
-            Reperasjoner
-          </Nav.Link>
-        </p>
+        <NavLink className="sidebarlink" to="/neworder">
+          &#57642; Ny ordre
+        </NavLink>
+        <NavLink className="sidebarlink" to="/storagestatus">
+          &#57709; Lager
+        </NavLink>
+        <NavLink className="sidebarlink" to="/reparations">
+          &#57694; Reperasjoner
+        </NavLink>
+        <NavLink className="sidebarlink" to="/transport">
+          &#57660; Transportering
+        </NavLink>
       </div>
     );
   }
