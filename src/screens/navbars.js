@@ -21,12 +21,10 @@ export class Menu extends Component {
         <Navbar.Brand className="clickable" onClick={() => history.push('/home')}>
           Sykkelutleie AS
         </Navbar.Brand>
-        <Nav className="mr-auto">
-
-          <Nav.Link onClick={() => history.push('/orders')}>Finn ordre</Nav.Link>
-
-          <Nav.Link onClick={() => history.push('/customers')}>Kunde</Nav.Link>
-          <Nav.Link onClick={() => history.push('/employees')}>Ansatte</Nav.Link>
+        <Nav className="mr-auto" style={{color:"#fff"}}>
+          <Nav.Link className="navbarstyle" onClick={() => history.push('/orders')}>Finn ordre</Nav.Link>
+          <Nav.Link className="navbarstyle" onClick={() => history.push('/customers')}>Kunde</Nav.Link>
+          <Nav.Link className="navbarstyle" onClick={() => history.push('/employees')}>Ansatte</Nav.Link>
         </Nav>
         <DropdownButton
           id="dropdown-item-button"

@@ -120,7 +120,7 @@ export class VerticalTableComponent extends Component {
                       this.props.delete(Object.values(row)[0]);
                     }}
                   >
-                    X
+                    &#57610;
                   </button>
                 </td>
               )}
