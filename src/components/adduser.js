@@ -10,6 +10,8 @@ import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import ModalBody from 'react-bootstrap/ModalBody';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import Dropdown from 'react-bootstrap/Dropdown';
 import { Radio, ControlLabel, ButtonGroup } from 'react-bootstrap';
 
 //make it not show if loading is fast?
@@ -336,8 +338,12 @@ export class AddModel extends Component {
   model = {};
   submitting = false;
   bike = null;
+  bikeDetails = [];
+  location = ['Haugastøl', 'Finse'];
+
   render() {
     console.log(this.model);
+    console.log(this.bike);
     if (this.submitting)
       return (
         <Modal show={this.props.modal} onHide={this.props.toggle} centered>
@@ -392,6 +398,62 @@ export class AddModel extends Component {
                   />
                 </Form.Group>
               </Form.Row>
+              {this.bike == 1 && (
+                <>
+                  <Form.Row>
+                    <Form.Group as={Col}>
+                      <Form.Label>Antall gir</Form.Label>
+                      <Form.Control type="number" placeholder="Gir" onChange={e => (this.bike.gear = e.target.value)} />
+                    </Form.Group>
+                    <Form.Group as={Col}>
+                      <Form.Label>Hjulstørrelse</Form.Label>
+                      <Form.Control
+                        type="text"
+                        placeholder="Hjul"
+                        onChange={e => (this.bike.wheel_size = e.target.value)}
+                      />
+                    </Form.Group>
+                  </Form.Row>
+                  <Form.Row>
+                    <Form.Group as={Col}>
+                      <Form.Label>
+                        <select
+                          onChange={e => {
+                            this.bikeDetails.locations = e.target.value;
+                            console.log(this.bikeDetails);
+                          }}
+                        >
+                          <option hidden>Velg sted...</option>
+                          {this.location.map(location => (
+                            <option key={location}>{location}</option>
+                          ))}{' '}
+                        </select>
+                      </Form.Label>
+                    </Form.Group>
+                    <Form.Group as={Col}>
+                      <Form.Label>Bagasjebrett: </Form.Label>
+                      <div>
+                        <input
+                          type="radio"
+                          value="1"
+                          name="bikevalue"
+                          onChange={e => (this.bikeDetails = e.target.value)}
+                        />{' '}
+                        Ja
+                      </div>
+                      <div>
+                        <input
+                          type="radio"
+                          value="0"
+                          name="bikevalue"
+                          onChange={e => (this.bikeDetails = e.target.value)}
+                        />{' '}
+                        Nei
+                      </div>
+                    </Form.Group>
+                  </Form.Row>
+                </>
+              )}
               <Button variant="outline-primary" onClick={this.add}>
                 Legg til
               </Button>
@@ -403,6 +465,7 @@ export class AddModel extends Component {
   }
 
   add() {
+    console.log(this.bike.location);
     if (this.model.model && this.model.description && this.model.hour_price && this.model.day_price) {
       this.submitting = true;
       storageService.addProductType(this.model, this.bike, () => console.log('success'));
@@ -493,12 +556,20 @@ export class AddReparation extends Component {
               <Form.Row>
                 <Form.Group as={Col}>
                   <Form.Label>Fra dato</Form.Label>
-                  <Form.Control type="number" placeholder="åååå/mm/dd" onChange={e => (this.rep.r_fdate = e.target.value)} />
+                  <Form.Control
+                    type="number"
+                    placeholder="åååå/mm/dd"
+                    onChange={e => (this.rep.r_fdate = e.target.value)}
+                  />
                 </Form.Group>
-                  <Form.Group as={Col}>
-                    <Form.Label>Til dato</Form.Label>
-                    <Form.Control type="number" placeholder="åååå/mm/dd" onChange={e => (this.rep.r_tdate = e.target.value)} />
-                  </Form.Group>
+                <Form.Group as={Col}>
+                  <Form.Label>Til dato</Form.Label>
+                  <Form.Control
+                    type="number"
+                    placeholder="åååå/mm/dd"
+                    onChange={e => (this.rep.r_tdate = e.target.value)}
+                  />
+                </Form.Group>
                 <Form.Group as={Col}>
                   <Form.Label>Reperasjonspris</Form.Label>
                   <Form.Control
@@ -511,7 +582,11 @@ export class AddReparation extends Component {
               <Form.Row>
                 <Form.Group as={Col}>
                   <Form.Label>Beskrivelse</Form.Label>
-                  <Form.Control type="text" placeholder="Beskrivelse av reperasjonen" onChange={e => (this.rep.description = e.target.value)} />
+                  <Form.Control
+                    type="text"
+                    placeholder="Beskrivelse av reperasjonen"
+                    onChange={e => (this.rep.description = e.target.value)}
+                  />
                 </Form.Group>
               </Form.Row>
               <Button variant="outline-primary" onClick={this.add}>
@@ -525,7 +600,7 @@ export class AddReparation extends Component {
   }
 
   add() {
-    if (this.rep.r_fdate && this.rep.r_tdate &&  this.rep.expenses && this.rep.r_description) {
+    if (this.rep.r_fdate && this.rep.r_tdate && this.rep.expenses && this.rep.r_description) {
       this.submitting = true;
     } else {
       alert('Du må fylle inn alle feltene');
