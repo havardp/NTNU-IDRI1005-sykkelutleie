@@ -343,10 +343,22 @@ class ReparationService {
     );
   }
 
-  addReparation(rep, bike, success) {
+  addReparation(rep, id, success) {
     connection.query(
-      'INSERT INTO Reparations VALUES (null, ?, ?, ?, ?)',
-      [rep.chassis_id, rep.r_fdate, rep.tdate, rep.expenses, rep.r_description],
+      'INSERT INTO Reparations VALUES (null, ?, ?, ?, ?, ?)',
+      [id, rep.r_fdate, rep.r_tdate, rep.expenses, rep.r_description],
+      (error, results) => {
+        if (error) return console.error(error);
+
+        success();
+      }
+    );
+  }
+
+  changeBrokenstatus(id, success) {
+    connection.query(
+      'UPDATE Bike SET Broken = 0 WHERE chassis_id = ?',
+      [id],
       (error, results) => {
         if (error) return console.error(error);
 

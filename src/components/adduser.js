@@ -18,7 +18,7 @@ import ReactLoading from 'react-loading';
 import { Customers, Employees } from '../components/adduser.js';
 
 //Imports for sql queries
-import { customerService, employeeService, storageService } from '../services';
+import { customerService, employeeService, storageService, reparationService } from '../services';
 
 const bcrypt = require('bcryptjs');
 //TODO validering av data og input
@@ -491,13 +491,20 @@ export class AddReparation extends Component {
           <Modal.Body>
             <Form>
               <Form.Row>
+              <Form.Group as={Col}>
+                <Form.Label>Ramme id</Form.Label>
+                <Form.Control type="number" disabled value={this.props.chassisId.id} />
+
+              </Form.Group>
+              </Form.Row>
+              <Form.Row>
                 <Form.Group as={Col}>
                   <Form.Label>Fra dato</Form.Label>
-                  <Form.Control type="number" placeholder="åååå/mm/dd" onChange={e => (this.rep.r_fdate = e.target.value)} />
+                  <Form.Control type="date" onChange={e => (this.rep.r_fdate = e.target.value)} />
                 </Form.Group>
                   <Form.Group as={Col}>
                     <Form.Label>Til dato</Form.Label>
-                    <Form.Control type="number" placeholder="åååå/mm/dd" onChange={e => (this.rep.r_tdate = e.target.value)} />
+                    <Form.Control type="date" onChange={e => (this.rep.r_tdate = e.target.value)} />
                   </Form.Group>
                 <Form.Group as={Col}>
                   <Form.Label>Reperasjonspris</Form.Label>
@@ -511,7 +518,7 @@ export class AddReparation extends Component {
               <Form.Row>
                 <Form.Group as={Col}>
                   <Form.Label>Beskrivelse</Form.Label>
-                  <Form.Control type="text" placeholder="Beskrivelse av reperasjonen" onChange={e => (this.rep.description = e.target.value)} />
+                  <Form.Control type="text" placeholder="Beskrivelse av reperasjonen" onChange={e => (this.rep.r_description = e.target.value)} />
                 </Form.Group>
               </Form.Row>
               <Button variant="outline-primary" onClick={this.add}>
@@ -525,10 +532,20 @@ export class AddReparation extends Component {
   }
 
   add() {
-    if (this.rep.r_fdate && this.rep.r_tdate &&  this.rep.expenses && this.rep.r_description) {
+
+    if ( this.rep.r_fdate && this.rep.r_tdate &&  this.rep.expenses && this.rep.r_description) {
       this.submitting = true;
+      console.log("test val")
+      reparationService.changeBrokenstatus(this.props.chassisId.id, () =>{
+        console.log('status changed')
+      })
+      reparationService.addReparation(this.rep, this.props.chassisId.id, () =>{
+        this.submitting = false
+        this.props.toggle()
+      })
     } else {
       alert('Du må fylle inn alle feltene');
     }
   }
+
 }

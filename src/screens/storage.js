@@ -114,7 +114,7 @@ export class BikeDetails extends Component {
           <button className="btn btn-info btn-lg" onClick={this.toggleModal}>
             &#10010;
           </button>
-          {this.modal && <AddReparation modal={true} toggle={this.toggleModal} />}
+          {this.modal && <AddReparation modal={true} toggle={this.toggleModal} chassisId={this.props.match.params} />}
         </Card>
       </>
     );
