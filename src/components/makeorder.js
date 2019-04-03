@@ -13,7 +13,7 @@ import Select from 'react-select';
 //Imports for sql queries
 import { customerService } from '../services';
 
-export class CustomerOrderComponent extends Component {
+export class NewOrderCustomer extends Component {
   selectedOption = null;
 
   temporaryOptions = [];
@@ -47,7 +47,7 @@ export class CustomerOrderComponent extends Component {
   }
 }
 
-export class MakeOrderProductTable extends Component {
+export class NewOrderProductSelection extends Component {
   product = [];
   render() {
     return (
@@ -93,7 +93,7 @@ export class MakeOrderProductTable extends Component {
   }
 }
 
-export class AdditionalDetailsTable extends Component {
+export class NewOrderAdditionalDetails extends Component {
   orderInformation = [];
   location = ['Haugastøl', 'Finse'];
 
@@ -209,59 +209,6 @@ export class AdditionalDetailsTable extends Component {
           </Table>
         </div>
       </>
-    );
-  }
-}
-
-export class ProductOrderTable extends Component {
-  tableHead = { products: ['Modell', 'Antall', 'Pris'] };
-
-  render() {
-    return (
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            {this.tableHead[this.props.tableHead].map(data => (
-              <td key={data}>{data}</td>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {Object.keys(this.props.tableBody).map((data, index) => (
-            <tr key={data}>
-              <td>{data}</td>
-              <td>{this.props.tableBody[data][0]}</td>
-              <td>{this.props.tableBody[data][1] * this.props.tableBody[data][0]}</td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-    );
-  }
-}
-
-export class AdditionalDetailsConfirmTable extends Component {
-  tableHeadAdditional = {
-    pickupLocation: 'Hentested',
-    dropoffLocation: 'Avleveringssted',
-    fromDate: 'Fra-dato',
-    toDate: 'Til-dato',
-    nrDays: 'Antall dager',
-    totalPrice: 'Total pris'
-  };
-
-  render() {
-    return (
-      <Table striped bordered hover>
-        <tbody>
-          {Object.keys(this.tableHeadAdditional).map(data => (
-            <tr key={data}>
-              <td>{this.tableHeadAdditional[data]}</td>
-              <td>{this.props.tableBody[data]}</td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
     );
   }
 }

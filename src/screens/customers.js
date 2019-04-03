@@ -88,7 +88,8 @@ export class Customers extends Component {
   }
 
   delete(id) {
-    customerService.deleteCustomers(id, () => this.mounted());
+    if (window.confirm('Er du sikker på at du vil slette denne kunden?'))
+      customerService.deleteCustomers(id, () => this.mounted());
   }
 
   toggleModal() {

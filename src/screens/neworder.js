@@ -16,13 +16,8 @@ import { storageService, orderService, customerService } from '../services';
 //reusable components
 import { HorizontalTableComponent } from '../components/tables.js';
 import { AddCustomer } from '../components/adduser.js';
-import {
-  CustomerOrderComponent,
-  MakeOrderProductTable,
-  AdditionalDetailsTable,
-  ProductOrderTable,
-  AdditionalDetailsConfirmTable
-} from '../components/makeorder.js';
+import { NewOrderCustomer, NewOrderProductSelection, NewOrderAdditionalDetails } from '../components/makeorder.js';
+import { ConfirmOrderProducts, ConfirmOrderAdditionalDetails } from '../components/confirmorder.js';
 
 //make it not show if loading is fast?
 import ReactLoading from 'react-loading';
@@ -47,7 +42,7 @@ class MakeOrder extends Component {
       return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     return (
       <div hidden={this.props.hide}>
-        <CustomerOrderComponent
+        <NewOrderCustomer
           sendStateToParent={this.handleActiveCustomerChange}
           makeNewCustomer={this.toggleModal}
           options={this.searchbarOptions}
@@ -55,14 +50,14 @@ class MakeOrder extends Component {
         <Form>
           <Card title="Annen informasjon">
             <div className="row">
-              <AdditionalDetailsTable sendStateToParent={this.handleOrderInformationChange} />
+              <NewOrderAdditionalDetails sendStateToParent={this.handleOrderInformationChange} />
             </div>
           </Card>
           <Card>
             <div className="row">
               <div className="col-6">
                 <h3>Sykkel</h3>
-                <MakeOrderProductTable
+                <NewOrderProductSelection
                   tableBody={this.distinctBikeModels}
                   sendStateToParent={this.handleBikeChange}
                   products={this.bike}
@@ -70,7 +65,7 @@ class MakeOrder extends Component {
               </div>
               <div className="col-6">
                 <h3>Utstyr</h3>
-                <MakeOrderProductTable
+                <NewOrderProductSelection
                   tableBody={this.distinctEquipmentModels}
                   sendStateToParent={this.handleEquipmentChange}
                   products={this.equipment}
@@ -242,16 +237,16 @@ class ConfirmOrder extends Component {
               <HorizontalTableComponent tableBody={this.customerDetails} tableHead={'customer'} />
             </div>
             <div className="col-6">
-              <AdditionalDetailsConfirmTable tableBody={this.additionalDetails} />
+              <ConfirmOrderAdditionalDetails tableBody={this.additionalDetails} />
             </div>
           </div>
           <Card title="Sykkel og utstyr">
             <div className="row">
               <div className="col-6">
-                <ProductOrderTable tableBody={this.bikeDetails} tableHead={'products'} />
+                <ConfirmOrderProducts tableBody={this.bikeDetails} tableHead={'products'} />
               </div>
               <div className="col-6">
-                <ProductOrderTable tableBody={this.equipmentDetails} tableHead={'products'} />
+                <ConfirmOrderProducts tableBody={this.equipmentDetails} tableHead={'products'} />
               </div>
             </div>
             <div className="row">
