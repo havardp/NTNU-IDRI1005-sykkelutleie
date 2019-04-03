@@ -24,6 +24,7 @@ export class Menu extends Component {
         <Nav className="mr-auto">
           <NavLink
             to="/neworder"
+            className="test"
             activeStyle={{
               paddingTop: '6px',
               fontWeight: 'bold',
