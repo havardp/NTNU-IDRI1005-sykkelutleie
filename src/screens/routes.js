@@ -5,7 +5,8 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 //Import of all components "login, customer, employee etc."
 import { Login } from './login.js';
 import { Menu, SideNav } from './navbars.js';
-import { Home, ReparationDetails } from './home.js';
+import { Home} from './home.js';
+import { Reparations, ReparationDetails } from './reparations.js';
 import { Customers, CustomerDetail, CustomerAdd } from './customers.js';
 import { Employees, EmployeeDetail } from './employees.js';
 import { StorageStatus, StorageDetails, BikeDetails } from './storage.js';
@@ -22,7 +23,7 @@ class NoMatch extends Component {
 export class Routes extends Component {
   render() {
     return (
-      <div className="container-Fluid" style={{ overflow: 'hidden', height: '100%', position: 'fixed' }}>
+      <div className="container-Fluid" style={{ overflow: 'hidden', height: '100%', position: 'fixed', width:"100%"}}>
         <div className="row">
           <div className="col-12">
             <Menu />
@@ -44,6 +45,7 @@ export class Routes extends Component {
           >
             <Switch>
               <Route exact path="/home" component={Home} />
+              <Route exact path="/reparations" component={Reparations} />
               <Route exact path="/reparations/:id" component={ReparationDetails} />
               <Route exact path="/customers" component={Customers} />
               <Route exact path="/customers/:id" component={CustomerDetail} />
