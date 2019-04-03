@@ -18,28 +18,69 @@ export class VerticalTableComponent extends Component {
   //deleteButton: whether to display a functional delete button at the end of each row in the table.
   //delete: callback to parent function with id's as an argument to be able to delete the row wwith an sql query
   //tableBody : arrays/objects with the information to be displayed in the table
-  //tableHead: chooses what to display in the talbhead from the tableHead object in this class
+  //tableHead: chooses what to display in the talbhead from the tableHead object in this class, and the sort key decides which value to sort on when clicked
 
   tableHead = {
-    customer: ['Kunde id', 'Fornavn', 'Etternavn', 'Antall ordre', 'Fjern'],
-    reparation: ['Reprasjons id', 'Ramme id', 'Fra-dato', 'Til-dato'],
-    customersOrder: ['Ordrenummer', 'Kundenummer', 'Kundenavn', 'Antall sykler', 'Antall utstyr'],
-    employee: ['Ansatt id', 'Fornavn', 'Etternavn', 'Fjern'],
-    storage: ['Modell', 'Beskrivelse', 'Timepris', 'Dagpris', 'Antall'],
-    bike: ['Ramme id', 'Gir', 'Hjulstørrelse', 'Ødelagt', 'Tilholdssted'],
-    equipment: ['Utstyr id', 'Modell'],
-    order: [
-      'Ordrenummer',
-      'Kundenummer',
-      'Kundenavn',
-      'Antall sykler',
-      'Antall utstyr',
-      'Fra-dato',
-      'Til-dato',
-      'Fjern'
+    employee: [
+      { sort: 'e_id', value: 'Ansatt id' },
+      { sort: 'fname', value: 'Fornavn' },
+      { sort: 'lname', value: 'Etternavn' },
+      { sort: 'e_id', value: 'Fjern' }
     ],
-    orderEquipment: ['Modell', 'Utstyrs id', 'Pris'],
-    orderBike: ['Modell', 'Ramme id', 'Pris']
+    customer: [
+      { sort: 'c_id', value: 'Kunde-id' },
+      { sort: 'c_fname', value: 'Fornavn' },
+      { sort: 'c_lname', value: 'Etternavn' },
+      { sort: 'nrorder', value: 'Antall ordre' },
+      { sort: 'c_id', value: 'Fjern' }
+    ],
+    customersOrder: [
+      { sort: 'order_nr', value: 'Ordrenummer' },
+      { sort: 'c_id', value: 'Kundenummer' },
+      { sort: 'nrbikes', value: 'Antall sykler' },
+      { sort: 'nrequipment', value: 'Antall utstyr' }
+    ],
+    reparation: [
+      { sort: 'rep_id', value: 'Reprasjons id' },
+      { sort: 'chassis_id', value: 'Ramme id' },
+      { sort: 'r_fdate', value: 'Fra-dato' },
+      { sort: 'r_tdate', value: 'Til-dato' }
+    ],
+    storage: [
+      { sort: 'model', value: 'Modell' },
+      { sort: 'description', value: 'Beskrivelse' },
+      { sort: 'hour_price', value: 'Timepris' },
+      { sort: 'day_price', value: 'Dagpris' },
+      { sort: 'countBikes', value: 'Antall' }
+    ],
+    bike: [
+      { sort: 'chassis_id', value: 'Ramme id' },
+      { sort: 'gear', value: 'Gir' },
+      { sort: 'wheel_size', value: 'Hjulstørrelse' },
+      { sort: 'broken', value: 'Ødelagt' },
+      { sort: 'storage', value: 'Tilholdssted' }
+    ],
+    equipment: [{ sort: 'eq_id', value: 'Utstyr id' }, { sort: 'model', value: 'Modell' }],
+    order: [
+      { sort: 'order_nr', value: 'Ordrenummer' },
+      { sort: 'c_id', value: 'Kundenummer' },
+      { sort: 'fullname', value: 'Kundenavn' },
+      { sort: 'nrbikes', value: 'Antall sykler' },
+      { sort: 'nrequipment', value: 'Antall utstyr' },
+      { sort: 'from_date', value: 'Fra-dato' },
+      { sort: 'to_date', value: 'Til-dato' },
+      { sort: 'order_nr', value: 'Fjern' }
+    ],
+    orderEquipment: [
+      { sort: 'model', value: 'Modell' },
+      { sort: 'eq_id', value: 'Utstyrs id' },
+      { sort: 'day_price', value: 'Pris' }
+    ],
+    orderBike: [
+      { sort: 'model', value: 'Modell' },
+      { sort: 'chassis_id', value: 'Ramme id' },
+      { sort: 'day_price', value: 'Pris' }
+    ]
   };
 
   render() {
@@ -49,9 +90,11 @@ export class VerticalTableComponent extends Component {
       <Table striped bordered hover>
         <thead>
           {/*Loops through the head part of the table which is sent in as an array of text strings from parent component*/}
-          <tr>
+          <tr className="sortable">
             {this.tableHead[this.props.tableHead].map(tableHead => (
-              <td key={tableHead}>{tableHead}</td>
+              <td key={tableHead.value} onClick={() => this.props.sort(tableHead.sort)}>
+                {tableHead.value}
+              </td>
             ))}
           </tr>
         </thead>

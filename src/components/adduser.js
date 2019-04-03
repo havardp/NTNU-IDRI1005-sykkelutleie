@@ -494,7 +494,6 @@ export class AddReparation extends Component {
               <Form.Group as={Col}>
                 <Form.Label>Ramme id</Form.Label>
                 <Form.Control type="number" disabled value={this.props.chassisId.id} />
-
               </Form.Group>
               </Form.Row>
               <Form.Row>

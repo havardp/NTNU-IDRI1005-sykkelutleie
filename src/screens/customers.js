@@ -15,7 +15,7 @@ import { VerticalTableComponent, HorizontalTableComponent } from '../components/
 import { AddCustomer } from '../components/adduser.js';
 
 import Select from 'react-select';
-
+import arraySort from 'array-sort';
 //Imports for sql queries
 import { customerService } from '../services';
 
@@ -41,6 +41,7 @@ export class Customers extends Component {
               <Select
                 value={this.selectedOption}
                 placeholder="Søk kunde..."
+                className="writable"
                 onChange={e => {
                   this.selectedOption = e;
                   history.push('/customers/' + e.value);
@@ -62,6 +63,7 @@ export class Customers extends Component {
           deleteButton={true}
           delete={this.delete}
           whereTo={history.location.pathname}
+          sort={this.sort}
         />
         {this.modal && <AddCustomer modal={true} toggle={this.toggleModal} />}
       </>
@@ -79,6 +81,10 @@ export class Customers extends Component {
       });
       this.searchbarOptions = this.temporaryOptions;
     });
+  }
+
+  sort(sort) {
+    arraySort(this.customers, sort);
   }
 
   delete(id) {
@@ -105,7 +111,12 @@ export class CustomerDetail extends Component {
         </Card>
         <Card title="Ordrehistorikk">
           {this.orderHistory && (
-            <VerticalTableComponent tableBody={this.orderHistory} tableHead={'customersOrder'} whereTo={'/orders'} />
+            <VerticalTableComponent
+              tableBody={this.orderHistory}
+              tableHead={'customersOrder'}
+              whereTo={'/orders'}
+              sort={this.sort}
+            />
           )}
         </Card>
       </>
@@ -119,5 +130,9 @@ export class CustomerDetail extends Component {
     customerService.getCustomerOrders(this.props.match.params.id, orders => {
       this.orderHistory = orders;
     });
+  }
+
+  sort(sort) {
+    arraySort(this.orderHistory, sort);
   }
 }
