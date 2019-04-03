@@ -6,7 +6,7 @@ import { Card } from '../widgets';
 
 //make it not show if loading is fast?
 import ReactLoading from 'react-loading';
-
+import arraySort from 'array-sort';
 import Select from 'react-select';
 
 //reusable components
@@ -59,6 +59,8 @@ export class Orders extends Component {
           deleteButton={true}
           delete={this.delete}
           whereTo={history.location.pathname}
+          sort={this.sort}
+          className={'clickable'}
         />
       </>
     );
@@ -86,6 +88,10 @@ export class Orders extends Component {
   delete(id) {
     orderService.deleteOrder(id, () => this.mounted());
   }
+
+  sort(sort) {
+    arraySort(this.orders, sort);
+  }
 }
 
 export class OrderDetail extends Component {
@@ -110,6 +116,8 @@ export class OrderDetail extends Component {
                 tableHead={'orderBike'}
                 deleteButton={false}
                 whereTo={history.location.pathname}
+                sort={this.sortBike}
+                className={'clickable'}
               />
             </div>
             <div className="col-6">
@@ -118,6 +126,8 @@ export class OrderDetail extends Component {
                 tableHead={'orderEquipment'}
                 deleteButton={false}
                 whereTo={history.location.pathname}
+                sort={this.sortEquipment}
+                className={'clickable'}
               />
             </div>
           </div>
@@ -144,5 +154,12 @@ export class OrderDetail extends Component {
         '-' +
         this.order.to_date.getFullYear();
     });
+  }
+
+  sortBike(sort) {
+    arraySort(this.orderBikes, sort);
+  }
+  sortEquipment(sort) {
+    arraySort(this.orderEquipment, sort);
   }
 }

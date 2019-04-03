@@ -493,12 +493,20 @@ export class AddReparation extends Component {
               <Form.Row>
                 <Form.Group as={Col}>
                   <Form.Label>Fra dato</Form.Label>
-                  <Form.Control type="number" placeholder="åååå/mm/dd" onChange={e => (this.rep.r_fdate = e.target.value)} />
+                  <Form.Control
+                    type="number"
+                    placeholder="åååå/mm/dd"
+                    onChange={e => (this.rep.r_fdate = e.target.value)}
+                  />
                 </Form.Group>
-                  <Form.Group as={Col}>
-                    <Form.Label>Til dato</Form.Label>
-                    <Form.Control type="number" placeholder="åååå/mm/dd" onChange={e => (this.rep.r_tdate = e.target.value)} />
-                  </Form.Group>
+                <Form.Group as={Col}>
+                  <Form.Label>Til dato</Form.Label>
+                  <Form.Control
+                    type="number"
+                    placeholder="åååå/mm/dd"
+                    onChange={e => (this.rep.r_tdate = e.target.value)}
+                  />
+                </Form.Group>
                 <Form.Group as={Col}>
                   <Form.Label>Reperasjonspris</Form.Label>
                   <Form.Control

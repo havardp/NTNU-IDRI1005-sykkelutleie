@@ -58,9 +58,10 @@ class MakeOrder extends Component {
               <AdditionalDetailsTable sendStateToParent={this.handleOrderInformationChange} />
             </div>
           </Card>
-          <Card title="Sykkel og utstyr">
+          <Card>
             <div className="row">
               <div className="col-6">
+                <h3>Sykkel</h3>
                 <MakeOrderProductTable
                   tableBody={this.distinctBikeModels}
                   sendStateToParent={this.handleBikeChange}
@@ -68,6 +69,7 @@ class MakeOrder extends Component {
                 />
               </div>
               <div className="col-6">
+                <h3>Utstyr</h3>
                 <MakeOrderProductTable
                   tableBody={this.distinctEquipmentModels}
                   sendStateToParent={this.handleEquipmentChange}

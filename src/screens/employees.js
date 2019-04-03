@@ -11,6 +11,7 @@ import { AddEmployee } from '../components/adduser.js';
 //make it not show if loading is fast?
 import ReactLoading from 'react-loading';
 import Select from 'react-select';
+import arraySort from 'array-sort';
 //Imports for sql queries
 import { employeeService } from '../services';
 
@@ -52,10 +53,12 @@ export class Employees extends Component {
         )}
         <VerticalTableComponent
           tableBody={this.employees}
+          className={'clickable'}
           tableHead={'employee'}
           deleteButton={true}
           delete={this.delete}
           whereTo={history.location.pathname}
+          sort={this.sort}
         />
         {this.modal && <AddEmployee modal={true} toggle={this.toggleModal} />}
       </>
@@ -81,6 +84,10 @@ export class Employees extends Component {
 
   delete(id) {
     employeeService.deleteEmployee(id, () => this.mounted());
+  }
+
+  sort(sort) {
+    arraySort(this.employees, sort);
   }
 }
 

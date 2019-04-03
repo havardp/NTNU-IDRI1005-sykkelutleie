@@ -6,6 +6,7 @@ import { Card } from '../widgets';
 
 //make it not show if loading is fast?
 import ReactLoading from 'react-loading';
+import arraySort from 'array-sort';
 
 //reusable components
 import { VerticalTableComponent, HorizontalTableComponent } from '../components/tables.js';
@@ -32,6 +33,8 @@ export class StorageStatus extends Component {
           deleteButton={false}
           delete={this.delete}
           whereTo={history.location.pathname}
+          sort={this.sortBike}
+          className={'clickable'}
         />
         <h3 align="center">Utstyr</h3>
         <VerticalTableComponent
@@ -40,6 +43,8 @@ export class StorageStatus extends Component {
           deleteButton={false}
           delete={this.delete}
           whereTo={history.location.pathname}
+          sort={this.sortEquipment}
+          className={'clickable'}
         />
         <button className="btn btn-info btn-lg" onClick={this.toggleModal}>
           &#10010;
@@ -57,6 +62,13 @@ export class StorageStatus extends Component {
   toggleModal() {
     this.modal ? (this.modal = false) : (this.modal = true);
     this.mounted();
+  }
+
+  sortBike(sort) {
+    arraySort(this.bikes, sort);
+  }
+  sortEquipment(sort) {
+    arraySort(this.equipment, sort);
   }
 }
 
@@ -77,6 +89,8 @@ export class StorageDetails extends Component {
           deleteButton={false}
           delete={this.delete}
           whereTo={'/bikedetails'}
+          sort={this.sort}
+          className={'clickable'}
         />
         <button className="btn btn-info btn-lg" onClick={this.toggleModal}>
           &#10010;
@@ -97,11 +111,14 @@ export class StorageDetails extends Component {
     this.modal ? (this.modal = false) : (this.modal = true);
     this.mounted();
   }
+
+  sort(sort) {
+    this.bike ? arraySort(this.bike, sort) : arraySort(this.equipment, sort);
+  }
 }
 
 export class BikeDetails extends Component {
   bike = null;
-
 
   render() {
     if (!this.bike)
