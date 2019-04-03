@@ -56,7 +56,8 @@ export class SideNav extends Component {
     return (
       <div className="sidenav">
         <p>
-          <Nav.Link className="sidenavpart"onClick={() => history.push('/reparations')}>Reperasjoner</Nav.Link>
+          <Nav.Link className="sidenavpart"onClick={() => history.push('/reparations')}>&#128736; Reperasjoner</Nav.Link>
+          <Nav.Link className="sidenavpart">&#128666;Transportering</Nav.Link>
         </p>
       </div>
     );
