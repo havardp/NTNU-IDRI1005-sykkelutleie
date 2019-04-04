@@ -244,7 +244,7 @@ class StorageService {
 
   getBike(id, success, failure) {
     connection.query(
-      'select chassis_id, gear, wheel_size, broken, storage from Bike where Bike.model = ?',
+      'select chassis_id, gear, wheel_size, broken, storage, luggage from Bike where Bike.model = ?',
       [id],
       (error, results) => {
         if (error) return console.error(error);
@@ -332,6 +332,25 @@ class StorageService {
         success();
       }
     );
+  }
+
+  addBike(model, bikeDetails, success) {
+    connection.query(
+      'INSERT INTO Bike VALUES (null, ?, ?, ?,null, 0,?,?)',
+      [model, bikeDetails.gear, bikeDetails.wheel_size, bikeDetails.location, bikeDetails.luggage],
+      (error, results) => {
+        if (error) return console.error(error);
+
+        success();
+      }
+    );
+  }
+
+  addEquipment(model, success) {
+    connection.query('INSERT INTO Equipment VALUES (null, ?)', [model], (error, results) => {
+      if (error) return console.error(error);
+      success();
+    });
   }
 }
 

@@ -104,11 +104,6 @@
   margin-left: 5px;
 }
 
-/* When you mouse over the navigation links, change their color */
-.sidenav a:hover {
-  color: #c1c1c1;
-}
-
 .spinner {
   margin-left: 400px;
   margin-top: 200px;

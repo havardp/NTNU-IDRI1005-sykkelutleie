@@ -93,25 +93,46 @@ export class StorageDetails extends Component {
   tablehead = '';
 
   render() {
-    this.tableBody = this.bike ? this.bike : this.equipment;
-    this.tableHead = this.bike ? 'bike' : 'equipment';
-    return (
-      <>
-        <VerticalTableComponent
-          tableBody={this.tableBody}
-          tableHead={this.tableHead}
-          deleteButton={false}
-          delete={this.delete}
-          whereTo={'/bikedetails'}
-          sort={this.sort}
-          className={'clickable'}
-        />
-        <button className="btn btn-info btn-lg" onClick={this.toggleModal}>
-          &#10010;
-        </button>
-        {this.modal && <AddBike modal={true} toggle={this.toggleModal} />}
-      </>
-    );
+    if (this.bike)
+      return (
+        <>
+          <VerticalTableComponent
+            tableBody={this.bike}
+            tableHead={'bike'}
+            deleteButton={false}
+            delete={this.delete}
+            whereTo={'/bikedetails'}
+            sort={this.sort}
+            className={'clickable'}
+          />
+          <button className="btn btn-info btn-lg" onClick={this.toggleModal}>
+            &#10010;
+          </button>
+          {this.modal && (
+            <AddBike
+              modal={true}
+              toggle={this.toggleModal}
+              bikeDetails={this.bike[0]}
+              model={this.props.match.params.id}
+            />
+          )}
+        </>
+      );
+    else
+      return (
+        <>
+          <VerticalTableComponent
+            tableBody={this.equipment}
+            tableHead={'equipment'}
+            deleteButton={false}
+            delete={this.delete}
+            sort={this.sort}
+          />
+          <button className="btn btn-info btn-lg" onClick={this.addEquipment}>
+            &#10010;
+          </button>
+        </>
+      );
   }
   mounted() {
     storageService.getBike(this.props.match.params.id, result => {
@@ -128,6 +149,14 @@ export class StorageDetails extends Component {
 
   sort(sort) {
     this.bike ? arraySort(this.bike, sort) : arraySort(this.equipment, sort);
+  }
+
+  addEquipment() {
+    storageService.addEquipment(this.props.match.params.id, () => {
+      storageService.getEquipment(this.props.match.params.id, result => {
+        this.equipment = result;
+      });
+    });
   }
 }
 

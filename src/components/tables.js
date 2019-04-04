@@ -56,7 +56,8 @@ export class VerticalTableComponent extends Component {
       { sort: 'gear', value: 'Gir' },
       { sort: 'wheel_size', value: 'Hjulstørrelse' },
       { sort: 'broken', value: 'Ødelagt' },
-      { sort: 'storage', value: 'Tilholdssted' }
+      { sort: 'storage', value: 'Tilholdssted' },
+      { sort: 'luggage', value: 'Baggasje' }
     ],
     equipment: [{ sort: 'eq_id', value: 'Utstyr id' }, { sort: 'model', value: 'Modell' }],
     order: [
@@ -103,7 +104,9 @@ export class VerticalTableComponent extends Component {
             <tr
               key={Object.values(row)[0] + Object.values(row)[1].toString()}
               onClick={() => {
-                history.push(this.props.whereTo + '/' + Object.values(row)[0]);
+                this.props.whereTo
+                  ? history.push(this.props.whereTo + '/' + Object.values(row)[0])
+                  : console.log('nowhere to go');
               }}
               className={this.props.className}
             >
