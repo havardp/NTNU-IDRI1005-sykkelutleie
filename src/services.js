@@ -65,6 +65,13 @@ class EmployeeService {
       success(results);
     });
   }
+
+  updateEmployee(key, value, id, success) {
+    connection.query('update Employee set ??=? where e_id=?', [key, value, id], (error, result) => {
+      if (error) return console.error(error);
+      success();
+    });
+  }
 }
 
 class CustomerService {

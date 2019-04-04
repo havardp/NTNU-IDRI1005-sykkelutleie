@@ -108,6 +108,7 @@ export class CustomerDetail extends Component {
   customer = null;
   orderHistory = null;
   editable = false;
+  sortedBy = 'order_nr';
 
   render() {
     return (
@@ -119,7 +120,9 @@ export class CustomerDetail extends Component {
             editable={this.editable}
             sendStateToParent={this.updateCustomer}
           />
-          <button onClick={() => (this.editable ? (this.editable = false) : (this.editable = true))}>&#57604;</button>
+          <button onClick={() => (this.editable ? (this.editable = false) : (this.editable = true))}>
+            &#57604; Endre
+          </button>
         </Card>
         <Card title="Ordrehistorikk">
           {this.orderHistory && (
@@ -145,7 +148,13 @@ export class CustomerDetail extends Component {
   }
 
   sort(sort) {
-    arraySort(this.orderHistory, sort);
+    if (sort == this.sortedBy) {
+      arraySort(this.orderHistory, sort, { reverse: true });
+      this.sortedBy = '';
+    } else {
+      arraySort(this.orderHistory, sort);
+      this.sortedBy = sort;
+    }
   }
 
   updateCustomer(value, key) {

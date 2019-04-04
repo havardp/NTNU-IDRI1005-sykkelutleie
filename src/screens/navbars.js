@@ -23,7 +23,10 @@ export class Menu extends Component {
         </Navbar.Brand>
         <Nav className="mr-auto navbar">
           <NavLink className="navbarlink" to="/orders">
-            Finn ordre
+            Ordre
+          </NavLink>
+          <NavLink className="navbarlink" to="/storagestatus">
+            &#57709; Lager
           </NavLink>
           <NavLink className="navbarlink" to="/customers">
             Kunde
@@ -65,9 +68,6 @@ export class SideNav extends Component {
       <div className="sidenav">
         <NavLink className="sidebarlink" to="/neworder">
           &#57642; Ny ordre
-        </NavLink>
-        <NavLink className="sidebarlink" to="/storagestatus">
-          &#57709; Lager
         </NavLink>
         <NavLink className="sidebarlink" to="/reparations">
           &#57694; Reperasjoner

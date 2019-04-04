@@ -101,13 +101,22 @@ export class Employees extends Component {
 
 export class EmployeeDetail extends Component {
   user = null;
+  editable = false;
 
   render() {
     if (!this.user || typeof this.user.DOB == 'object')
       return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     return (
       <Card title="Personalia">
-        <HorizontalTableComponent tableBody={this.user} tableHead={'employee'} />
+        <HorizontalTableComponent
+          tableBody={this.user}
+          tableHead={'employee'}
+          editable={this.editable}
+          sendStateToParent={this.updateEmployee}
+        />
+        <button onClick={() => (this.editable ? (this.editable = false) : (this.editable = true))}>
+          &#57604; Endre
+        </button>
       </Card>
     );
   }
@@ -121,5 +130,9 @@ export class EmployeeDetail extends Component {
       },
       () => console.log('failure')
     );
+  }
+
+  updateEmployee(value, key) {
+    employeeService.updateEmployee(key, value, this.props.match.params.id, () => console.log('ansatt endret'));
   }
 }

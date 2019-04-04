@@ -195,7 +195,7 @@ export class HorizontalTableComponent extends Component {
                       )
                     }
                   >
-                    &#57605;
+                    &#57605; Lagre
                   </button>
                 </td>
               )}
