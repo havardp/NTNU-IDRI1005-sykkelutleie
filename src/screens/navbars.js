@@ -23,16 +23,16 @@ export class Menu extends Component {
         </Navbar.Brand>
         <Nav className="mr-auto navbar">
           <NavLink className="navbarlink" to="/orders">
-            Ordre
+            &#57967; Ordre
           </NavLink>
           <NavLink className="navbarlink" to="/storagestatus">
             &#57709; Lager
           </NavLink>
           <NavLink className="navbarlink" to="/customers">
-            Kunde
+            &#57637; Kunde
           </NavLink>
           <NavLink className="navbarlink" to="/employees">
-            Ansatte
+            &#57654; Ansatte
           </NavLink>
         </Nav>
         <DropdownButton
@@ -70,7 +70,7 @@ export class SideNav extends Component {
           &#57642; Ny ordre
         </NavLink>
         <NavLink className="sidebarlink" to="/reparations">
-          &#57694; Reperasjoner
+          &#57694; Reparasjoner
         </NavLink>
         <NavLink className="sidebarlink" to="/transport">
           &#57660; Transportering
