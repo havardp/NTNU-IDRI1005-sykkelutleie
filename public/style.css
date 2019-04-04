@@ -187,6 +187,11 @@
     font-size: 18px;
     text-decoration: none;
 }
+
+#dropdown-item-button {
+  color: white;
+
+}
 .active {
   font-weight: bold;
 }
