@@ -112,7 +112,7 @@ export class CustomerDetail extends Component {
             editable={this.editable}
             sendStateToParent={this.updateCustomer}
           />
-          <button onClick={() => (this.editable ? (this.editable = false) : (this.editable = true))}>&#9881;</button>
+          <button onClick={() => (this.editable ? (this.editable = false) : (this.editable = true))}>&#57604;</button>
         </Card>
         <Card title="Ordrehistorikk">
           {this.orderHistory && (

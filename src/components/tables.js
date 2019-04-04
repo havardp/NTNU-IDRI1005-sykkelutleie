@@ -7,10 +7,8 @@ import Table from 'react-bootstrap/Table';
 //Import the hashistory from index.js to be able to change path
 import { history } from '../index.js';
 
-//make it not show if loading is fast?
+//node modules
 import ReactLoading from 'react-loading';
-
-//contentEditable="true" gjør tablen editable
 
 //Reusable table component, which takes in an array for the table head, and an array of objects for the table body.
 export class VerticalTableComponent extends Component {
@@ -197,7 +195,7 @@ export class HorizontalTableComponent extends Component {
                       )
                     }
                   >
-                    save
+                    &#57605;
                   </button>
                 </td>
               )}

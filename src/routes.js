@@ -3,15 +3,15 @@ import { Component } from 'react-simplified';
 import { Route, Switch, Redirect } from 'react-router-dom';
 
 //Import of all components "login, customer, employee etc."
-import { Login } from './login.js';
-import { Menu, SideNav } from './navbars.js';
-import { Home } from './home.js';
-import { Reparations, ReparationDetails } from './reparations.js';
-import { Customers, CustomerDetail, CustomerAdd } from './customers.js';
-import { Employees, EmployeeDetail } from './employees.js';
-import { StorageStatus, StorageDetails, BikeDetails } from './storage.js';
-import { Orders, OrderDetail } from './orders.js';
-import { NewOrder } from './neworder.js';
+import { Login } from './screens/login.js';
+import { Menu, SideNav } from './screens/navbars.js';
+import { Home } from './screens/home.js';
+import { Reparations, ReparationDetails } from './screens/reparations.js';
+import { Customers, CustomerDetail, CustomerAdd } from './screens/customers.js';
+import { Employees, EmployeeDetail } from './screens/employees.js';
+import { StorageStatus, StorageDetails, BikeDetails } from './screens/storage.js';
+import { Orders, OrderDetail } from './screens/orders.js';
+import { NewOrder } from './screens/neworder.js';
 
 class NoMatch extends Component {
   render() {
