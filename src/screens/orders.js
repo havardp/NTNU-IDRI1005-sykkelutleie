@@ -86,7 +86,10 @@ export class Orders extends Component {
   }
 
   delete(id) {
-    orderService.deleteOrder(id, () => this.mounted());
+    orderService.deleteOrder(id, () => {
+      this.ready = false;
+      this.mounted();
+    });
   }
 
   sort(sort) {

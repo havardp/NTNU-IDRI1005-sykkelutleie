@@ -21,7 +21,7 @@ export class Menu extends Component {
         <Navbar.Brand className="clickable" onClick={() => history.push('/home')}>
           Sykkelutleie AS
         </Navbar.Brand>
-        <Nav className="mr-auto">
+        <Nav className="mr-auto navbar">
           <NavLink className="navbarlink" to="/orders">
             Finn ordre
           </NavLink>

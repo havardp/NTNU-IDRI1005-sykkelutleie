@@ -106,7 +106,6 @@ export class VerticalTableComponent extends Component {
               key={Object.values(row)[0] + Object.values(row)[1].toString()}
               onClick={() => {
                 history.push(this.props.whereTo + '/' + Object.values(row)[0]);
-                console.log(this.props.whereTo + '/' + Object.values(row)[0]);
               }}
               className={this.props.className}
             >
