@@ -39,7 +39,7 @@ export class VerticalTableComponent extends Component {
       { sort: 'nrequipment', value: 'Antall utstyr' }
     ],
     reparation: [
-      { sort: 'rep_id', value: 'Reprasjons id' },
+      { sort: 'rep_id', value: 'Reparasjons id' },
       { sort: 'chassis_id', value: 'Ramme id' },
       { sort: 'r_fdate', value: 'Fra-dato' },
       { sort: 'r_tdate', value: 'Til-dato' }

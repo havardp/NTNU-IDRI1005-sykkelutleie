@@ -70,7 +70,7 @@ export class SideNav extends Component {
           &#57642; Ny ordre
         </NavLink>
         <NavLink className="sidebarlink" to="/reparations">
-          &#57694; Reperasjoner
+          &#57694; Reparasjoner
         </NavLink>
         <NavLink className="sidebarlink" to="/transport">
           &#57660; Transportering
