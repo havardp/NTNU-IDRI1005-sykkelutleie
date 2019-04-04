@@ -198,7 +198,7 @@ export class HorizontalTableComponent extends Component {
                       )
                     }
                   >
-                    save
+                    &#57605;
                   </button>
                 </td>
               )}
