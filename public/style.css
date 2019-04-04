@@ -189,3 +189,9 @@
   color: black;
   font-weight: bold;
 }
+
+.timer {
+  position: absolute;
+  bottom: 100px;
+  padding-left: 10px;
+}

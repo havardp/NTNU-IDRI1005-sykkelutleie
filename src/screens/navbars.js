@@ -55,6 +55,11 @@ export class Menu extends Component {
 }
 
 export class SideNav extends Component {
+  time = 0;
+  hour = 0;
+  minute = 0;
+  second = 0;
+  timer = '00:00:00';
   render() {
     return (
       <div className="sidenav">
@@ -70,7 +75,23 @@ export class SideNav extends Component {
         <NavLink className="sidebarlink" to="/transport">
           &#57660; Transportering
         </NavLink>
+        <div className="timer">Tid innlogget: {this.timer}</div>
       </div>
     );
+  }
+
+  mounted() {
+    setInterval(() => {
+      this.time++;
+      this.hour = Math.floor(this.time / 3600);
+      this.minute = Math.floor(this.time / 60) - this.hour * 60;
+      this.second = this.time - this.minute * 60 - this.hour * 3600;
+      this.timer =
+        (this.hour.toString().length == 1 ? '0' + this.hour : this.hour) +
+        ':' +
+        (this.minute.toString().length == 1 ? '0' + this.minute : this.minute) +
+        ':' +
+        (this.second.toString().length == 1 ? '0' + this.second : this.second);
+    }, 1000);
   }
 }

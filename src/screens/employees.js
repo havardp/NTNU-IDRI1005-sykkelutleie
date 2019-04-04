@@ -22,6 +22,7 @@ import { history } from '../index.js';
 export class Employees extends Component {
   employees = null;
   modal = false;
+  sortedBy = 'e_id';
 
   //variables for the select searchbar
   selectedOption = null;
@@ -88,7 +89,13 @@ export class Employees extends Component {
   }
 
   sort(sort) {
-    arraySort(this.employees, sort);
+    if (sort == this.sortedBy) {
+      arraySort(this.employees, sort, { reverse: true });
+      this.sortedBy = '';
+    } else {
+      arraySort(this.employees, sort);
+      this.sortedBy = sort;
+    }
   }
 }
 

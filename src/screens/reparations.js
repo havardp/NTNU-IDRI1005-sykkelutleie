@@ -20,6 +20,7 @@ import { history } from '../index.js';
 export class Reparations extends Component {
   reparations = null;
   ready = false;
+  sortedBy = 'rep_id';
   render() {
     if (!this.ready)
       return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
@@ -50,7 +51,13 @@ export class Reparations extends Component {
   }
 
   sort(sort) {
-    arraySort(this.reparations, sort);
+    if (sort == this.sortedBy) {
+      arraySort(this.reparations, sort, { reverse: true });
+      this.sortedBy = '';
+    } else {
+      arraySort(this.reparations, sort);
+      this.sortedBy = sort;
+    }
   }
 }
 

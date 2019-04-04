@@ -30,6 +30,7 @@ export class Customers extends Component {
   temporaryOptions = [];
   searchbarOptions = null;
   temporary = null;
+  sortedBy = 'c_id';
 
   render() {
     return (
@@ -83,7 +84,13 @@ export class Customers extends Component {
   }
 
   sort(sort) {
-    arraySort(this.customers, sort);
+    if (sort == this.sortedBy) {
+      arraySort(this.customers, sort, { reverse: true });
+      this.sortedBy = '';
+    } else {
+      arraySort(this.customers, sort);
+      this.sortedBy = sort;
+    }
   }
 
   delete(id) {

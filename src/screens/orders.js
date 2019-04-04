@@ -21,6 +21,7 @@ import { history } from '../index.js';
 export class Orders extends Component {
   orders = null;
   ready = false;
+  sortedBy = 'order_nr';
 
   //variables for the select searchbar
   selectedOption = null;
@@ -93,7 +94,13 @@ export class Orders extends Component {
   }
 
   sort(sort) {
-    arraySort(this.orders, sort);
+    if (sort == this.sortedBy) {
+      arraySort(this.orders, sort, { reverse: true });
+      this.sortedBy = '';
+    } else {
+      arraySort(this.orders, sort);
+      this.sortedBy = sort;
+    }
   }
 }
 

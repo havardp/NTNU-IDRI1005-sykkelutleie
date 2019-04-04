@@ -23,6 +23,8 @@ export class StorageStatus extends Component {
   bikes = null;
   equipment = null;
   modal = false;
+  sortedByBike = 'chassis_id';
+  sortedByEq = 'eq_id';
   render() {
     return (
       <>
@@ -65,10 +67,22 @@ export class StorageStatus extends Component {
   }
 
   sortBike(sort) {
-    arraySort(this.bikes, sort);
+    if (sort == this.sortedByBike) {
+      arraySort(this.bikes, sort, { reverse: true });
+      this.sortedByBike = '';
+    } else {
+      arraySort(this.bikes, sort);
+      this.sortedByBike = sort;
+    }
   }
   sortEquipment(sort) {
-    arraySort(this.equipment, sort);
+    if (sort == this.sortedByEq) {
+      arraySort(this.equipment, sort, { reverse: true });
+      this.sortedByEq = '';
+    } else {
+      arraySort(this.equipment, sort);
+      this.sortedByEq = sort;
+    }
   }
 }
 
