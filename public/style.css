@@ -158,6 +158,20 @@
   color: white;
 }
 
+
+.navbarlink {
+  margin-left: 10px;
+  margin-right: 10px;
+  color: white;
+}
+
+
+.navbarlink:hover {
+  color: white;
+  font-size: 18px;
+  text-decoration: none;
+}
+
 .sidebarlink {
   padding-top: 16px;
   text-decoration: none;
@@ -168,6 +182,11 @@
   margin-left: 5px;
 }
 
+
+.sidebarlink:hover {
+    font-size: 18px;
+    text-decoration: none;
+}
 .active {
-  color: red;
+  font-weight: bold;
 }
