@@ -55,7 +55,7 @@ export class VerticalTableComponent extends Component {
       { sort: 'chassis_id', value: 'Ramme id' },
       { sort: 'gear', value: 'Gir' },
       { sort: 'wheel_size', value: 'Hjulstørrelse' },
-      { sort: 'broken', value: 'Ødelagt' },
+      { sort: 'status', value: 'status' },
       { sort: 'storage', value: 'Tilholdssted' },
       { sort: 'luggage', value: 'Baggasje' }
     ],
@@ -150,7 +150,7 @@ export class HorizontalTableComponent extends Component {
       'Modell',
       'Gir',
       'Hjulstørrelse',
-      'Ødelagt',
+      'status',
       'Tilholdssted',
       'Bagasjerett',
       'Beskrivelse',

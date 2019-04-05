@@ -244,7 +244,7 @@ class StorageService {
 
   getBike(id, success, failure) {
     connection.query(
-      'select chassis_id, gear, wheel_size, broken, storage, luggage from Bike where Bike.model = ?',
+      'select chassis_id, gear, wheel_size, status, storage, luggage from Bike where Bike.model = ?',
       [id],
       (error, results) => {
         if (error) return console.error(error);
@@ -257,7 +257,7 @@ class StorageService {
 
   getBikeDetails(id, success) {
     connection.query(
-      'select chassis_id, B.model, gear, wheel_size, broken, storage, luggage, description, day_price from Bike B, Product_Type PT where B.model = PT.model and chassis_id = ?',
+      'select chassis_id, B.model, gear, wheel_size, status, storage, luggage, description, day_price from Bike B, Product_Type PT where B.model = PT.model and chassis_id = ?',
       [id],
       (error, results) => {
         if (error) return console.error(error);
