@@ -48,7 +48,8 @@ export class VerticalTableComponent extends Component {
       { sort: 'model', value: 'Modell' },
       { sort: 'description', value: 'Beskrivelse' },
       { sort: 'day_price', value: 'Dagpris' },
-      { sort: 'countBikes', value: 'Antall' }
+      { sort: 'countBikes', value: 'Antall' },
+      { sort: 'model', value: 'Fjern' }
     ],
     bike: [
       { sort: 'chassis_id', value: 'Ramme id' },
@@ -56,9 +57,14 @@ export class VerticalTableComponent extends Component {
       { sort: 'wheel_size', value: 'Hjulstørrelse' },
       { sort: 'stolen', value: 'Stjelt' },
       { sort: 'storage', value: 'Tilholdssted' },
-      { sort: 'luggage', value: 'Baggasje' }
+      { sort: 'luggage', value: 'Baggasje' },
+      { sort: 'chassis_id', value: 'Fjern' }
     ],
-    equipment: [{ sort: 'eq_id', value: 'Utstyr id' }, { sort: 'model', value: 'Modell' }],
+    equipment: [
+      { sort: 'eq_id', value: 'Utstyr id' },
+      { sort: 'model', value: 'Modell' },
+      { sort: 'eq_id', value: 'Fjern' }
+    ],
     order: [
       { sort: 'order_nr', value: 'Ordrenummer' },
       { sort: 'c_id', value: 'Kundenummer' },
@@ -89,11 +95,15 @@ export class VerticalTableComponent extends Component {
         <thead>
           {/*Loops through the head part of the table which is sent in as an array of text strings from parent component*/}
           <tr className="sortable">
-            {this.tableHead[this.props.tableHead].map(tableHead => (
-              <td key={tableHead.value} onClick={() => this.props.sort(tableHead.sort)}>
-                {tableHead.value}
-              </td>
-            ))}
+            {this.tableHead[this.props.tableHead].map(tableHead =>
+              tableHead.value != 'Fjern' ||
+              sessionStorage.getItem('role') == 'Admin' ||
+              sessionStorage.getItem('role') == 'Sektretær' ? (
+                <td key={tableHead.value} onClick={() => this.props.sort(tableHead.sort)}>
+                  {tableHead.value}
+                </td>
+              ) : null
+            )}
           </tr>
         </thead>
         <tbody>
@@ -114,18 +124,19 @@ export class VerticalTableComponent extends Component {
                 <td key={data + row + index}>{data}</td>
               ))}
               {/*Add a delete button at the end of the row if its sent in as true from parent component*/}
-              {this.props.deleteButton && (
-                <td>
-                  <button
-                    onClick={e => {
-                      e.stopPropagation();
-                      this.props.delete(Object.values(row)[0]);
-                    }}
-                  >
-                    &#57610;
-                  </button>
-                </td>
-              )}
+              {(sessionStorage.getItem('role') == 'Admin' || sessionStorage.getItem('role') == 'Sekretær') &&
+                this.props.delete && (
+                  <td>
+                    <button
+                      onClick={e => {
+                        e.stopPropagation();
+                        this.props.delete(Object.values(row)[0]);
+                      }}
+                    >
+                      &#57610;
+                    </button>
+                  </td>
+                )}
             </tr>
           ))}
         </tbody>

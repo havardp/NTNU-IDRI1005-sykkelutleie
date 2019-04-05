@@ -9,7 +9,7 @@ import { Home } from './screens/home.js';
 import { Reparations, ReparationDetails } from './screens/reparations.js';
 import { Customers, CustomerDetail, CustomerAdd } from './screens/customers.js';
 import { Employees, EmployeeDetail } from './screens/employees.js';
-import { StorageStatus, StorageDetails, BikeDetails } from './screens/storage.js';
+import { Storage, StorageDetails, BikeDetails } from './screens/storage.js';
 import { Orders, OrderDetail } from './screens/orders.js';
 import { NewOrder } from './screens/neworder.js';
 
@@ -51,7 +51,7 @@ export class Routes extends Component {
               <Route exact path="/customers/:id" component={CustomerDetail} />
               <Route exact path="/employees" component={Employees} />
               <Route exact path="/employees/:id" component={EmployeeDetail} />
-              <Route exact path="/storagestatus" component={StorageStatus} />
+              <Route exact path="/storagestatus" component={Storage} />
               <Route exact path="/storagestatus/:id" component={StorageDetails} />
               <Route exact path="/bikedetails/:id" component={BikeDetails} />
               <Route exact path="/orders" component={Orders} />

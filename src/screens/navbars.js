@@ -31,9 +31,11 @@ export class Menu extends Component {
           <NavLink className="navbarlink" to="/customers">
             &#57637; Kunde
           </NavLink>
-          <NavLink className="navbarlink" to="/employees">
-            &#57654; Ansatte
-          </NavLink>
+          {(sessionStorage.getItem('role') == 'Admin' || sessionStorage.getItem('role') == 'Sekretær') && (
+            <NavLink className="navbarlink" to="/employees">
+              &#57654; Ansatte
+            </NavLink>
+          )}
         </Nav>
         <DropdownButton
           id="dropdown-item-button"

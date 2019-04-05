@@ -118,6 +118,7 @@ export class Login extends Component {
           if (bcrypt.compareSync(this.user.password ? this.user.password : '', result.password)) {
             sessionStorage.setItem('userName', this.user.name);
             sessionStorage.setItem('userLoggedIn', true);
+            sessionStorage.setItem('role', result.department);
             history.push('/home');
             ipcRenderer.send('maximize');
             document.removeEventListener('keydown', this.handleKeyPress);
