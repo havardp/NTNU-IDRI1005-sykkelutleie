@@ -54,7 +54,7 @@ export class VerticalTableComponent extends Component {
       { sort: 'chassis_id', value: 'Ramme id' },
       { sort: 'gear', value: 'Gir' },
       { sort: 'wheel_size', value: 'Hjulstørrelse' },
-      { sort: 'broken', value: 'Ødelagt' },
+      { sort: 'stolen', value: 'Stjelt' },
       { sort: 'storage', value: 'Tilholdssted' },
       { sort: 'luggage', value: 'Baggasje' }
     ],
@@ -144,7 +144,7 @@ export class HorizontalTableComponent extends Component {
   tableHead = {
     customer: ['Kunde id', 'Fornavn', 'Etternavn', 'Email', 'Telefon', 'Adresse'],
     employee: ['Ansatt id', 'Fornavn', 'Etternavn', 'Avdeling', 'Email', 'Telefon', 'Adresse', 'Fødselsdato'],
-    bikeDetails: ['Ramme id', 'Modell', 'Gir', 'Hjulstørrelse', 'Ødelagt', 'Tilholdssted', 'Bagasjerett'],
+    bikeDetails: ['Ramme id', 'Modell', 'Gir', 'Hjulstørrelse', 'Status', 'Tilholdssted', 'Bagasjerett'],
     reparationDetails: ['Reparasjons id', 'Ramme id', 'Fra-dato', 'Til-dato', 'Reparasjons kostnad', 'Beskrivelse'],
     order: [
       'Ordrenummer',

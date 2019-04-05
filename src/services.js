@@ -251,7 +251,7 @@ class StorageService {
 
   getBike(id, success, failure) {
     connection.query(
-      'select chassis_id, gear, wheel_size, broken, storage, luggage from Bike where Bike.model = ?',
+      'select chassis_id, gear, wheel_size, stolen, storage, luggage from Bike where Bike.model = ?',
       [id],
       (error, results) => {
         if (error) return console.error(error);
@@ -264,7 +264,7 @@ class StorageService {
 
   getBikeDetails(id, success) {
     connection.query(
-      'select chassis_id, model, gear, wheel_size, broken, storage, luggage from Bike B where chassis_id = ?',
+      'select chassis_id, model, gear, wheel_size, stolen, storage, luggage from Bike B where chassis_id = ?',
       [id],
       (error, results) => {
         if (error) return console.error(error);
@@ -400,14 +400,6 @@ class ReparationService {
         success();
       }
     );
-  }
-
-  changeBrokenstatus(id, success) {
-    connection.query('UPDATE Bike SET Broken = 0 WHERE chassis_id = ?', [id], (error, results) => {
-      if (error) return console.error(error);
-
-      success();
-    });
   }
 
   updateRep(key, value, id, success) {
