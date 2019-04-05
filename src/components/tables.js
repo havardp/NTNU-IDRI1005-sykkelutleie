@@ -55,7 +55,7 @@ export class VerticalTableComponent extends Component {
       { sort: 'chassis_id', value: 'Ramme id' },
       { sort: 'gear', value: 'Gir' },
       { sort: 'wheel_size', value: 'Hjulstørrelse' },
-      { sort: 'status', value: 'status' },
+      { sort: 'stolen', value: 'Stjelt' },
       { sort: 'storage', value: 'Tilholdssted' },
       { sort: 'luggage', value: 'Baggasje' }
     ],
