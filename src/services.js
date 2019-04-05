@@ -368,14 +368,6 @@ class ReparationService {
       }
     );
   }
-
-  changeBrokenstatus(id, success) {
-    connection.query('UPDATE Bike SET Broken = 0 WHERE chassis_id = ?', [id], (error, results) => {
-      if (error) return console.error(error);
-
-      success();
-    });
-  }
 }
 
 export let reparationService = new ReparationService();

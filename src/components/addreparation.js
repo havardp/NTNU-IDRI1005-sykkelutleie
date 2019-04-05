@@ -79,10 +79,6 @@ export class AddReparation extends Component {
 
   add() {
     if (this.rep.r_fdate && this.rep.r_tdate && this.rep.expenses && this.rep.r_description) {
-      this.submitting = true;
-      reparationService.changeBrokenstatus(this.props.chassisId.id, () => {
-        console.log('status changed');
-      });
       reparationService.addReparation(this.rep, this.props.chassisId.id, () => {
         this.submitting = false;
         this.props.toggle();
