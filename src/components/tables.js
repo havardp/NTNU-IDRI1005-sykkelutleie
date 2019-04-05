@@ -47,7 +47,6 @@ export class VerticalTableComponent extends Component {
     storage: [
       { sort: 'model', value: 'Modell' },
       { sort: 'description', value: 'Beskrivelse' },
-      { sort: 'hour_price', value: 'Timepris' },
       { sort: 'day_price', value: 'Dagpris' },
       { sort: 'countBikes', value: 'Antall' }
     ],
@@ -73,12 +72,12 @@ export class VerticalTableComponent extends Component {
     orderEquipment: [
       { sort: 'model', value: 'Modell' },
       { sort: 'eq_id', value: 'Utstyrs id' },
-      { sort: 'day_price', value: 'Pris' }
+      { sort: 'day_price', value: 'Dags pris' }
     ],
     orderBike: [
       { sort: 'model', value: 'Modell' },
       { sort: 'chassis_id', value: 'Ramme id' },
-      { sort: 'day_price', value: 'Pris' }
+      { sort: 'day_price', value: 'Dags pris' }
     ]
   };
 
@@ -145,17 +144,7 @@ export class HorizontalTableComponent extends Component {
   tableHead = {
     customer: ['Kunde id', 'Fornavn', 'Etternavn', 'Email', 'Telefon', 'Adresse'],
     employee: ['Ansatt id', 'Fornavn', 'Etternavn', 'Avdeling', 'Email', 'Telefon', 'Adresse', 'Fødselsdato'],
-    bikeDetails: [
-      'Ramme id',
-      'Modell',
-      'Gir',
-      'Hjulstørrelse',
-      'Ødelagt',
-      'Tilholdssted',
-      'Bagasjerett',
-      'Beskrivelse',
-      'Dagspris'
-    ],
+    bikeDetails: ['Ramme id', 'Modell', 'Gir', 'Hjulstørrelse', 'Ødelagt', 'Tilholdssted', 'Bagasjerett'],
     reparationDetails: ['Reparasjons id', 'Ramme id', 'Fra-dato', 'Til-dato', 'Reparasjons kostnad', 'Beskrivelse'],
     order: [
       'Ordrenummer',

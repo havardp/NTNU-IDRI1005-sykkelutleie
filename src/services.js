@@ -228,12 +228,19 @@ class OrderService {
       }
     );
   }
+
+  updateOrder(key, value, id, success) {
+    connection.query('update Orders set ??=? where order_nr=?', [key, value, id], (error, result) => {
+      if (error) return console.error(error);
+      success();
+    });
+  }
 }
 
 class StorageService {
   getModels(success) {
     connection.query(
-      'SELECT PT.model, description, hour_price, day_price, count(B.model) as "countBikes" FROM Product_Type PT left join Bike B on B.model = PT.model where PT.bike=1 group by PT.model; SELECT PT.model, description, hour_price, day_price, count(E.model) as "countEquipment" FROM Product_Type PT left join Equipment E on E.model = PT.model where PT.bike= 0 Group by PT.model',
+      'SELECT PT.model, description, day_price, count(B.model) as "countBikes" FROM Product_Type PT left join Bike B on B.model = PT.model where PT.bike=1 group by PT.model; SELECT PT.model, description,  day_price, count(E.model) as "countEquipment" FROM Product_Type PT left join Equipment E on E.model = PT.model where PT.bike= 0 Group by PT.model',
       (error, results) => {
         if (error) return console.error(error);
 
@@ -257,7 +264,7 @@ class StorageService {
 
   getBikeDetails(id, success) {
     connection.query(
-      'select chassis_id, B.model, gear, wheel_size, broken, storage, luggage, description, day_price from Bike B, Product_Type PT where B.model = PT.model and chassis_id = ?',
+      'select chassis_id, model, gear, wheel_size, broken, storage, luggage from Bike B where chassis_id = ?',
       [id],
       (error, results) => {
         if (error) return console.error(error);
@@ -324,8 +331,8 @@ class StorageService {
   }
   addProductType(model, bike, success) {
     connection.query(
-      'INSERT INTO Product_Type VALUES (?, ?, ?, ?, ?)',
-      [model.model, model.description, model.hour_price, model.day_price, bike],
+      'INSERT INTO Product_Type VALUES (?, ?, ?, ?)',
+      [model.model, model.description, model.day_price, bike],
       (error, results) => {
         if (error) return console.error(error);
 
@@ -348,6 +355,13 @@ class StorageService {
 
   addEquipment(model, success) {
     connection.query('INSERT INTO Equipment VALUES (null, ?)', [model], (error, results) => {
+      if (error) return console.error(error);
+      success();
+    });
+  }
+
+  updateBike(key, value, id, success) {
+    connection.query('update Bike set ??=? where chassis_id=?', [key, value, id], (error, result) => {
       if (error) return console.error(error);
       success();
     });
@@ -392,6 +406,13 @@ class ReparationService {
     connection.query('UPDATE Bike SET Broken = 0 WHERE chassis_id = ?', [id], (error, results) => {
       if (error) return console.error(error);
 
+      success();
+    });
+  }
+
+  updateRep(key, value, id, success) {
+    connection.query('update Reparations set ??=? where rep_id=?', [key, value, id], (error, result) => {
+      if (error) return console.error(error);
       success();
     });
   }

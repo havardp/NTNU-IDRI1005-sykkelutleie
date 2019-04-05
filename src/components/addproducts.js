@@ -48,6 +48,14 @@ export class AddModel extends Component {
                   <Form.Label>Modell</Form.Label>
                   <Form.Control type="text" placeholder="Navn" onChange={e => (this.model.model = e.target.value)} />
                 </Form.Group>
+                <Form.Group as={Col}>
+                  <Form.Label>Dagspris</Form.Label>
+                  <Form.Control
+                    type="number"
+                    placeholder="X kr"
+                    onChange={e => (this.model.day_price = e.target.value)}
+                  />
+                </Form.Group>
               </Form.Row>
               <Form.Row>
                 <Form.Group as={Col}>
@@ -56,24 +64,6 @@ export class AddModel extends Component {
                     type="text"
                     placeholder="Tekst"
                     onChange={e => (this.model.description = e.target.value)}
-                  />
-                </Form.Group>
-              </Form.Row>
-              <Form.Row>
-                <Form.Group as={Col}>
-                  <Form.Label>Timepris</Form.Label>
-                  <Form.Control
-                    type="number"
-                    placeholder="X kr"
-                    onChange={e => (this.model.hour_price = e.target.value)}
-                  />
-                </Form.Group>
-                <Form.Group as={Col}>
-                  <Form.Label>Dagspris</Form.Label>
-                  <Form.Control
-                    type="number"
-                    placeholder="X kr"
-                    onChange={e => (this.model.day_price = e.target.value)}
                   />
                 </Form.Group>
               </Form.Row>
@@ -149,7 +139,7 @@ export class AddModel extends Component {
   add() {
     console.log(this.bike, this.model, this.bikeDetails);
 
-    if (this.model.model && this.model.description && this.model.hour_price && this.model.day_price) {
+    if (this.model.model && this.model.description && this.model.day_price) {
       this.submitting = true;
       storageService.addProductType(this.model, this.bike, () => {
         this.bike == 1

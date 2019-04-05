@@ -87,10 +87,11 @@ export class Orders extends Component {
   }
 
   delete(id) {
-    orderService.deleteOrder(id, () => {
-      this.ready = false;
-      this.mounted();
-    });
+    if (window.confirm('Er du sikker på at du vil slette denne orderen?'))
+      orderService.deleteOrder(id, () => {
+        this.ready = false;
+        this.mounted();
+      });
   }
 
   sort(sort) {
@@ -108,15 +109,24 @@ export class OrderDetail extends Component {
   order = null;
   orderBikes = null;
   orderEquipment = null;
+  sortedByBike = 'model';
+  sortedByEquipment = 'model';
+  editable = false;
   render() {
     if (!this.order || typeof this.order.from_date == 'object' || typeof this.order.to_date == 'object')
       return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     return (
       <>
         <Card title="Ordredetaljer">
-          <HorizontalTableComponent tableBody={this.order} tableHead={'order'} />
-          <button>&#9881;</button>
-          <button>&#10004;</button>
+          <HorizontalTableComponent
+            tableBody={this.order}
+            tableHead={'order'}
+            editable={this.editable}
+            sendStateToParent={this.updateOrder}
+          />
+          <button onClick={() => (this.editable ? (this.editable = false) : (this.editable = true))}>
+            &#57604; Endre
+          </button>
         </Card>
         <Card title="Sykler og utstyr">
           <div className="row">
@@ -166,10 +176,26 @@ export class OrderDetail extends Component {
     });
   }
 
+  updateOrder(value, key) {
+    orderService.updateOrder(key, value, this.props.match.params.id, () => console.log('Ordre endret'));
+  }
+
   sortBike(sort) {
-    arraySort(this.orderBikes, sort);
+    if (sort == this.sortedByBike) {
+      arraySort(this.orderBikes, sort, { reverse: true });
+      this.sortedByBike = '';
+    } else {
+      arraySort(this.orderBikes, sort);
+      this.sortedByBike = sort;
+    }
   }
   sortEquipment(sort) {
-    arraySort(this.orderEquipment, sort);
+    if (sort == this.sortedByEquipment) {
+      arraySort(this.orderEquipment, sort, { reverse: true });
+      this.sortedByEquipment = '';
+    } else {
+      arraySort(this.orderEquipment, sort);
+      this.sortedByEquipment = sort;
+    }
   }
 }

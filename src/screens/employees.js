@@ -85,7 +85,8 @@ export class Employees extends Component {
   }
 
   delete(id) {
-    employeeService.deleteEmployee(id, () => this.mounted());
+    if (window.confirm('Er du sikker på at du vil slette denne ansatte?'))
+      employeeService.deleteEmployee(id, () => this.mounted());
   }
 
   sort(sort) {

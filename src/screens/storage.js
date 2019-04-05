@@ -91,6 +91,7 @@ export class StorageDetails extends Component {
   bike = null;
   equipment = null;
   tablehead = '';
+  sortedBy = 'model';
 
   render() {
     if (this.bike)
@@ -106,7 +107,7 @@ export class StorageDetails extends Component {
             className={'clickable'}
           />
           <button className="btn btn-info btn-lg" onClick={this.toggleModal}>
-            &#10010;
+            &#10010; Legg til
           </button>
           {this.modal && (
             <AddBike
@@ -148,7 +149,23 @@ export class StorageDetails extends Component {
   }
 
   sort(sort) {
-    this.bike ? arraySort(this.bike, sort) : arraySort(this.equipment, sort);
+    if (this.bike) {
+      if (sort == this.sortedBy) {
+        arraySort(this.bike, sort, { reverse: true });
+        this.sortedBy = '';
+      } else {
+        arraySort(this.bike, sort);
+        this.sortedBy = sort;
+      }
+    } else {
+      if (sort == this.sortedBy) {
+        arraySort(this.equipment, sort, { reverse: true });
+        this.sortedBy = '';
+      } else {
+        arraySort(this.equipment, sort);
+        this.sortedBy = sort;
+      }
+    }
   }
 
   addEquipment() {
@@ -163,6 +180,7 @@ export class StorageDetails extends Component {
 export class BikeDetails extends Component {
   bike = null;
   modal = false;
+  editable = false;
 
   render() {
     if (!this.bike)
@@ -170,10 +188,17 @@ export class BikeDetails extends Component {
     return (
       <>
         <Card title="Sykkelinformasjon">
-          <HorizontalTableComponent tableBody={this.bike} tableHead={'bikeDetails'} />
-          <button onClick={() => console.log('test')}>&#9881;</button>
+          <HorizontalTableComponent
+            tableBody={this.bike}
+            tableHead={'bikeDetails'}
+            editable={this.editable}
+            sendStateToParent={this.updateBike}
+          />
+          <button onClick={() => (this.editable ? (this.editable = false) : (this.editable = true))}>
+            &#57604; Endre
+          </button>
           <button className="btn btn-info btn-lg" onClick={this.toggleModal}>
-            &#10010;
+            Reparasjon &#10010;
           </button>
           {this.modal && <AddReparation modal={true} toggle={this.toggleModal} chassisId={this.props.match.params} />}
         </Card>
@@ -189,5 +214,9 @@ export class BikeDetails extends Component {
   toggleModal() {
     this.modal ? (this.modal = false) : (this.modal = true);
     this.mounted();
+  }
+
+  updateBike(value, key) {
+    storageService.updateBike(key, value, this.props.match.params.id, () => console.log('Bike endret'));
   }
 }

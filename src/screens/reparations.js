@@ -21,6 +21,7 @@ export class Reparations extends Component {
   reparations = null;
   ready = false;
   sortedBy = 'rep_id';
+
   render() {
     if (!this.ready)
       return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
@@ -63,13 +64,23 @@ export class Reparations extends Component {
 
 export class ReparationDetails extends Component {
   reparation = null;
+  editable = false;
 
   render() {
     if (!this.reparation || typeof this.reparation.r_fdate == 'object' || typeof this.reparation.r_tdate == 'object')
       return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     return (
       <Card title="Reparasjonsdetaljer">
-        <HorizontalTableComponent tableBody={this.reparation} tableHead={'reparationDetails'} checkDate={true} />
+        <HorizontalTableComponent
+          tableBody={this.reparation}
+          tableHead={'reparationDetails'}
+          checkDate={true}
+          editable={this.editable}
+          sendStateToParent={this.updateReparation}
+        />
+        <button onClick={() => (this.editable ? (this.editable = false) : (this.editable = true))}>
+          &#57604; Endre
+        </button>
       </Card>
     );
   }
@@ -86,5 +97,9 @@ export class ReparationDetails extends Component {
       },
       () => console.log('failure')
     );
+  }
+
+  updateReparation(value, key) {
+    reparationService.updateRep(key, value, this.props.match.params.id, () => console.log('rep endret'));
   }
 }
