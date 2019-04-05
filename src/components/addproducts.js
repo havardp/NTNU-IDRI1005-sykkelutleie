@@ -16,15 +16,13 @@ import ReactLoading from 'react-loading';
 import { storageService } from '../services';
 
 export class AddModel extends Component {
-  model = {};
+  model = [];
   submitting = false;
   bike = null;
   bikeDetails = [];
   location = ['Haugastøl', 'Finse'];
 
   render() {
-    console.log(this.model);
-    console.log(this.bike);
     if (this.submitting)
       return (
         <Modal show={this.props.modal} onHide={this.props.toggle} centered>
@@ -84,14 +82,18 @@ export class AddModel extends Component {
                   <Form.Row>
                     <Form.Group as={Col}>
                       <Form.Label>Antall gir</Form.Label>
-                      <Form.Control type="number" placeholder="Gir" onChange={e => (this.bike.gear = e.target.value)} />
+                      <Form.Control
+                        type="number"
+                        placeholder="Gir"
+                        onChange={e => (this.bikeDetails.gear = e.target.value)}
+                      />
                     </Form.Group>
                     <Form.Group as={Col}>
                       <Form.Label>Hjulstørrelse</Form.Label>
                       <Form.Control
                         type="text"
                         placeholder="Hjul"
-                        onChange={e => (this.bike.wheel_size = e.target.value)}
+                        onChange={e => (this.bikeDetails.wheel_size = e.target.value)}
                       />
                     </Form.Group>
                   </Form.Row>
@@ -100,8 +102,7 @@ export class AddModel extends Component {
                       <Form.Label>
                         <select
                           onChange={e => {
-                            this.bikeDetails.locations = e.target.value;
-                            console.log(this.bikeDetails);
+                            this.bikeDetails.location = e.target.value;
                           }}
                         >
                           <option hidden>Velg sted...</option>
@@ -118,7 +119,7 @@ export class AddModel extends Component {
                           type="radio"
                           value="1"
                           name="bikevalue"
-                          onChange={e => (this.bikeDetails = e.target.value)}
+                          onChange={e => (this.bikeDetails.luggage = e.target.value)}
                         />{' '}
                         Ja
                       </div>
@@ -127,7 +128,7 @@ export class AddModel extends Component {
                           type="radio"
                           value="0"
                           name="bikevalue"
-                          onChange={e => (this.bikeDetails = e.target.value)}
+                          onChange={e => (this.bikeDetails.luggage = e.target.value)}
                         />{' '}
                         Nei
                       </div>
@@ -146,18 +147,30 @@ export class AddModel extends Component {
   }
 
   add() {
-    console.log(this.bike.location);
+    console.log(this.bike, this.model, this.bikeDetails);
+
     if (this.model.model && this.model.description && this.model.hour_price && this.model.day_price) {
       this.submitting = true;
-      storageService.addProductType(this.model, this.bike, () => console.log('success'));
+      storageService.addProductType(this.model, this.bike, () => {
+        this.bike == 1
+          ? storageService.addBike(this.model.model, this.bikeDetails, () => {
+              this.submitting = false;
+              this.props.toggle();
+            })
+          : storageService.addEquipment(this.model.model, () => {
+              this.submitting = false;
+              this.props.toggle();
+            });
+      });
     } else {
       alert('Du må fylle inn alle feltene');
     }
   }
 }
 export class AddBike extends Component {
-  bike = [];
+  bikeDetails = [];
   submitting = false;
+  location = ['Haugastøl', 'Finse'];
   render() {
     if (this.submitting)
       return (
@@ -174,30 +187,24 @@ export class AddBike extends Component {
           <Modal.Body>
             <Form>
               <Form.Row>
-                <Form.Group as={Col}>
-                  <Form.Label>Antall gir</Form.Label>
-                  <Form.Control type="number" placeholder="Gir" onChange={e => (this.bike.gear = e.target.value)} />
-                </Form.Group>
-                <Form.Group as={Col}>
-                  <Form.Label>Hjulstørrelse</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Hjul"
-                    onChange={e => (this.bike.wheel_size = e.target.value)}
-                  />
-                </Form.Group>
-              </Form.Row>
-              <Form.Row>
-                <Form.Group as={Col}>
-                  <Form.Label>Lagersted (nedtrekksboks)</Form.Label>
-                  <Form.Control type="text" placeholder="Sted" onChange={e => (this.bike.storage = e.target.value)} />
-                </Form.Group>
-                <Form.Group as={Col}>
-                  <Form.Label>Bagasjebrett: Ja eller nei?</Form.Label>
-                  <Form.Control type="text" placeholder="Brett" onChange={e => (this.bike.luggage = e.target.value)} />
+                <Form.Group>
+                  <select
+                    required
+                    value={this.bikeDetails.location || ''}
+                    onChange={e => {
+                      this.bikeDetails.location = e.target.value;
+                    }}
+                  >
+                    <option hidden value="">
+                      Velg sted...
+                    </option>
+                    {this.location.map(location => (
+                      <option key={location}>{location}</option>
+                    ))}
+                  </select>
                 </Form.Group>
               </Form.Row>
-              <Button variant="outline-primary" onClick={this.add}>
+              <Button variant="outline-primary" type="submit" onClick={this.add}>
                 Legg til
               </Button>
             </Form>
@@ -207,11 +214,18 @@ export class AddBike extends Component {
     );
   }
 
+  mounted() {
+    this.bikeDetails = JSON.parse(JSON.stringify(this.props.bikeDetails)); //deep copy
+    this.bikeDetails.location = null;
+  }
+
   add() {
-    if (this.bike.gear && this.bike.wheel_size && this.bike.storage && this.bike.luggage) {
+    if (this.bikeDetails.location) {
       this.submitting = true;
-    } else {
-      alert('Du må fylle inn alle feltene');
+      storageService.addBike(this.props.model, this.bikeDetails, () => {
+        this.submitting = false;
+        this.props.toggle();
+      });
     }
   }
 }
