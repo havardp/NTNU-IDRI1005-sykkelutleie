@@ -78,7 +78,7 @@ class MakeOrder extends Component {
                       type="submit"
                       onClick={this.goToConfirmationPage}
                     >
-                      videre
+                      videre &#57518; 
                     </Button>
                   </div>
                 </div>
