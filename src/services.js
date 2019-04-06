@@ -2,7 +2,7 @@ import { connection } from './mysql_connection';
 
 class EmployeeService {
   getEmployee(username, success, failure) {
-    connection.query('select password from Employee where e_id = ?', [username], (error, results) => {
+    connection.query('select password, department from Employee where e_id = ?', [username], (error, results) => {
       if (error) {
         return console.error(error);
       }
@@ -365,6 +365,38 @@ class StorageService {
       if (error) return console.error(error);
       success();
     });
+  }
+
+  deleteModel(id, success) {
+    connection.query('delete from Product_Type where model = ?', [id], (error, results) => {
+      if (error) return console.error(error);
+
+      success(results);
+    });
+  }
+
+  deleteBike(id, success) {
+    connection.query(
+      'delete from Bike_Order where chassis_id = ?;delete from Reparations where chassis_id = ?;delete from Transportation where chassis_id=?;delete from Bike where chassis_id = ?',
+      [id, id, id, id],
+      (error, results) => {
+        if (error) return console.error(error);
+
+        success(results);
+      }
+    );
+  }
+
+  deleteEquipment(id, success) {
+    connection.query(
+      'delete from Equipment_Order where eq_id = ?; delete from Equipment where eq_id = ?',
+      [id, id],
+      (error, results) => {
+        if (error) return console.error(error);
+
+        success(results);
+      }
+    );
   }
 }
 

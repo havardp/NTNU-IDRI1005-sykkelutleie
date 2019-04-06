@@ -19,7 +19,7 @@ import { storageService } from '../services';
 //Import the hashistory from index.js to be able to change path
 import { history } from '../index.js';
 
-export class StorageStatus extends Component {
+export class Storage extends Component {
   bikes = null;
   equipment = null;
   modal = false;
@@ -32,7 +32,7 @@ export class StorageStatus extends Component {
         <VerticalTableComponent
           tableBody={this.bikes}
           tableHead={'storage'}
-          deleteButton={false}
+          deleteButton={true}
           delete={this.delete}
           whereTo={this.props.match.path}
           sort={this.sortBike}
@@ -42,7 +42,7 @@ export class StorageStatus extends Component {
         <VerticalTableComponent
           tableBody={this.equipment}
           tableHead={'storage'}
-          deleteButton={false}
+          deleteButton={true}
           delete={this.delete}
           whereTo={this.props.match.path}
           sort={this.sortEquipment}
@@ -84,6 +84,11 @@ export class StorageStatus extends Component {
       this.sortedByEq = sort;
     }
   }
+
+  delete(id) {
+    if (window.confirm('Er du sikker på at du vil slette denne modellen?(Slett først alle syklene av denne modellen)'))
+      storageService.deleteModel(id, () => this.mounted());
+  }
 }
 
 //turn the two returns into one conditional TODO
@@ -100,7 +105,7 @@ export class StorageDetails extends Component {
           <VerticalTableComponent
             tableBody={this.bike}
             tableHead={'bike'}
-            deleteButton={false}
+            deleteButton={true}
             delete={this.delete}
             whereTo={'/bikedetails'}
             sort={this.sort}
@@ -125,7 +130,7 @@ export class StorageDetails extends Component {
           <VerticalTableComponent
             tableBody={this.equipment}
             tableHead={'equipment'}
-            deleteButton={false}
+            deleteButton={true}
             delete={this.delete}
             sort={this.sort}
           />
@@ -174,6 +179,24 @@ export class StorageDetails extends Component {
         this.equipment = result;
       });
     });
+  }
+
+  delete(id) {
+    if (this.bike) {
+      if (
+        window.confirm(
+          'Er du sikker på at du vil slette denne sykkelen? Den vil bli fjernet fra alle orderne, reparasjoner og transportering.'
+        )
+      )
+        storageService.deleteBike(id, () => this.mounted());
+    } else {
+      if (
+        window.confirm(
+          'Er du sikker på at du vil slette dette utstyret? Den vil bli fjernet fra alle orderne, reparasjoner og transportering.'
+        )
+      )
+        storageService.deleteEquipment(id, () => this.mounted());
+    }
   }
 }
 
