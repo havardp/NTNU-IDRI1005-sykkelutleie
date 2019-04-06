@@ -50,7 +50,7 @@ export class VerticalTableComponent extends Component {
       { sort: 'chassis_id', value: 'Ramme id' },
       { sort: 'storage', value: 'Transporteres fra' },
       { sort: 'to_place', value: 'Transporteres til' },
-      { sort: 't_complete', value: 'Transport fullført' }
+      { sort: 't_id', value: 'Knapp' }
     ],
     storage: [
       { sort: 'model', value: 'Modell' },
@@ -133,7 +133,7 @@ export class VerticalTableComponent extends Component {
               ))}
               {/*Add a delete button at the end of the row if its sent in as true from parent component*/}
               {(sessionStorage.getItem('role') == 'Admin' || sessionStorage.getItem('role') == 'Sekretær') &&
-                this.props.delete && (
+                this.props.deleteButton && (
                   <td>
                     <button
                       onClick={e => {
@@ -144,8 +144,19 @@ export class VerticalTableComponent extends Component {
                       &#57610;
                     </button>
                   </td>
-                )}
-                
+                )}{this.props.transportation && (
+                    <td>
+                      <button
+                        onClick={e => {
+                          e.stopPropagation();
+                          this.props.transport(Object.values(row)[0]);
+                        }}
+                      >
+                        transport
+                      </button>
+                    </td>
+                  )}
+
             </tr>
 
           ))}
@@ -176,13 +187,6 @@ export class HorizontalTableComponent extends Component {
       'Utleveringsted',
       'Innleveringsted',
       'Totalpris'
-    ],
-    transportationDetails: [
-      'Transport id',
-      'Ordrenummer',
-      'Ramme id',
-      'Tilhørighetssted',
-      'Leveringssted'
     ]
 
   };
