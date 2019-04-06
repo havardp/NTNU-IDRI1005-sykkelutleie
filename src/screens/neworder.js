@@ -69,14 +69,19 @@ class MakeOrder extends Component {
                   sendStateToParent={this.handleEquipmentChange}
                   products={this.equipment}
                 />
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-9" />
-              <div className="col-3">
-                <Button variant="secondary" style={{ width: '100%' }} type="submit" onClick={this.goToConfirmationPage}>
-                  videre
-                </Button>
+                <div className="row">
+                  <div className="col-6" />
+                  <div className="col-6">
+                    <Button
+                      variant="secondary"
+                      style={{ width: '100%' }}
+                      type="submit"
+                      onClick={this.goToConfirmationPage}
+                    >
+                      videre &#57518;
+                    </Button>
+                  </div>
+                </div>
               </div>
             </div>
           </Card>

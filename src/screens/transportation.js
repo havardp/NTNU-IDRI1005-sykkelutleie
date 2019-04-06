@@ -31,7 +31,6 @@ export class Transportations extends Component {
             tableHead={'transportations'}
             checkDate={false}
             deleteButton={false}
-            whereTo={this.props.match.path}
             sort={this.sort}
             transportation={true}
             transport={this.transport}

@@ -39,7 +39,7 @@ export class Orders extends Component {
             <div className="col-10">
               <Select
                 value={this.selectedOption}
-                placeholder="Søk ordre..."
+                placeholder="&#57492; Søk ordre..."
                 onChange={e => {
                   this.selectedOption = e;
                   history.push('/orders/' + e.value);
