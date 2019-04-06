@@ -38,7 +38,7 @@ export class Employees extends Component {
             <div className="col-10">
               <Select
                 value={this.selectedOption}
-                placeholder="Søk ansatt..."
+                placeholder="&#57492; Søk ansatt..."
                 onChange={e => {
                   this.selectedOption = e;
                   history.push('/employees/' + e.value);

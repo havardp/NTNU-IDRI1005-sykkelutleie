@@ -40,7 +40,7 @@ export class Customers extends Component {
             <div className="col-10">
               <Select
                 value={this.selectedOption}
-                placeholder="Søk kunde..."
+                placeholder="&#57492; Søk kunde..."
                 className="writable"
                 onChange={e => {
                   this.selectedOption = e;

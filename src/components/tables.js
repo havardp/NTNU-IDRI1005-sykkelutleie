@@ -50,7 +50,7 @@ export class VerticalTableComponent extends Component {
       { sort: 'chassis_id', value: 'Ramme id' },
       { sort: 'storage', value: 'Transporteres fra' },
       { sort: 'to_place', value: 'Transporteres til' },
-      { sort: 't_id', value: 'Knapp' }
+      { sort: 't_id', value: 'Bestill transport' }
     ],
     storage: [
       { sort: 'model', value: 'Modell' },
@@ -152,7 +152,7 @@ export class VerticalTableComponent extends Component {
                           this.props.transport(Object.values(row)[0]);
                         }}
                       >
-                        transport
+                    &#9951;
                       </button>
                     </td>
                   )}
