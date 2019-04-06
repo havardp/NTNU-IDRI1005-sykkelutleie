@@ -36,7 +36,7 @@ export class NewOrderCustomer extends Component {
           </div>
           <div className="col-2">
             <button className="btn btn-info btn-lg" onClick={this.props.makeNewCustomer}>
-              &#10010;
+              &#57826;
             </button>
           </div>
         </div>
