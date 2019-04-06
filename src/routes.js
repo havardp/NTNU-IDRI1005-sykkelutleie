@@ -12,6 +12,7 @@ import { Employees, EmployeeDetail } from './screens/employees.js';
 import { StorageStatus, StorageDetails, BikeDetails } from './screens/storage.js';
 import { Orders, OrderDetail } from './screens/orders.js';
 import { NewOrder } from './screens/neworder.js';
+import { Transportations } from './screens/transportation.js';
 
 class NoMatch extends Component {
   render() {
@@ -45,6 +46,7 @@ export class Routes extends Component {
           >
             <Switch>
               <Route exact path="/home" component={Home} />
+              <Route exact path="/transportation" component={Transportations} />
               <Route exact path="/reparations" component={Reparations} />
               <Route exact path="/reparations/:id" component={ReparationDetails} />
               <Route exact path="/customers" component={Customers} />

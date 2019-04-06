@@ -410,6 +410,17 @@ class ReparationService {
   }
 }
 
+class TransportationService {
+  getTransportations(success) {
+    connection.query('select t_id, order_nr, chassis_id, t_complete from Reparations', (error, results) => {
+      if (error) return console.error(error);
+
+      success(results);
+    });
+  }
+}
+
+export let transportationService = new TransportationService();
 export let reparationService = new ReparationService();
 export let employeeService = new EmployeeService();
 export let customerService = new CustomerService();

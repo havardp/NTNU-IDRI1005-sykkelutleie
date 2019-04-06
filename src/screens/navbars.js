@@ -72,7 +72,7 @@ export class SideNav extends Component {
         <NavLink className="sidebarlink" to="/reparations">
           &#57694; Reparasjoner
         </NavLink>
-        <NavLink className="sidebarlink" to="/transport">
+        <NavLink className="sidebarlink" to="/transportation">
           &#57660; Transportering
         </NavLink>
         <div className="timer">Tid innlogget: {this.timer}</div>

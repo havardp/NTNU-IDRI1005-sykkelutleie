@@ -44,6 +44,12 @@ export class VerticalTableComponent extends Component {
       { sort: 'r_fdate', value: 'Fra-dato' },
       { sort: 'r_tdate', value: 'Til-dato' }
     ],
+    transportations: [
+      { sort: 't_id', value: 'Reparasjons id' },
+      { sort: 'order_nr', value: 'Ordrenummer' },
+      { sort: 'chassis_id', value: 'Ramme id' },
+      { sort: 't_complete', value: 'Transport fullført' }
+    ],
     storage: [
       { sort: 'model', value: 'Modell' },
       { sort: 'description', value: 'Beskrivelse' },

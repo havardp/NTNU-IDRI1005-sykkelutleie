@@ -12,7 +12,7 @@ import arraySort from 'array-sort';
 import { VerticalTableComponent, HorizontalTableComponent } from '../components/tables.js';
 
 //Imports for sql queries
-import { reparationService } from '../services';
+import { transportationService } from '../services';
 
 //Import the hashistory from index.js to be able to change path
 import { history } from '../index.js';
