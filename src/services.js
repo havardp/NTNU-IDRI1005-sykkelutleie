@@ -240,7 +240,7 @@ class OrderService {
 class StorageService {
   getModels(success) {
     connection.query(
-      'SELECT PT.model, description, day_price, count(B.model) as "countBikes" FROM Product_Type PT left join Bike B on B.model = PT.model where PT.bike=1 group by PT.model; SELECT PT.model, description,  day_price, count(E.model) as "countEquipment" FROM Product_Type PT left join Equipment E on E.model = PT.model where PT.bike= 0 Group by PT.model',
+      'SELECT PT.model, description, day_price, count(B.model) as "countBikes" FROM Product_Type PT, Bike B where B.model = PT.model and PT.bike=1 group by PT.model; SELECT PT.model, description,  day_price, count(E.model) as "countEquipment" FROM Product_Type PT, Equipment E where E.model = PT.model and PT.bike= 0 Group by PT.model',
       (error, results) => {
         if (error) return console.error(error);
 
@@ -442,6 +442,27 @@ class ReparationService {
   }
 }
 
+class TransportationService {
+  getTransportations(success) {
+    connection.query(
+      'SELECT DISTINCT T.t_id, T.order_nr, T.chassis_id, O.to_place, B.storage FROM Transportation T, Bike B, Orders O WHERE T.order_nr = O.order_nr and T.chassis_id = B.chassis_id and T.t_complete = 0',
+      (error, results) => {
+        if (error) return console.error(error);
+
+        success(results);
+      }
+    );
+  }
+  updateTransport(id, success) {
+    connection.query('UPDATE Transportation SET t_complete = 1 WHERE t_id = ?', [id], (error, results) => {
+      if (error) return console.error(error);
+
+      success();
+    });
+  }
+}
+
+export let transportationService = new TransportationService();
 export let reparationService = new ReparationService();
 export let employeeService = new EmployeeService();
 export let customerService = new CustomerService();

@@ -12,17 +12,16 @@ import arraySort from 'array-sort';
 import { VerticalTableComponent, HorizontalTableComponent } from '../components/tables.js';
 
 //Imports for sql queries
-import { reparationService } from '../services';
+import { transportationService } from '../services';
 
 //Import the hashistory from index.js to be able to change path
 import { history } from '../index.js';
 
 export class Transportations extends Component {
   transportations = null;
-  ready = false;
   sortedBy = 't_id';
   render() {
-    if (!this.ready)
+    if (!this.transportations)
       return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     return (
       <>
@@ -34,15 +33,20 @@ export class Transportations extends Component {
             deleteButton={false}
             whereTo={this.props.match.path}
             sort={this.sort}
+            transportation={true}
+            transport={this.transport}
           />
         </Card>
       </>
     );
   }
+
+  transport(t_id){
+    transportationService.updateTransport(t_id, () => this.mounted());
+  }
   mounted() {
     transportationService.getTransportations(transportations => {
       this.transportations = transportations;
-      this.ready = true;
     });
   }
 

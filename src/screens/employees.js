@@ -127,7 +127,14 @@ export class EmployeeDetail extends Component {
       this.props.match.params.id,
       result => {
         this.user = result;
-        this.user.DOB = result.DOB.getDate() + '-' + (result.DOB.getMonth() + 1) + '-' + result.DOB.getFullYear();
+        this.user.DOB =
+          (result.DOB.getDate().toString().length == 1 ? '0' + result.DOB.getDate() : result.DOB.getDate()) +
+          '-' +
+          ((result.DOB.getMonth() + 1).toString().length == 1
+            ? '0' + (result.DOB.getMonth() + 1)
+            : result.DOB.getMonth() + 1) +
+          '-' +
+          result.DOB.getFullYear();
       },
       () => console.log('failure')
     );

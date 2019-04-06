@@ -44,8 +44,22 @@ export class Reparations extends Component {
     reparationService.getReparations(reparations => {
       this.reparations = reparations;
       this.reparations.map(rep => {
-        rep.r_fdate = rep.r_fdate.getFullYear() + '-' + (rep.r_fdate.getMonth() + 1) + '-' + rep.r_fdate.getDate();
-        rep.r_tdate = rep.r_tdate.getFullYear() + '-' + (rep.r_tdate.getMonth() + 1) + '-' + rep.r_tdate.getDate();
+        rep.r_fdate =
+          rep.r_fdate.getFullYear() +
+          '-' +
+          ((rep.r_fdate.getMonth() + 1).toString().length == 1
+            ? '0' + (rep.r_fdate.getMonth() + 1)
+            : rep.r_fdate.getMonth + 1) +
+          '-' +
+          (rep.r_fdate.getDate().toString().length == 1 ? '0' + rep.r_fdate.getDate() : rep.r_fdate.getDate());
+        rep.r_tdate =
+          rep.r_tdate.getFullYear() +
+          '-' +
+          ((rep.r_tdate.getMonth() + 1).toString().length == 1
+            ? '0' + (rep.r_tdate.getMonth() + 1)
+            : rep.r_tdate.getMonth + 1) +
+          '-' +
+          (rep.r_tdate.getDate().toString().length == 1 ? '0' + rep.r_tdate.getDate() : rep.r_tdate.getDate());
       });
       this.ready = true;
     });

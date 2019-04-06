@@ -132,7 +132,6 @@ class MakeOrder extends Component {
 
   //Checks to see how many of each bike and equipment are available between the selected from and to date
   updateAvailableDate() {
-    this.test = ['test'];
     if (typeof this.orderInformation.toDate != 'undefined' && typeof this.orderInformation.fromDate != 'undefined') {
       storageService.getCountModel(this.orderInformation.fromDate, this.orderInformation.toDate, result => {
         this.bike = [];

@@ -111,7 +111,7 @@ export class StorageDetails extends Component {
       return (
         <>
           <VerticalTableComponent
-            tableBody={this.bike}
+            tableBody={this.bike ? this.bike : []}
             tableHead={'bike'}
             deleteButton={true}
             delete={this.delete}
@@ -132,11 +132,11 @@ export class StorageDetails extends Component {
           )}
         </>
       );
-    else
+    else if (this.equipment)
       return (
         <>
           <VerticalTableComponent
-            tableBody={this.equipment}
+            tableBody={this.equipment ? this.equipment : []}
             tableHead={'equipment'}
             deleteButton={true}
             delete={this.delete}
@@ -147,6 +147,7 @@ export class StorageDetails extends Component {
           </button>
         </>
       );
+    else return null;
   }
   mounted() {
     storageService.getBike(this.props.match.params.id, result => {

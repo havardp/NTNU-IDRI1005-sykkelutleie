@@ -71,9 +71,23 @@ export class Orders extends Component {
       this.orders = orders;
       this.orders.map(order => {
         order.from_date =
-          order.from_date.getDate() + '-' + (order.from_date.getMonth() + 1) + '-' + order.from_date.getFullYear();
+          order.from_date.getFullYear() +
+          '-' +
+          ((order.from_date.getMonth() + 1).toString().length == 1
+            ? '0' + (order.from_date.getMonth() + 1)
+            : order.from_date.getMonth() + 1) +
+          '-' +
+          (order.from_date.getDate().toString().length == 1
+            ? '0' + order.from_date.getDate()
+            : order.from_date.getDate());
         order.to_date =
-          order.to_date.getDate() + '-' + (order.to_date.getMonth() + 1) + '-' + order.to_date.getFullYear();
+          order.to_date.getFullYear() +
+          '-' +
+          ((order.to_date.getMonth() + 1).toString().length == 1
+            ? '0' + (order.to_date.getMonth() + 1)
+            : order.to_date.getMonth() + 1) +
+          '-' +
+          (order.to_date.getDate().toString().length == 1 ? '0' + order.to_date.getDate() : order.to_date.getDate());
       });
       this.ready = true;
     });
@@ -162,17 +176,25 @@ export class OrderDetail extends Component {
       this.orderEquipment = result[2];
       this.order = result[0][0];
       this.order.from_date =
-        this.order.from_date.getDate() +
+        this.order.from_date.getFullYear() +
         '-' +
-        (this.order.from_date.getMonth() + 1) +
+        ((this.order.from_date.getMonth() + 1).toString().length == 1
+          ? '0' + (this.order.from_date.getMonth() + 1)
+          : this.order.from_date.getMonth() + 1) +
         '-' +
-        this.order.from_date.getFullYear();
+        (this.order.from_date.getDate().toString().length == 1
+          ? '0' + this.order.from_date.getDate()
+          : this.order.from_date.getDate());
       this.order.to_date =
-        this.order.to_date.getDate() +
+        this.order.to_date.getFullYear() +
         '-' +
-        (this.order.to_date.getMonth() + 1) +
+        ((this.order.to_date.getMonth() + 1).toString().length == 1
+          ? '0' + (this.order.to_date.getMonth() + 1)
+          : this.order.to_date.getMonth() + 1) +
         '-' +
-        this.order.to_date.getFullYear();
+        (this.order.to_date.getDate().toString().length == 1
+          ? '0' + this.order.to_date.getDate()
+          : this.order.to_date.getDate());
     });
   }
 

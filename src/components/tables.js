@@ -44,6 +44,14 @@ export class VerticalTableComponent extends Component {
       { sort: 'r_fdate', value: 'Fra-dato' },
       { sort: 'r_tdate', value: 'Til-dato' }
     ],
+    transportations: [
+      { sort: 't_id', value: 'Transport id' },
+      { sort: 'order_nr', value: 'Ordrenummer' },
+      { sort: 'chassis_id', value: 'Ramme id' },
+      { sort: 'storage', value: 'Transporteres fra' },
+      { sort: 'to_place', value: 'Transporteres til' },
+      { sort: 't_id', value: 'Knapp' }
+    ],
     storage: [
       { sort: 'model', value: 'Modell' },
       { sort: 'description', value: 'Beskrivelse' },
@@ -137,6 +145,18 @@ export class VerticalTableComponent extends Component {
                     </button>
                   </td>
                 )}
+              {this.props.transportation && (
+                <td>
+                  <button
+                    onClick={e => {
+                      e.stopPropagation();
+                      this.props.transport(Object.values(row)[0]);
+                    }}
+                  >
+                    transport
+                  </button>
+                </td>
+              )}
             </tr>
           ))}
         </tbody>
