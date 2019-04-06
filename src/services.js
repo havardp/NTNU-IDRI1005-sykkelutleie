@@ -444,7 +444,7 @@ class ReparationService {
 
 class TransportationService {
   getTransportations(success) {
-    connection.query('select t_id, order_nr, chassis_id, t_complete from Transportation', (error, results) => {
+    connection.query('SELECT DISTINCT T.t_id, T.order_nr, T.chassis_id, O.to_place, B.storage, T.t_complete FROM Transportation T, Bike B, Orders O WHERE T.order_nr = O.order_nr and T.chassis_id = B.chassis_id', (error, results) => {
       if (error) return console.error(error);
 
       success(results);

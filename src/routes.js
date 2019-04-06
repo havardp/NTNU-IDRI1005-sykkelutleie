@@ -12,7 +12,7 @@ import { Employees, EmployeeDetail } from './screens/employees.js';
 import { Storage, StorageDetails, BikeDetails } from './screens/storage.js';
 import { Orders, OrderDetail } from './screens/orders.js';
 import { NewOrder } from './screens/neworder.js';
-import { Transportations } from './screens/transportation.js';
+import { Transportations} from './screens/transportation.js';
 
 class NoMatch extends Component {
   render() {

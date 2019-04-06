@@ -48,6 +48,8 @@ export class VerticalTableComponent extends Component {
       { sort: 't_id', value: 'Transport id' },
       { sort: 'order_nr', value: 'Ordrenummer' },
       { sort: 'chassis_id', value: 'Ramme id' },
+      { sort: 'storage', value: 'Transporteres fra' },
+      { sort: 'to_place', value: 'Transporteres til' },
       { sort: 't_complete', value: 'Transport fullført' }
     ],
     storage: [
@@ -143,7 +145,9 @@ export class VerticalTableComponent extends Component {
                     </button>
                   </td>
                 )}
+                
             </tr>
+
           ))}
         </tbody>
       </Table>
@@ -172,7 +176,15 @@ export class HorizontalTableComponent extends Component {
       'Utleveringsted',
       'Innleveringsted',
       'Totalpris'
+    ],
+    transportationDetails: [
+      'Transport id',
+      'Ordrenummer',
+      'Ramme id',
+      'Tilhørighetssted',
+      'Leveringssted'
     ]
+
   };
 
   render() {
