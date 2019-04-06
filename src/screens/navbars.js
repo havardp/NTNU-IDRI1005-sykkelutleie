@@ -65,6 +65,7 @@ export class SideNav extends Component {
   minute = 0;
   second = 0;
   timer = '00:00:00';
+  timeInterval = null;
   render() {
     return (
       <div className="sidenav">
@@ -83,7 +84,7 @@ export class SideNav extends Component {
   }
 
   mounted() {
-    setInterval(() => {
+    this.timeInterval = setInterval(() => {
       this.time++;
       this.hour = Math.floor(this.time / 3600);
       this.minute = Math.floor(this.time / 60) - this.hour * 60;
@@ -95,5 +96,9 @@ export class SideNav extends Component {
         ':' +
         (this.second.toString().length == 1 ? '0' + this.second : this.second);
     }, 1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timeInterval);
   }
 }

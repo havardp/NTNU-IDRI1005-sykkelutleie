@@ -69,19 +69,14 @@ class MakeOrder extends Component {
                   sendStateToParent={this.handleEquipmentChange}
                   products={this.equipment}
                 />
-                <div className="row">
-                  <div className="col-6" />
-                  <div className="col-6">
-                    <Button
-                      variant="secondary"
-                      style={{ width: '100%' }}
-                      type="submit"
-                      onClick={this.goToConfirmationPage}
-                    >
-                      videre
-                    </Button>
-                  </div>
-                </div>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-9" />
+              <div className="col-3">
+                <Button variant="secondary" style={{ width: '100%' }} type="submit" onClick={this.goToConfirmationPage}>
+                  videre
+                </Button>
               </div>
             </div>
           </Card>
@@ -275,6 +270,9 @@ class ConfirmOrder extends Component {
         this.equipmentDetails[data][0] * this.equipmentDetails[data][1] * this.additionalDetails.nrDays;
       this.countProducts += parseInt(this.equipmentDetails[data][0]);
     });
+    if (this.additionalDetails.rabat) {
+      this.additionalDetails.totalPrice *= (100 - parseInt(this.additionalDetails.rabat)) / 100;
+    }
 
     //finds the details about the selected customer
     customerService.getCustomerDetails(this.customer, result => {

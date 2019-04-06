@@ -109,7 +109,7 @@ export class VerticalTableComponent extends Component {
         <tbody>
           {/*Loops through an array of objects from the sql queries, the array length will be the number of rows.*/}
           {/*The onclick on the row will send you to the current location plus the id of the row etc("/customers/400100")*/}
-          {this.props.tableBody.map(row => (
+          {this.props.tableBody.map((row, index) => (
             <tr
               key={Object.values(row)[0] + Object.values(row)[1].toString()}
               onClick={() => {
@@ -125,12 +125,12 @@ export class VerticalTableComponent extends Component {
               ))}
               {/*Add a delete button at the end of the row if its sent in as true from parent component*/}
               {(sessionStorage.getItem('role') == 'Admin' || sessionStorage.getItem('role') == 'Sekretær') &&
-                this.props.delete && (
+                this.props.deleteButton && (
                   <td>
                     <button
                       onClick={e => {
                         e.stopPropagation();
-                        this.props.delete(Object.values(row)[0]);
+                        this.props.delete(Object.values(row)[0], index);
                       }}
                     >
                       &#57610;

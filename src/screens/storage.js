@@ -33,7 +33,7 @@ export class Storage extends Component {
           tableBody={this.bikes}
           tableHead={'storage'}
           deleteButton={true}
-          delete={this.delete}
+          delete={this.deleteBike}
           whereTo={this.props.match.path}
           sort={this.sortBike}
           className={'clickable'}
@@ -43,7 +43,7 @@ export class Storage extends Component {
           tableBody={this.equipment}
           tableHead={'storage'}
           deleteButton={true}
-          delete={this.delete}
+          delete={this.deleteEquipment}
           whereTo={this.props.match.path}
           sort={this.sortEquipment}
           className={'clickable'}
@@ -85,8 +85,16 @@ export class Storage extends Component {
     }
   }
 
-  delete(id) {
-    if (window.confirm('Er du sikker på at du vil slette denne modellen?(Slett først alle syklene av denne modellen)'))
+  deleteBike(id, index) {
+    if (this.bikes[index].countBikes != 0) {
+      alert('Du må slette alle syklene av denne modellen først');
+    } else if (window.confirm('Er du sikker på at du vil slette denne modellen?'))
+      storageService.deleteModel(id, () => this.mounted());
+  }
+  deleteEquipment(id, index) {
+    if (this.equipment[index].countEquipment != 0) {
+      alert('Du må slette alt utstyret av denne modellen først');
+    } else if (window.confirm('Er du sikker på at du vil slette denne modellen?'))
       storageService.deleteModel(id, () => this.mounted());
   }
 }

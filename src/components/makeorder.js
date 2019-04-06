@@ -203,6 +203,21 @@ export class NewOrderAdditionalDetails extends Component {
                   </select>
                 </td>
               </tr>
+              <tr>
+                <td>Rabatt %</td>
+                <td>
+                  <input
+                    required
+                    placeholder="0%"
+                    defaultValue="0"
+                    type="number"
+                    onChange={e => {
+                      this.orderInformation['rabat'] = e.target.value;
+                      this.props.sendStateToParent(this.orderInformation);
+                    }}
+                  />
+                </td>
+              </tr>
             </tbody>
           </Table>
         </div>

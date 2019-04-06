@@ -39,7 +39,8 @@ export class ConfirmOrderAdditionalDetails extends Component {
     fromDate: 'Fra-dato',
     toDate: 'Til-dato',
     nrDays: 'Antall dager',
-    totalPrice: 'Total pris'
+    totalPrice: 'Total pris',
+    rabat: 'Rabatt (%)'
   };
 
   render() {
