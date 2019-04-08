@@ -13,7 +13,7 @@ import Modal from 'react-bootstrap/Modal';
 import ReactLoading from 'react-loading';
 
 //Imports for sql queries
-import { storageService } from '../services';
+import { storageService, locationService } from '../services';
 
 export class AddModel extends Component {
   model = [];
@@ -137,8 +137,6 @@ export class AddModel extends Component {
   }
 
   add() {
-    console.log(this.bike, this.model, this.bikeDetails);
-
     if (this.model.model && this.model.description && this.model.day_price) {
       this.submitting = true;
       storageService.addProductType(this.model, this.bike, () => {
@@ -160,9 +158,9 @@ export class AddModel extends Component {
 export class AddBike extends Component {
   bikeDetails = [];
   submitting = false;
-  location = ['Haugastøl', 'Finse'];
+  location = null;
   render() {
-    if (this.submitting)
+    if (this.submitting || !this.location)
       return (
         <Modal show={this.props.modal} onHide={this.props.toggle} centered>
           <Modal.Body>
@@ -189,7 +187,7 @@ export class AddBike extends Component {
                       Velg sted...
                     </option>
                     {this.location.map(location => (
-                      <option key={location}>{location}</option>
+                      <option key={location.l_name}>{location.l_name}</option>
                     ))}
                   </select>
                 </Form.Group>
@@ -205,6 +203,9 @@ export class AddBike extends Component {
   }
 
   mounted() {
+    locationService.getPickupLocation(location => {
+      this.location = location;
+    });
     this.bikeDetails = JSON.parse(JSON.stringify(this.props.bikeDetails)); //deep copy
     this.bikeDetails.location = null;
   }

@@ -10,7 +10,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
 //Imports for sql queries
-import { storageService, orderService, customerService } from '../services';
+import { storageService, orderService, customerService, transportationService, locationService } from '../services';
 
 //reusable components
 import { HorizontalTableComponent } from '../components/tables.js';
@@ -25,6 +25,8 @@ class MakeOrder extends Component {
   //view variables
   distinctBikeModels = null;
   distinctEquipmentModels = null;
+  pickup = null;
+  dropoff = null;
   modal = false;
   temporaryOptions = [];
   searchbarOptions = null;
@@ -37,7 +39,7 @@ class MakeOrder extends Component {
   orderInformation = [];
   order = [];
   render() {
-    if (!this.distinctBikeModels || !this.distinctEquipmentModels)
+    if (!this.distinctBikeModels || !this.distinctEquipmentModels || !this.pickup || !this.dropoff)
       return <ReactLoading type="spin" className="main spinner fade-in" color="#A9A9A9" height={200} width={200} />;
     return (
       <div hidden={this.props.hide}>
@@ -49,7 +51,11 @@ class MakeOrder extends Component {
         <Form>
           <Card title="Annen informasjon">
             <div className="row">
-              <NewOrderAdditionalDetails sendStateToParent={this.handleOrderInformationChange} />
+              <NewOrderAdditionalDetails
+                sendStateToParent={this.handleOrderInformationChange}
+                pickup={this.pickup}
+                dropoff={this.dropoff}
+              />
             </div>
           </Card>
           <Card>
@@ -99,6 +105,12 @@ class MakeOrder extends Component {
       });
       this.searchbarOptions = this.temporaryOptions;
     });
+    locationService.getPickupLocation(pickup => {
+      this.pickup = pickup;
+    });
+    locationService.getDropoffLocation(dropoff => {
+      this.dropoff = dropoff;
+    });
     storageService.getDistinctModel(result => {
       this.distinctBikeModels = result[0];
       this.distinctEquipmentModels = result[1];
@@ -140,6 +152,7 @@ class MakeOrder extends Component {
     if (typeof this.orderInformation.toDate != 'undefined' && typeof this.orderInformation.fromDate != 'undefined') {
       storageService.getCountModel(this.orderInformation.fromDate, this.orderInformation.toDate, result => {
         this.bike = [];
+        console.log(this.bike);
         this.equipment = [];
         this.distinctBikeModels = result[0];
         this.distinctEquipmentModels = result[1];
@@ -297,8 +310,13 @@ class ConfirmOrder extends Component {
           parseInt(this.bikeDetails[data][0]),
           result => {
             result.map(bike => {
-              orderService.makeBikeOrder(order_id, bike.chassis_id, () => {
+              orderService.makeBikeOrder(order_id, bike.chassis_id, bikelocation => {
                 console.log('bike inserted');
+                if (bikelocation[1][0].storage != this.additionalDetails.dropoffLocation) {
+                  transportationService.addTransport(this.orderId, bike.chassis_id, () =>
+                    console.log('transport added for: ' + bike.chassis_id)
+                  );
+                }
                 this.insertedProducts++;
                 if (this.insertedProducts == this.countProducts) {
                   this.makingOrder = false;

@@ -93,7 +93,6 @@ export class NewOrderProductSelection extends Component {
 
 export class NewOrderAdditionalDetails extends Component {
   orderInformation = [];
-  location = ['Haugastøl', 'Finse'];
 
   //Variables used to set the minimum date to the current date
   date = new Date();
@@ -175,8 +174,8 @@ export class NewOrderAdditionalDetails extends Component {
                     <option value="" hidden>
                       Velg sted...
                     </option>
-                    {this.location.map(location => (
-                      <option key={location}>{location}</option>
+                    {this.props.pickup.map(location => (
+                      <option key={location.l_name}>{location.l_name}</option>
                     ))}
                   </select>
                 </td>
@@ -197,8 +196,8 @@ export class NewOrderAdditionalDetails extends Component {
                     <option value="" hidden>
                       Velg sted...
                     </option>
-                    {this.location.map(location => (
-                      <option key={location}>{location}</option>
+                    {this.props.dropoff.map(location => (
+                      <option key={location.l_name}>{location.l_name}</option>
                     ))}
                   </select>
                 </td>
