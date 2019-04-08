@@ -80,7 +80,7 @@ export class SideNav extends Component {
         </NavLink>
         {(sessionStorage.getItem('role') == 'Admin' || sessionStorage.getItem('role') == 'Sekretær') && (
           <NavLink className="sidebarlink" to="/location">
-            &#57660; Lokasjoner
+            &#57665; Lokasjoner
           </NavLink>
         )}
         <div className="timer">Tid innlogget: {this.timer}</div>
