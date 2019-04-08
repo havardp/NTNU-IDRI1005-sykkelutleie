@@ -21,6 +21,7 @@ export class AddModel extends Component {
   bike = null;
   bikeDetails = [];
   location = ['Haugastøl', 'Finse'];
+  validated = false;
 
   render() {
     if (this.submitting)
@@ -36,7 +37,7 @@ export class AddModel extends Component {
       <div>
         <Modal show={this.props.modal} onHide={this.props.toggle} centered>
           <Modal.Body>
-            <Form>
+            <Form noValidate validated={this.validated}>
               <div>
                 <input type="radio" value="1" name="modeltype" onChange={e => (this.bike = e.target.value)} /> Sykkel
               </div>
@@ -46,11 +47,17 @@ export class AddModel extends Component {
               <Form.Row>
                 <Form.Group as={Col}>
                   <Form.Label>Modell</Form.Label>
-                  <Form.Control type="text" placeholder="Navn" onChange={e => (this.model.model = e.target.value)} />
+                  <Form.Control
+                    required
+                    type="text"
+                    placeholder="Navn"
+                    onChange={e => (this.model.model = e.target.value)}
+                  />
                 </Form.Group>
                 <Form.Group as={Col}>
                   <Form.Label>Dagspris</Form.Label>
                   <Form.Control
+                    required
                     type="number"
                     placeholder="X kr"
                     onChange={e => (this.model.day_price = e.target.value)}
@@ -62,6 +69,7 @@ export class AddModel extends Component {
                   <Form.Label>Beskrivelse</Form.Label>
                   <Form.Control
                     type="text"
+                    required
                     placeholder="Tekst"
                     onChange={e => (this.model.description = e.target.value)}
                   />
@@ -73,6 +81,7 @@ export class AddModel extends Component {
                     <Form.Group as={Col}>
                       <Form.Label>Antall gir</Form.Label>
                       <Form.Control
+                        required
                         type="number"
                         placeholder="Gir"
                         onChange={e => (this.bikeDetails.gear = e.target.value)}
@@ -81,6 +90,7 @@ export class AddModel extends Component {
                     <Form.Group as={Col}>
                       <Form.Label>Hjulstørrelse</Form.Label>
                       <Form.Control
+                        required
                         type="text"
                         placeholder="Hjul"
                         onChange={e => (this.bikeDetails.wheel_size = e.target.value)}
@@ -91,6 +101,7 @@ export class AddModel extends Component {
                     <Form.Group as={Col}>
                       <Form.Label>
                         <select
+                          required
                           onChange={e => {
                             this.bikeDetails.location = e.target.value;
                           }}
@@ -137,21 +148,36 @@ export class AddModel extends Component {
   }
 
   add() {
+    event.preventDefault();
+    event.stopPropagation();
+    this.validated = true;
     if (this.model.model && this.model.description && this.model.day_price) {
       this.submitting = true;
-      storageService.addProductType(this.model, this.bike, () => {
-        this.bike == 1
-          ? storageService.addBike(this.model.model, this.bikeDetails, () => {
-              this.submitting = false;
-              this.props.toggle();
-            })
-          : storageService.addEquipment(this.model.model, () => {
+      if (
+        (this.bike == 1 &&
+          this.bikeDetails.gear &&
+          this.bikeDetails.wheel_size &&
+          this.bikeDetails.location &&
+          this.bikeDetails.luggage) ||
+        this.bike == 0
+      ) {
+        storageService.addProductType(this.model, this.bike, () => {
+          if (this.bike == 1) {
+            storageService.addBike(this.model.model, this.bikeDetails, () => {
               this.submitting = false;
               this.props.toggle();
             });
-      });
-    } else {
-      alert('Du må fylle inn alle feltene');
+          }
+          if (this.bike == 0) {
+            storageService.addEquipment(this.model.model, () => {
+              this.submitting = false;
+              this.props.toggle();
+            });
+          }
+        });
+      } else {
+        this.submitting = false;
+      }
     }
   }
 }

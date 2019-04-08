@@ -12,7 +12,8 @@ import { Employees, EmployeeDetail } from './screens/employees.js';
 import { Storage, StorageDetails, BikeDetails } from './screens/storage.js';
 import { Orders, OrderDetail } from './screens/orders.js';
 import { NewOrder } from './screens/neworder.js';
-import { Transportations} from './screens/transportation.js';
+import { Transportations } from './screens/transportation.js';
+import { Location } from './screens/location.js';
 
 class NoMatch extends Component {
   render() {
@@ -59,6 +60,7 @@ export class Routes extends Component {
               <Route exact path="/orders" component={Orders} />
               <Route exact path="/orders/:id" component={OrderDetail} />
               <Route exact path="/neworder" component={NewOrder} />
+              <Route exact path="/location" component={Location} />
               <Route component={NoMatch} />
             </Switch>
           </div>

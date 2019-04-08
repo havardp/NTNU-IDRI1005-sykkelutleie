@@ -223,8 +223,8 @@ class OrderService {
 
   deleteOrder(id, success) {
     connection.query(
-      'delete from Bike_Order where order_nr = ?; delete from Equipment_Order where order_nr = ?; delete from Orders where order_nr = ?',
-      [id, id, id],
+      'delete from Transportation where order_nr=?; delete R from Reparations R left join Bike_Order BO on R.chassis_id = BO.chassis_id where order_nr=?;delete from Bike_Order where order_nr = ?; delete from Equipment_Order where order_nr = ?; delete from Orders where order_nr = ?',
+      [id, id, id, id, id],
       (error, results) => {
         if (error) return console.error(error);
 
@@ -489,6 +489,30 @@ class LocationService {
       success(results);
     });
   }
+  addLocation(location, success) {
+    connection.query(
+      'insert into Locations values (null, ?, ?)',
+      [location.name, location.storage],
+      (error, results) => {
+        if (error) return console.error(error);
+
+        success();
+      }
+    );
+  }
+}
+
+class OverviewService {
+  getOverview(success) {
+    connection.query(
+      'select (select count(*) from Employee) as "nrEmployees", (select count(*) from Customer) as "nrCustomer", (select count(*) from Bike) as "nrBikes", (select count(*) from Equipment) as "nrEquipment", (select count(*) from Orders) as "nrOrders", (select sum(full_price) from Orders) as "nrRevenue"',
+      (error, results) => {
+        if (error) return console.error(error);
+
+        success(results[0]);
+      }
+    );
+  }
 }
 
 export let transportationService = new TransportationService();
@@ -498,3 +522,4 @@ export let customerService = new CustomerService();
 export let storageService = new StorageService();
 export let orderService = new OrderService();
 export let locationService = new LocationService();
+export let overviewService = new OverviewService();
