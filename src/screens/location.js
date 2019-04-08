@@ -53,6 +53,8 @@ export class Location extends Component {
   }
 
   add() {
-    locationService.addLocation(this.newLocation, () => this.mounted());
+    if (this.newLocation.name) {
+      locationService.addLocation(this.newLocation, () => this.mounted());
+    }
   }
 }

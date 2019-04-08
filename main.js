@@ -34,9 +34,7 @@ app.on('window-all-closed', () => {
 let { ipcMain } = electron;
 ipcMain.on('maximize', function(e) {
   mainWindow.maximize();
-  mainWindow.openDevTools();
 });
 ipcMain.on('minimize', function(e) {
   mainWindow.restore();
-  mainWindow.closeDevTools();
 });

@@ -78,9 +78,11 @@ export class SideNav extends Component {
         <NavLink className="sidebarlink" to="/transportation">
           &#57660; Transportering
         </NavLink>
-        <NavLink className="sidebarlink" to="/location">
-          &#57660; Lokasjoner
-        </NavLink>
+        {(sessionStorage.getItem('role') == 'Admin' || sessionStorage.getItem('role') == 'Sekretær') && (
+          <NavLink className="sidebarlink" to="/location">
+            &#57660; Lokasjoner
+          </NavLink>
+        )}
         <div className="timer">Tid innlogget: {this.timer}</div>
       </div>
     );
