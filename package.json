@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "main": "main.js",
   "scripts": {
-    "start": "electron -r @babel/register .",
-    "bat": "start.bat"
+    "start": "electron -r @babel/register ."
   },
   "dependencies": {
     "@babel/core": "^7.2.2",
