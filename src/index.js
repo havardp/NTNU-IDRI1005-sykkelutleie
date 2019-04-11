@@ -7,7 +7,7 @@ import { Routes } from './routes.js';
 import { Login } from './screens/login.js';
 
 //To be able to change path
-import createHashHistory from 'history/createHashHistory';
+import { createHashHistory } from 'history';
 export const history = createHashHistory();
 
 ReactDOM.render(
