@@ -5,6 +5,8 @@ import { Component } from 'react-simplified';
 import { Card } from '../widgets';
 import Table from 'react-bootstrap/Table';
 
+//components that are used in the confirm order part of the neworder screen which shows the details of the order
+
 export class ConfirmOrderProducts extends Component {
   tableHead = { products: ['Modell', 'Antall', 'Pris'] };
 

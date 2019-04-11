@@ -16,7 +16,9 @@ import ReactLoading from 'react-loading';
 import { customerService, employeeService } from '../services';
 
 const bcrypt = require('bcryptjs');
-//TODO validering av data og input
+
+//reusable components that are used in the customer, employee and new order screen when making new customers/employees
+
 export class AddCustomer extends Component {
   user = [];
   submitting = false;

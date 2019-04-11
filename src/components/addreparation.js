@@ -15,6 +15,8 @@ import ReactLoading from 'react-loading';
 //Imports for sql queries
 import { reparationService } from '../services';
 
+//reusable component that is used in the storage screen when sending a bike to reparation
+
 export class AddReparation extends Component {
   rep = [];
   submitting = false;

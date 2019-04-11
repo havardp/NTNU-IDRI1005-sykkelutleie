@@ -11,6 +11,8 @@ import Select from 'react-select';
 //Imports for sql queries
 import { customerService } from '../services';
 
+//components used when making the order in the neworder screen
+
 export class NewOrderCustomer extends Component {
   selectedOption = null;
 

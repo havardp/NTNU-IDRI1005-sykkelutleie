@@ -298,10 +298,33 @@ class StorageService {
     );
   }
 
-  getCountModel(from, to, success) {
+  getCountModel(from, to, location, success) {
     connection.query(
-      'Select B.model, count(B.chassis_id) as "max", day_price from Bike B, Product_Type PT where B.chassis_id not in  (SELECT B.chassis_id from Bike B left outer join Bike_Order BO on B.chassis_id=BO.chassis_id left outer join Orders O on BO.order_nr = O.order_nr WHERE (? >= O.from_date and ? <= O.to_date) OR (? <= O.from_date and ? <= O.to_date and ? >= O.from_date) OR (? >= O.from_date and ? >= O.to_date and ? <= O.to_date) OR (? <= O.from_date and ? >= O.to_date)) and B.model = PT.model and B.chassis_id not in (select B.Chassis_id from Bike B left outer join Reparations R on B.chassis_id = R.chassis_id where ? < R.r_tdate) group by B.model; Select E.model, count(E.eq_id) as "max", day_price from Equipment E, Product_Type PT where E.eq_id not in  (SELECT E.eq_id from Equipment E left outer join Equipment_Order EO on E.eq_id=EO.eq_id left outer join Orders O on EO.order_nr = O.order_nr WHERE (? >= O.from_date and ? <= O.to_date) OR (? <= O.from_date and ? <= O.to_date and ? >= O.from_date) OR (? >= O.from_date and ? >= O.to_date and ? <= O.to_date) OR (? <= O.from_date and ? >= O.to_date)) and E.model = PT.model group by E.model',
-      [from, to, from, to, to, from, to, from, from, to, from, from, to, from, to, to, from, to, from, from, to],
+      'Select B.model, count(B.chassis_id) as "max", day_price from Bike B, Product_Type PT where B.chassis_id not in  (SELECT B.chassis_id from Bike B left outer join Bike_Order BO on B.chassis_id=BO.chassis_id left outer join Orders O on BO.order_nr = O.order_nr WHERE (? >= O.from_date and ? <= O.to_date) OR (? <= O.from_date and ? <= O.to_date and ? >= O.from_date) OR (? >= O.from_date and ? >= O.to_date and ? <= O.to_date) OR (? <= O.from_date and ? >= O.to_date)) and B.model = PT.model and B.chassis_id not in (select B.Chassis_id from Bike B left outer join Reparations R on B.chassis_id = R.chassis_id where ? < R.r_tdate) and storage = ? group by B.model; Select E.model, count(E.eq_id) as "max", day_price from Equipment E, Product_Type PT where E.eq_id not in  (SELECT E.eq_id from Equipment E left outer join Equipment_Order EO on E.eq_id=EO.eq_id left outer join Orders O on EO.order_nr = O.order_nr WHERE (? >= O.from_date and ? <= O.to_date) OR (? <= O.from_date and ? <= O.to_date and ? >= O.from_date) OR (? >= O.from_date and ? >= O.to_date and ? <= O.to_date) OR (? <= O.from_date and ? >= O.to_date)) and E.model = PT.model group by E.model',
+      [
+        from,
+        to,
+        from,
+        to,
+        to,
+        from,
+        to,
+        from,
+        from,
+        to,
+        from,
+        location,
+        from,
+        to,
+        from,
+        to,
+        to,
+        from,
+        to,
+        from,
+        from,
+        to
+      ],
       (error, results) => {
         if (error) return console.error(error);
 
@@ -310,10 +333,10 @@ class StorageService {
     );
   }
 
-  getAvailableChassisId(model, from, to, nrbikes, success) {
+  getAvailableChassisId(model, from, to, nrbikes, location, success) {
     connection.query(
-      'Select B.chassis_id from Bike B where B.chassis_id not in (SELECT B.chassis_id from Bike B left outer join Bike_Order BO on B.chassis_id=BO.chassis_id left outer join Orders O on BO.order_nr = O.order_nr WHERE (? >= O.from_date and ? <= O.to_date) OR (? <= O.from_date and ? <= O.to_date and ? >= O.from_date) OR (? >= O.from_date and ? >= O.to_date and ? <= O.to_date) OR (? <= O.from_date and ? >= O.to_date)) and B.model=? and B.chassis_id not in (select B.Chassis_id from Bike B left outer join Reparations R on B.chassis_id = R.chassis_id where ? < R.r_tdate) limit ?',
-      [from, to, from, to, to, from, to, from, from, to, model, from, nrbikes],
+      'Select B.chassis_id from Bike B where B.chassis_id not in (SELECT B.chassis_id from Bike B left outer join Bike_Order BO on B.chassis_id=BO.chassis_id left outer join Orders O on BO.order_nr = O.order_nr WHERE (? >= O.from_date and ? <= O.to_date) OR (? <= O.from_date and ? <= O.to_date and ? >= O.from_date) OR (? >= O.from_date and ? >= O.to_date and ? <= O.to_date) OR (? <= O.from_date and ? >= O.to_date)) and B.model=? and B.chassis_id not in (select B.Chassis_id from Bike B left outer join Reparations R on B.chassis_id = R.chassis_id where ? < R.r_tdate) and storage = ? limit ?',
+      [from, to, from, to, to, from, to, from, from, to, model, from, location, nrbikes],
       (error, results) => {
         if (error) return console.error(error);
 

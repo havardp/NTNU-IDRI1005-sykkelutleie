@@ -149,14 +149,23 @@ class MakeOrder extends Component {
 
   //Checks to see how many of each bike and equipment are available between the selected from and to date
   updateAvailableDate() {
-    if (typeof this.orderInformation.toDate != 'undefined' && typeof this.orderInformation.fromDate != 'undefined') {
-      storageService.getCountModel(this.orderInformation.fromDate, this.orderInformation.toDate, result => {
-        this.bike = [];
-        console.log(this.bike);
-        this.equipment = [];
-        this.distinctBikeModels = result[0];
-        this.distinctEquipmentModels = result[1];
-      });
+    if (
+      typeof this.orderInformation.toDate != 'undefined' &&
+      typeof this.orderInformation.fromDate != 'undefined' &&
+      typeof this.orderInformation.pickupLocation != 'undefined'
+    ) {
+      storageService.getCountModel(
+        this.orderInformation.fromDate,
+        this.orderInformation.toDate,
+        this.orderInformation.pickupLocation,
+        result => {
+          this.bike = [];
+          console.log(this.bike);
+          this.equipment = [];
+          this.distinctBikeModels = result[0];
+          this.distinctEquipmentModels = result[1];
+        }
+      );
     }
   }
 
@@ -308,6 +317,7 @@ class ConfirmOrder extends Component {
           this.additionalDetails.fromDate,
           this.additionalDetails.toDate,
           parseInt(this.bikeDetails[data][0]),
+          this.additionalDetails.pickupLocation,
           result => {
             result.map(bike => {
               orderService.makeBikeOrder(order_id, bike.chassis_id, bikelocation => {

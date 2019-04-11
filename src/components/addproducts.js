@@ -15,6 +15,8 @@ import ReactLoading from 'react-loading';
 //Imports for sql queries
 import { storageService, locationService } from '../services';
 
+//reusable components that are used when making new products in the storage screen
+
 export class AddModel extends Component {
   model = [];
   submitting = false;
